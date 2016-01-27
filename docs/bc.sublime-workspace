@@ -1,0 +1,576 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"$",
+				"$stateProvider"
+			],
+			[
+				"Cla",
+				"CanalPluginModel"
+			],
+			[
+				"Slide",
+				"SlideInlineAdmin	class"
+			],
+			[
+				"Sli",
+				"SliderInlineAdmin	class"
+			],
+			[
+				"insta",
+				"instance	param"
+			],
+			[
+				"u",
+				"upload_to"
+			],
+			[
+				"context",
+				"context	param"
+			],
+			[
+				"Jum",
+				"JumboPluginModel	module"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "01_overview.tex",
+			"settings":
+			{
+				"buffer_size": 3103,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "main.tex",
+			"settings":
+			{
+				"buffer_size": 2876,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "02_charakt.tex",
+			"settings":
+			{
+				"buffer_size": 2319,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "00_introduction.tex",
+			"settings":
+			{
+				"buffer_size": 2013,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "abstract.tex",
+			"settings":
+			{
+				"buffer_size": 701,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "Packages/LaTeXing/LaTeX.sublime-build",
+	"build_system_choices":
+	[
+		[
+			[
+				[
+					"Packages/LaTeXing/LaTeX.sublime-build",
+					""
+				],
+				[
+					"Packages/LaTeXing/LaTeX.sublime-build",
+					"Clean up Files"
+				]
+			],
+			[
+				"Packages/LaTeXing/LaTeX.sublime-build",
+				""
+			]
+		]
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 393.0,
+		"last_filter": "section",
+		"selected_items":
+		[
+			[
+				"section",
+				"Snippet: Section"
+			],
+			[
+				"latex",
+				"LaTeXing: Word to Phrases Dictionary"
+			],
+			[
+				"citat",
+				"LaTeXing: Import Citation(s)"
+			],
+			[
+				"latex bi",
+				"LaTeXing: Rebuild Cache"
+			],
+			[
+				"Snippet: Bibtex ",
+				"Snippet: BibTeX Article"
+			],
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"angular",
+				"Set Syntax: HTML (Angular.js)"
+			],
+			[
+				"ins",
+				"Package Control: Install Package"
+			],
+			[
+				"insta",
+				"Package Control: Install Package"
+			],
+			[
+				"reind",
+				"Indentation: Reindent Lines"
+			],
+			[
+				"inde",
+				"Indentation: Reindent Lines"
+			],
+			[
+				"remo",
+				"Package Control: Remove Package"
+			],
+			[
+				"reindene",
+				"Indentation: Reindent Lines"
+			],
+			[
+				"rein",
+				"Indentation: Reindent Lines"
+			],
+			[
+				"django if",
+				"Snippet: Django template if statement"
+			],
+			[
+				"tag",
+				"Snippet: tag braces"
+			],
+			[
+				"emmet",
+				"Emmet: Remove Tag"
+			],
+			[
+				"django for",
+				"Snippet: Django template for loop"
+			],
+			[
+				"emmet ",
+				"Emmet: Expand Abbreviation"
+			],
+			[
+				"instal",
+				"Package Control: Install Package"
+			],
+			[
+				"django",
+				"Django: Check"
+			],
+			[
+				"set en",
+				"Django: Set Virtual Environment"
+			],
+			[
+				"django ",
+				"Django: Run Server"
+			],
+			[
+				"viru",
+				"Django: Set Virtual Environment"
+			],
+			[
+				"virtu",
+				"Django: Set Virtual Environment"
+			],
+			[
+				"django e",
+				"Django: Set Virtual Environment"
+			],
+			[
+				"insall",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 530.0
+	},
+	"console":
+	{
+		"height": 584.0,
+		"history":
+		[
+			"django-commands",
+			"pyt"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/home/dejwoo/Documents/bakalar"
+	],
+	"file_history":
+	[
+		"/home/dejwoo/Documents/bakalar/03_navrh.tex",
+		"/home/dejwoo/.config/sublime-text-3/Packages/LaTeXing/LaTeXing.sublime-settings",
+		"/home/dejwoo/Documents/bakalar/latex-template/firstpages.tex",
+		"/home/dejwoo/Documents/bakalar/latex-template/02_charakt.tex",
+		"/home/dejwoo/Documents/bakalar/latex-template/00_uvod.tex",
+		"/home/dejwoo/Downloads/latex-template/main.tex",
+		"/home/dejwoo/Documents/bakalar/latex-template/bachelor.sty",
+		"/home/dejwoo/Documents/bakalar/latex-template/main.tex",
+		"/home/dejwoo/Documents/bakalar/latex-template/main.bib",
+		"/home/dejwoo/mean/bakalar/packages/custom/common/public/controllers/header.js",
+		"/home/dejwoo/mean/bakalar/packages/custom/common/public/controllers/common.js",
+		"/home/dejwoo/mean/bakalar/packages/custom/common/public/routes/common.js",
+		"/home/dejwoo/mean/bakalar/packages/custom/common/public/views/timetable.html",
+		"/home/dejwoo/mean/bakalar/packages/custom/common/public/views/index.html",
+		"/home/dejwoo/mean/bakalar/packages/custom/common/public/controllers/timetable.js",
+		"/home/dejwoo/mean/bakalar/packages/custom/common/public/views/header.html",
+		"/home/dejwoo/mean/bakalar/packages/custom/common/app.js",
+		"/home/dejwoo/mean/bakalar.sublime-project",
+		"/home/dejwoo/mean/bakalar/packages/custom/common/public/assets/css/timetable.css",
+		"/home/dejwoo/mean/bakalar/packages/custom/common/server/views/layouts/default.html",
+		"/home/dejwoo/mean/bakalar/packages/custom/common/server/routes/common.js",
+		"/home/dejwoo/mean/bakalar/packages/core/system/app.js",
+		"/home/dejwoo/mean/bakalar/packages/custom/common/server/views/includes/head.html",
+		"/home/dejwoo/django/projects/foco/static/css/base.css",
+		"/home/dejwoo/django/projects/foco/templates/canals/canal_plugin.html",
+		"/home/dejwoo/django/projects/foco/apps/canals/cms_plugins.py",
+		"/home/dejwoo/django/projects/foco/apps/slider/cms_plugins.py",
+		"/home/dejwoo/django/projects/foco/templates/page.html",
+		"/home/dejwoo/django/projects/foco/settings.py",
+		"/home/dejwoo/django/projects/foco/templates/index.html",
+		"/home/dejwoo/django/projects/foco/templates/base.html",
+		"/home/dejwoo/django/projects/foco/static/slider/css/carousel.css",
+		"/home/dejwoo/django/projects/foco/apps/slider/models.py",
+		"/home/dejwoo/django/projects/foco/apps/canals/admin.py",
+		"/home/dejwoo/django/projects/foco/admin.py",
+		"/home/dejwoo/django/projects/foco/models.py",
+		"/home/dejwoo/django/projects/foco/apps/canals/models.py",
+		"/home/dejwoo/django/projects/foco/apps/canals/__init__.py",
+		"/home/dejwoo/.config/sublime-text-3/Packages/User/placeholder.sublime-snippet",
+		"/home/dejwoo/.config/sublime-text-3/Packages/Default/Preferences.sublime-settings",
+		"/home/dejwoo/.config/sublime-text-3/Packages/Anaconda/Anaconda.sublime-settings",
+		"/home/dejwoo/django/projects/foco/templates/menu.html",
+		"/home/dejwoo/django/projects/foco/templates/slider/slide_plugin.html",
+		"/home/dejwoo/django/projects/foco/apps/slider/views.py",
+		"/home/dejwoo/django/projects/foco/apps/slider/urls.py",
+		"/home/dejwoo/django/projects/foco/urls.py",
+		"/home/dejwoo/.config/sublime-text-3/Packages/Django Manage Commands/DjangoCommands.sublime-settings",
+		"/home/dejwoo/.config/sublime-text-3/Packages/User/DjangoCommands.sublime-settings",
+		"/home/dejwoo/.config/sublime-text-3/Packages/SideBarEnhancements/Side Bar.sublime-settings",
+		"/home/dejwoo/django/projects/foco/apps/jumbo/__init__.py",
+		"/tmp/ark-SHCIoR/Default.sublime-theme"
+	],
+	"find":
+	{
+		"height": 35.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"2013",
+			"Category",
+			"Article",
+			"slide",
+			"multi",
+			"h1",
+			"font"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 3,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "01_overview.tex",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3103,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2650,
+								2650
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/LaTeXing/support/LaTeX.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "main.tex",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2876,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1935,
+								1935
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/LaTeXing/support/LaTeX.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 1292.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "02_charakt.tex",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2319,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/LaTeXing/support/LaTeX.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "00_introduction.tex",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2013,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1740,
+								1740
+							]
+						],
+						"settings":
+						{
+							"open_with_edit": true,
+							"syntax": "Packages/LaTeXing/support/LaTeX.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "abstract.tex",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 701,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								230,
+								230
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/LaTeXing/support/LaTeX.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 27.0
+	},
+	"input":
+	{
+		"height": 31.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 297.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"output.haskell_sublime_load":
+	{
+		"height": 124.0
+	},
+	"pinned_build_system": "",
+	"project": "bc.sublime-project",
+	"replace":
+	{
+		"height": 50.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 265.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
