@@ -13,7 +13,7 @@ const util = require('util');
 function timeEmitter(sampleRate) {
   	EventEmitter.call(this);
   	let self = this;
-  	this.emitting = false;
+  	this.emitting = true;
   	this.sampleRate = sampleRate;
   	this.loop = function() {
 		setTimeout(function() {
@@ -32,11 +32,11 @@ function timeEmitter(sampleRate) {
 	}
 
 	this.readStop = function() {
-		console.log("Stoping emitting");
+		console.log("Stoping emitting time");
 		self.emitting = false;
 	}
 	this.readStart = function() {
-		console.log("Starting emitting");
+		console.log("Starting emitting time");
 		self.emitting = true;
 		// console.log(this);
 		self.loop();

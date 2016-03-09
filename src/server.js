@@ -21,6 +21,9 @@ const inputStream = require('./modules/inputStreamWrapper.js');
 // // Bind to a port
 // app.listen(8000);
 console.log('Application running!');
-const myTimeInputStream = new inputStream(timeInput,{},0);
-myTimeInputStream.pipe(process.stdout);
+const myTimeInputStream = new inputStream(timeInput,{},1000);
+myTimeInputStream.on('readable', function () {
+    var buf = myTimeInputStream.read();
+    console.log(buf.toString());
+});
 myTimeInputStream._source.readStart()
