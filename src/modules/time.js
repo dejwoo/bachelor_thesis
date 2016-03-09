@@ -13,12 +13,16 @@ const util = require('util');
 function timeEmitter(sampleRate) {
   	EventEmitter.call(this);
   	let self = this;
-  	this.reading = false;
+  	this.emitting = false;
   	this.sampleRate = sampleRate;
   	this.loop = function() {
 		setTimeout(function() {
-			if (self.reading) {
+			if (self.emitting) {
+				var d = new Date()
+				// TODO:: Calling Date() to have string buffer
 				self.emit('data', Date());
+				// console.log(d.toJSON() );
+				// console.log(self.sampleRate);
 				self.loop();
 			}
 			else {
@@ -28,23 +32,25 @@ function timeEmitter(sampleRate) {
 	}
 
 	this.readStop = function() {
-		self.reading = false;
+		console.log("Stoping emitting");
+		self.emitting = false;
 	}
 	this.readStart = function() {
-		self.reading = true;
+		console.log("Starting emitting");
+		self.emitting = true;
 		// console.log(this);
 		self.loop();
 
 	}
-	console.log(self);
+	// console.log(self);
 }
 util.inherits(timeEmitter, EventEmitter);
 
 
-const myEmitter = new timeEmitter(1000);
-myEmitter.on('data', (chunk) => {
-  console.log('an event occurred!' + chunk);
-});
+// const myEmitter = new timeEmitter(1000);
+// myEmitter.on('data', (chunk) => {
+//   console.log('an event occurred!' + chunk);
+// });
 // uncoment this and you can see readStart/Stop in action,
 // use node time.js 
 // myEmitter.readStart();

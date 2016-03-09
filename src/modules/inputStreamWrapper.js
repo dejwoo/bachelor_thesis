@@ -12,31 +12,42 @@
 // easy build up upon inputWrapper will be transformWrapper which will take
 // stream and transform it(HEX code -> normal values), after streaming it forwar
 // which will not clutter our code in main up, we will just conect pipes from one to another.
-inputSource = require('./time.js');
 util = require('util');
-var Readable = require('stream').Readable;
-util.inherits(inputWrapper, Readable);
+const Readable = require('stream').Readable;
+util.inherits(inputStreamWrapper, Readable);
 
-function inputWrapper(options,sampleRate) {
+function inputStreamWrapper(inputSource, options, sampleRate) {
   Readable.call(this, options);
   //source is an object, which will provide readStop(),readStart(),configure().
-  this._source = new InputSource(sampleRate);
+  this._source = new inputSource(sampleRate);
+  this._isReading = this._source.emitting;
 
   // Every time there's data, we push it into the internal buffer.
-  this._source.ondata = (chunk) => {
+  this._source.on('data', (chunk) => {
+    //BEAWARE: u can send objects with stream using objectMode:true as option in creating
+    // stream, BUT be careful where are you piping this stream, e.g process.stdout
     // if push() returns false, then we need to stop reading from source
     if (!this.push(chunk))
       this._source.readStop();
-  };
+      this._isReading = false;
+  });
 
   // When the source ends, we push the EOF-signaling `null` chunk
-  this._source.onend = () => {
+  this._source.on('end', () => {
     this.push(null);
-  };
+  });
 }
 
 // _read will be called when the stream wants to pull more data in
 // the advisory size argument is ignored in this case.
-inputWrapper.prototype._read = function(size) {
-  this._source.readStart();
+inputStreamWrapper.prototype._read = function(size) {
+  if (!this._isReading) {
+    this._source.readStart();
+    this._isReading = true;
+  }
+
 };
+module.exports = inputStreamWrapper
+// const myInputStreamWrapper = new inputWrapper({},0);
+// myInputStreamWrapper.pipe(process.stdout);
+// myInputStreamWrapper._source.readStart()
