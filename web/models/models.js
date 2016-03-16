@@ -12,4 +12,5 @@ var journalSchema = new mongoose.Schema({
 });
 //declaring a model called User which has schema userSchema
 mongoose.model("User", userSchema);
-mongoose.model("Journal", journalSchema);
+// console.log("User registered");
+mongoose.model('Journal', journalSchema);

@@ -1,8 +1,9 @@
 var express = require('express');
 var router = express.Router();
-
+var mongoose = require('mongoose');
+var Journal = mongoose.model('Journal');
 router.use(function (req, res, next) {
-	if (req.methor === "GET") {
+	if (req.method === "GET") {
 		//continue to the next m,iddleware or request handler
 		return next();
 	}
@@ -18,20 +19,57 @@ router.route('/journal')
 		//returns all journal
 		.get(function (req,res) {
 			// temp
-			res.send({message:'TODO: return all journal notes'});
+			Journal.find((err, data) => {
+				if (err) {
+					return res.send(500, err);
+				}
+				return res.send(data)
+			})
 		})
 		.post(function (req, res) {
-			res.send({message:'TODO: Create a new journal entry'});
+			var newJournal = new Journal();
+			newJournal.text = req.body.text;
+			newJournal.username = req.body.created_by;
+			newJournal.save(function (err, journal) {
+				if (err){
+					return res.send(500,err);
+				}
+				return res.json(journal);
+			});
 		});
 router.route('/journal/:id')
 
 		.get(function (req,res) {
-			res.send({message: 'TODO return post with ID: ' + req.params.id});
+			Journal.findById(req.params.id, function (err, journal) {
+				if (err){
+					return res.send(err);
+				}
+				return res.json(journal);
+			});
 		})
 		.put(function (req,res) {
-			res.send({message: 'TODO modify post with ID: ' + req.params.id});
+			Journal.findById(req.params.id, function (err, journal) {
+				if (err){
+					return res.send(err);
+				}
+				journal.text = req.body.text;
+				journal.username = req.body.created_by;
+				journal.save(function (err, journal) {
+					if (err){
+						return res.send(500,err);
+					}
+				return res.json(journal);
+				});
+			});
 		})
 		.delete(function (req,res) {
-			res.send({message: 'TODO delete post with ID: ' + req.params.id});
-		})
+			Journal.remove({
+				_id:req.params.id
+			}, function (err) {
+				if (err){
+					return res.send(err)
+				}
+				return res.json("Deleted: " + req.params.id);
+			});
+		});
 module.exports = router;

@@ -37,10 +37,12 @@ module.exports = function(passport){
                     return done(err,false);
                 }
                 if (!user) {
-                    return done("Wrong username", false);
+                    console.log('User Not Found with username '+username);
+                    return done(null, false);
                 }
                 if (!isValidPassword(user, password)) {
-                    return done("Wrond passowrd", false);
+                    console.log('Invalid Password');
+                    return done(null, false);
                 }
                 return done(null, user);
             });
@@ -51,27 +53,36 @@ module.exports = function(passport){
             passReqToCallback : true // allows us to pass back the entire request to the callback
         },
         function(req, username, password, done) {
-            //check if users exits
-            User.findOne({'username': username}, (err, user) => {
+
+            // find a user in mongo with provided username
+            User.findOne({ 'username' :  username }, function(err, user) {
+                // In case of any error, return using the done method
                 if (err){
-                    return done(err,false);
+                    console.log('Error in SignUp: '+err);
+                    return done(err);
                 }
+                // already exists
                 if (user) {
-                    //we have already signed user
-                    console.log("Username already taken " + user.username);
-                    return done("Username already taken " + user.username,false);
+                    console.log('User already exists with username: '+username);
+                    return done(null, false);
+                } else {
+                    // if there is no user, create the user
+                    var newUser = new User();
+
+                    // set the user's local credentials
+                    newUser.username = username;
+                    newUser.password = createHash(password);
+
+                    // save the user
+                    newUser.save(function(err) {
+                        if (err){
+                            console.log('Error in Saving user: '+err);
+                            throw err;
+                        }
+                        console.log(newUser.username + ' Registration succesful');
+                        return done(null, newUser);
+                    });
                 }
-                var user = new User();
-                user.username = username;
-                user.password = createHash(password);
-                console.log('Succesfully signed up user: ' + user);
-                user.save((err,user) => {
-                    if (err) {
-                        return done(err, false);
-                    }
-                    console.log('Succesfully signed up user: ' + user);
-                    return done(null,user);
-                });
             });
         })
     );
