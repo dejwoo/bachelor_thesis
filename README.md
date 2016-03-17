@@ -8,3 +8,6 @@ This bachelor thesis is written in colaboration with **SOFTEC s.r.o**
 **Thesis supervisor:** RNDr. Jozef Šiška
 
 **Thesis advisor:** Anton Pytel
+
+
+LoookUp: IoTivity standardization
