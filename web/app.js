@@ -11,7 +11,8 @@ var mongoose = require('mongoose');
 mongoose.connect("mongodb://localhost/dejwoo");
 require('./models/models.js');
 var api = require('./routes/api');
-var index = require('./routes/index');
+var html = require('./routes/html');
+var files = require('./routes/files');
 var authenticate = require('./routes/authenticate')(passport);
 var swig = require('swig');
 swig.setDefaults({ varControls: ['<{', '}>'] });
@@ -36,7 +37,6 @@ app.use(cookieParser());
 app.use(require('node-sass-middleware')({
   src: path.join(__dirname, 'public'),
   dest: path.join(__dirname, 'public'),
-  indentedSyntax: true,
   sourceMap: true
 }));
 app.use(express.static(path.join(__dirname, 'public')));
@@ -49,8 +49,9 @@ initPassport(passport);
 
 app.use('/api', api);
 app.use('/auth', authenticate);
-app.use('/about', index);
-app.use('/', index);
+app.use('/file', files);
+app.use('*', html);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

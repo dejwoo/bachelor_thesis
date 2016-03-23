@@ -1,18 +1,27 @@
 {% extends 'layout.html' %}
 {% block content %}
-	<div id='main' class="container">
-		<nav class="navbar-fluid navbar-default navbar-fixed-top">
-			<div class="container">
-				    <a class="navbar-brand" href="/"> <{ title }> </a>
-				    <p class="navbar-text"> Dávid Kőszeghy </p>
-				    <p class="navbar-right navbar-text" ng-hide="authenticated"><a href="#/login">Login</a> or <a href="#/register">Register</a></p>
-				    <p class="navbar-right navbar-text" ng-show="authenticated"><a href="#" ng-click="signout()">Logout</a></p>
-				    <p class="navbar-right navbar-text" ng-show="authenticated">Signed in as {{current_user}}</p>
-			</div>
-		</nav>
-		<div class="col-md-offset-2 col-md-8">
-			<div ng-view>
-			</div>
+<div id='main' class="container" data-ng-controller="MenuController as menuController">
+	<nav class="menu" ng-class="menuController.pushMenu">
+		<div class="menu-wrap" ng-if="menuController.showingMenu">
+			<h4>MENU: <button type="button" class="close pull-right" aria-label="Close" data-ng-click="menuController.showMenu()"><span aria-hidden="true">&times;</span></button></h4>
+
+			<ul>
+				<li><a href="/"> Home </a></li>
+				<li><a href="/about"> About </a></li>
+				<li><a href="/thesis"> Thesis </a></li>
+				<li><a href="/sources"> Sources </a></li>
+				<li><a href="/timeline"> Timeline </a></li>
+				<li><a href="/journal"> Journal </a></li>
+				<li><a href="/files"> Files </a></li>
+			</ul>
 		</div>
-	</div>
+		<div id="showMenu">
+			<a href="" data-ng-click="menuController.showMenu()">
+				<span class="glyphicon glyphicon-th-list"></span>
+			</a>
+		</div>
+	</nav>
+</div>
+<div ng-view>
+</div>
 {% endblock %}
