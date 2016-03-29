@@ -75,14 +75,14 @@ app.controller('MainController', function ($location) {
 			case '/404':
 				return 'error-background'
 		}
-		
+
 	}
 })
 app.controller('MenuController', function(){
 	let self = this;
 	self.showingMenu = false;
 	self.pushMenu = "";
-	self.showMenu = () => { 
+	self.showMenu = () => {
 		self.showingMenu = !self.showingMenu;
 		if (self.pushMenu === ""){
 			self.pushMenu = "pushMenu";
@@ -91,8 +91,4 @@ app.controller('MenuController', function(){
 			self.pushMenu = "";
 		}
 	};
-angular.module('app').controller 'AppCtrl', ($rootScope) ->
-  $rootScope.$on '$routeChangeSuccess', (event, current, previous) =>
-    $rootScope.pageTitle = $route.current.title
-	
 });
