@@ -1,0 +1,14 @@
+ttyUSB3
+9600
+novj
+defaultroute
+noauth
+persist
+holdoff 10
+maxfail 0
+debug
+crtscts
+local
+noipdefault
+ipcp-accept-local
+ipcp-accept-remote
