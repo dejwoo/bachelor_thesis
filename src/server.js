@@ -3,27 +3,28 @@
 // server
 
 // Include Express
-const express = require('express');
+const server = require('express');
 const timeInput = require('./modules/time.js');
 const inputStream = require('./modules/inputStreamWrapper.js');
+const gpsInput = require('./modules/gps/gps.module.js');
 
 // Create a new Express application
-// var app = express();
+var server = express();
 
-// // Add a basic route – index page
-// app.get('/', function (req, res) {
-// 	res.writeHead(200, {'Content-Type': 'text/plain'});
-// });
+// Add a basic route – index page
+server.get('/', function (req, res) {
+	res.writeHead(200, {'Content-Type': 'text/plain'});
+});
 
 
 
 
 // // Bind to a port
-// app.listen(8000);
+app.listen(8000);
 console.log('Application running!');
-const myTimeInputStream = new inputStream(timeInput,{},1000);
-myTimeInputStream.on('readable', function () {
-    var buf = myTimeInputStream.read();
-    console.log(buf.toString());
-});
-myTimeInputStream._source.readStart()
+// const myTimeInputStream = new inputStream(timeInput,{},1000);
+// myTimeInputStream.on('readable', function () {
+//     var buf = myTimeInputStream.read();
+//     console.log(buf.toString());
+// });
+// myTimeInputStream._source.readStart()
