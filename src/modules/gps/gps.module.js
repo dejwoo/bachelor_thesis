@@ -17,7 +17,7 @@ function GPSource(options) {
 	}
 	
 	self.serial = new SerialPort(self.options.device, {
-		baudrate:4800
+		baudrate:4800,
 		parser: serialport.parsers.readline('\n')
 	});
 	self.serial.on('open').then( function() {
@@ -25,8 +25,8 @@ function GPSource(options) {
 		self.serial.on('data').then( function(err,results) {
 			console.log(err);
 			console.log(results);
-		})
-	}
+		});
+	});
 
 }
 
