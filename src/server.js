@@ -22,9 +22,9 @@ server.get('/', function (req, res) {
 // // Bind to a port
 app.listen(8000);
 console.log('Application running!');
-// const myTimeInputStream = new inputStream(timeInput,{},1000);
-// myTimeInputStream.on('readable', function () {
-//     var buf = myTimeInputStream.read();
-//     console.log(buf.toString());
-// });
-// myTimeInputStream._source.readStart()
+const myTimeInputStream = new inputStream(timeInput,{},1000);
+myTimeInputStream.on('readable', function () {
+    var buf = myTimeInputStream.read();
+    console.log(buf.toString());
+});
+
