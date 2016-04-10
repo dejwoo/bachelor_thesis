@@ -21,10 +21,11 @@ function inputStreamWrapper(inputSource, options, sampleRate) {
   // {writableObjectMode:true}
   if (typeof options['writableObjectMode'] === 'undefined') {
     options.writableObjectMode = true;
+    options.readableObjectMode = true;
   }
   Duplex.call(this, options);
   this._source = new inputSource(sampleRate);
-  this._isReading = this._source.emitting;
+  this._isReading = false;
 
   // Every time there's data, we push it into the internal buffer.
   this._source.on('data', (chunk) => {
