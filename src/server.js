@@ -19,7 +19,7 @@ server.get('/', function (req, res) {
 
 
 
-var accelerometer = new accInput({});
+
 // // Bind to a port
 server.listen(8000);
 console.log('Application running!');
@@ -33,6 +33,12 @@ const myGpsInputStream = new inputStream(gpsInput,{},1000);
 myGpsInputStream.on('readable', function () {
     process.stdout.write("GPS: ");
     var gpsObject = myGpsInputStream.read();
-    console.log(gpsObject);
+    console.log(gpsObject.time);
+});
+const myAccInputStream = new inputStream(accInput,{},1000);
+myAccInputStream.on('readable', function () {
+    process.stdout.write("GPS: ");
+    var accObject = myAccInputStream.read();
+    console.log(accObject);
 });
 

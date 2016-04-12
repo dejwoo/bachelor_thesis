@@ -4,10 +4,17 @@ const LSM303_ACCEL = require('./accelerometer_const.js');
 
 
 function Accelerometer(options) {
-	this.i2c_num= options.num ? options.num : 1;
-	this.address= options.address ? options.address : LSM303_ACCEL.ADDRESS_DEFAULT;
-	this.reg1_a_cmd = options.reg1_a_cmd ? options.reg1_a_cmd : LSM303_ACCEL.CTRL_REG1_AXIS_Z_Y_X | LSM303_ACCEL.CTRL_REG1_RATE_100HZ
-	this.reg4_a_cmd = options.reg4_a_cmd ? options.reg4_a_cmd : LSM303_ACCEL.CTRL_REG4_FS_16G | LSM303_ACCEL.CTRL_REG4_HR
+	if (typeof options !== 'undefined') {
+		this.i2c_num= options.num ? options.num : 1;
+		this.address= options.address ? options.address : LSM303_ACCEL.ADDRESS_DEFAULT;
+		this.reg1_a_cmd = options.reg1_a_cmd ? options.reg1_a_cmd : LSM303_ACCEL.CTRL_REG1_AXIS_Z_Y_X | LSM303_ACCEL.CTRL_REG1_RATE_100HZ
+		this.reg4_a_cmd = options.reg4_a_cmd ? options.reg4_a_cmd : LSM303_ACCEL.CTRL_REG4_FS_16G | LSM303_ACCEL.CTRL_REG4_HR
+	} else {
+		this.i2c_num = 1;
+		this.address = LSM303_ACCEL.ADDRESS_DEFAULT;
+		this.reg1_a_cmd = LSM303_ACCEL.CTRL_REG1_AXIS_Z_Y_X | LSM303_ACCEL.CTRL_REG1_RATE_100HZ
+		this.reg4_a_cmd = LSM303_ACCEL.CTRL_REG4_FS_16G | LSM303_ACCEL.CTRL_REG4_HR
+	}
 }
 Accelerometer.prototype.init = function() {
 	this.i2c1 = i2c.open(this.i2c_num, function (err) {
