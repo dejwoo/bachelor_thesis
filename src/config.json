@@ -1,0 +1,37 @@
+{
+	"inputs" : [
+		{
+			"name" : "gpsInput",
+			"module" : "./gps/gps.module.js", //path to the module
+			"type": "event" // event, polling, direct?
+			"sampleRate": 0 //defined only with polling and direct types
+			"outputs" : ["mqtt","db","iftt"] //array of names of outputs to push data to
+		},{
+			"name" : "timeInput",
+			"module" : "./time/time.module.js", //path to the module
+			"type": "polling" // event, polling, direct?
+			"sampleRate": 1000//defined only with polling and direct types in ms
+			"outputs" : ["mqtt"] //array of names of outputs to push data to
+		},{
+			"name" : "obdInput",
+			"module" : "./obd/obd.module.js", //path to the module
+			"type": "event" // event, polling, direct?
+			"sampleRate": 0//defined only with polling and direct types in ms
+			"outputs" : ["db"] //array of names of outputs to push data to
+		}],
+	"outputs" : [
+		{
+			"name" : "mqtt",
+			"module" : "./mqtt/mqtt.module.js", //path to the module
+			"type": "msg" // msg
+		},{
+			"name" : "db",
+			"module" : "./db/db.module.js", //path to the module
+			"type": "db" // db
+			},
+		{
+			"name" : "iftt",
+			"module" : "./iftt/iftt.module.js", //path to the module
+			"type": "api" // db
+			}]
+}
