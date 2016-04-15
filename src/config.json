@@ -3,17 +3,17 @@
 		{
 			"name" : "gpsInput",
 			"modulePath" : "./gps/gps.module.js", 
-			"sourceOption" : { "sampleRate" : -1, "device": "/dev/ttyUSB1", "init": "AT+CGPS=1"}
+			"sourceOptions" : { "sampleRate" : -1, "device": "/dev/ttyUSB1", "init": "AT+CGPS=1"},
 			"outputs" : ["mqtt","db","iftt"] 
 		},{
 			"name" : "timeInput",
 			"modulePath" : "./time.module.js", 
-			"sourceOption" : { "sampleRate" : 1000, "response" : "JSON"}
+			"sourceOptions" : { "sampleRate" : 1000, "response" : "JSON"},
 			"outputs" : ["mqtt"] 
 		},{
 			"name" : "obdInput",
 			"modulePath" : "./obd/obd.module.js", 
-			"sourceOption" : { "sampleRate" : 1000, "response" : "JSON"}
+			"sourceOptions" : { "sampleRate" : 1000, "response" : "JSON"},
 			"outputs" : ["db"] 
 		}],
 	"outputs" : [
