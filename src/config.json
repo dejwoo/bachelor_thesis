@@ -2,36 +2,33 @@
 	"inputs" : [
 		{
 			"name" : "gpsInput",
-			"module" : "./gps/gps.module.js", //path to the module
-			"type": "event" // event, polling, direct?
-			"sampleRate": 0 //defined only with polling and direct types
-			"outputs" : ["mqtt","db","iftt"] //array of names of outputs to push data to
+			"modulePath" : "./gps/gps.module.js", 
+			"sourceOption" : { "sampleRate" : -1, "device": "/dev/ttyUSB1", "init": "AT+CGPS=1"}
+			"outputs" : ["mqtt","db","iftt"] 
 		},{
 			"name" : "timeInput",
-			"module" : "./time/time.module.js", //path to the module
-			"type": "polling" // event, polling, direct?
-			"sampleRate": 1000//defined only with polling and direct types in ms
-			"outputs" : ["mqtt"] //array of names of outputs to push data to
+			"modulePath" : "./time.module.js", 
+			"sourceOption" : { "sampleRate" : 1000, "response" : "JSON"}
+			"outputs" : ["mqtt"] 
 		},{
 			"name" : "obdInput",
-			"module" : "./obd/obd.module.js", //path to the module
-			"type": "event" // event, polling, direct?
-			"sampleRate": 0//defined only with polling and direct types in ms
-			"outputs" : ["db"] //array of names of outputs to push data to
+			"modulePath" : "./obd/obd.module.js", 
+			"sourceOption" : { "sampleRate" : 1000, "response" : "JSON"}
+			"outputs" : ["db"] 
 		}],
 	"outputs" : [
 		{
 			"name" : "mqtt",
-			"module" : "./mqtt/mqtt.module.js", //path to the module
-			"type": "msg" // msg
+			"modulePath" : "./mqtt/mqtt.module.js", 
+			"type": "msg" 
 		},{
 			"name" : "db",
-			"module" : "./db/db.module.js", //path to the module
-			"type": "db" // db
+			"modulePath" : "./db/db.module.js", 
+			"type": "db" 
 			},
 		{
 			"name" : "iftt",
-			"module" : "./iftt/iftt.module.js", //path to the module
-			"type": "api" // db
+			"modulePath" : "./iftt/iftt.module.js", 
+			"type": "api" 
 			}]
 }
