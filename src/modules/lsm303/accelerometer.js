@@ -1,7 +1,7 @@
 var i2c = require('i2c-bus'),
   i2c1;
 const LSM303_ACCEL = require('./accelerometer_const.js');
-
+util.inherits(GpsInputSource, EventEmitter);
 
 function Accelerometer(options) {
 	if (typeof options !== 'undefined') {
@@ -36,7 +36,7 @@ Accelerometer.prototype.init = function() {
   		console.log("LSM303 Accelerometer resolution and scale successfuly set.")
   	});
 }
-Accelerometer.prototype.read = function() {
+Accelerometer.prototype._read = function() {
 	//asuming XYZ axes for now
 	var buf = new Buffer(6);
 	//puzzled by 0x80 shift, dont know why its there, read it from official adafruit library
@@ -57,4 +57,8 @@ Accelerometer.prototype.read = function() {
 	}
 	return output;
 }
+
+.prototype.readStart = function () {
+
+
 module.exports = Accelerometer
