@@ -124,4 +124,11 @@ DataLogger.prototype.removeOutputSource = function (outputSourceName) {
 		console.error(err);
 	}
 }
+DataLogger.prototype.configureInputSource = function (inputSourceName, inputConfigJSON) {
+	var self = this;
+	if (!isDefined(self.inputs[inputSourceName])) {
+		console.error("data-logger.module.js: configureInputSource:: Input with name ["+inputSourceName+"] does not exists");
+	}
+	self.inputs[inputSourceName].stream.write(inputConfigJSON);
+}
 module.exports = new DataLogger();

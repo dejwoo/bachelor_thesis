@@ -11,6 +11,7 @@ consoleOutput.prototype.init = function (config,callback) {
 	}
 }
 consoleOutput.prototype.close = function (callback) {
+	callback();
 	return
 }
 consoleOutput.prototype.send = function (data,inputModule,callback) {
