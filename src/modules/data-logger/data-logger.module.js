@@ -1,10 +1,13 @@
 const inputStream = require('./inputStreamWrapper.js');
 
 function DataLogger (configJSON) {
+	var self = this;
 	this.inputs = {};
 	this.outputs = {};
 	if (typeof configJSON !== 'undefined') {
 		this.configure(configJSON)
+		console.log(this.inputs);
+
 	}
 	else {
 		// TODO: configure with default settings
@@ -35,6 +38,7 @@ DataLogger.prototype.configure = function (configJSON) {
 	}
 }
 DataLogger.prototype.addInputSource = function (inputConfig) {
+	var self = this;
 	if (isDefined(this.inputs[inputConfig.name])) {
 		console.error("Input with that name already exists, please remove it first.");
 		return;
@@ -56,15 +60,17 @@ DataLogger.prototype.addInputSource = function (inputConfig) {
 			} else {
 				// ak nie tak ich rovno posielame podla configu
 				for (var outputIndex = 0; outputIndex < inputConfig.outputs.length; outputIndex++) {
-					if (!isDefined(this.outputs[inputConfig.outputs[outputIndex]])) {
+					console.log(self);
+					if (!isDefined(self.outputs[inputConfig.outputs[outputIndex]])) {
 						console.error("DataLogger.configure.inputConfig has output source which is not defined");
+					} else {
+						self.outputs[inputConfig.outputs[ouputIndex]].module.send(readObject);
 					}
-					this.outputs[inputConfig.outputs[ouputIndex]].module.send(readObject);
 				}
 			}
 		});
 		//nakoniec pridam do interneho zoznamu data-loggera.
-		this.inputs[inputConfig.name] = inputConfig;
+		self.inputs[inputConfig.name] = inputConfig;
 
 	} catch(err) {
 		//nastala chyba v try blocku, vypisem spravu
@@ -72,22 +78,24 @@ DataLogger.prototype.addInputSource = function (inputConfig) {
 	}
 }
 DataLogger.prototype.removeInputSource = function (inputSourceName) {
-	if (!isDefined(this.inputs[inputSourceName])) {
+	var self = this;
+	if (!isDefined(self.inputs[inputSourceName])) {
 		console.warn("Input with that name does not exists.");
 		return;
 	}
 	try {
-		this.input[inputSourceName].stream.removeListener('readable', () => {
+		self.input[inputSourceName].stream.removeListener('readable', () => {
 			console.log(inptuSourceName + " successfully removed listener.");
 		});
 		//vymazem property z internej pamete data loggera
-		delete this.inputs[inputSourceName];
+		delete self.inputs[inputSourceName];
 	} catch (err) {
 		console.error(err);
 	}
 }
 DataLogger.prototype.addOutputSource = function(outputConfig) {
-	if (isDefined(this.outputs[outputConfig.name])) {
+	var self = this;
+	if (isDefined(self.outputs[outputConfig.name])) {
 		console.error("Output with that name already exists, please remove it first.");
 		return;
 	}
@@ -97,23 +105,24 @@ DataLogger.prototype.addOutputSource = function(outputConfig) {
 		//inicializujem
 		outputConfig.module.init(outputConfig.sourceOptions);
 		//pridam do interneho zoznamu data-loggera
-		this.outputs[outputConfig.name] = outputConfig;
+		self.outputs[outputConfig.name] = outputConfig;
 	} catch (err) {
 		console.error(err);
 	}
 }
 DataLogger.prototype.removeOutputSource = function (outputSourceName) {
-	if (!isDefined(this.outputs[outputSourceName])) {
+	var self = this;
+	if (!isDefined(self.outputs[outputSourceName])) {
 		console.warn("Input with that name does not exists.");
 		return;
 	}
 	try {
 		//zavolam funkciu na korektne ukoncenie output modulu
-		this.outputs[outputSourceName].module.close();
+		self.outputs[outputSourceName].module.close();
 		//vymazem property z internej pamete data loggera
-		delete this.outputs[outputSourceName];
+		delete self.outputs[outputSourceName];
 	} catch (err) {
 		console.error(err);
 	}
 }
-module.exports = new DataLogger;
+module.exports = new DataLogger();

@@ -9,7 +9,7 @@
 			"name" : "timeInput",
 			"modulePath" : "./time.module.js", 
 			"sourceOptions" : { "sampleRate" : 1000, "response" : "JSON"},
-			"outputs" : ["mqtt"] 
+			"outputs" : ["console"] 
 		},{
 			"name" : "obdInput",
 			"modulePath" : "./obd/obd.module.js", 
@@ -30,5 +30,10 @@
 			"name" : "iftt",
 			"modulePath" : "./iftt/iftt.module.js", 
 			"type": "api" 
-			}]
+			},
+		{	
+			"name" : "console",
+			"modulePath" : "./outputs/console.module.js", 
+			"sourceOptions" : { "messageHeader" : "Console Output"}
+		}]
 }
