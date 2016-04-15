@@ -2,9 +2,9 @@
 	"inputs" : [
 		{
 			"name" : "gpsInput",
-			"modulePath" : "./gps/gps.module.js", 
+			"modulePath" : "./gps/gps.modulse.js", 
 			"sourceOptions" : { "sampleRate" : -1, "device": "/dev/ttyUSB1", "init": "AT+CGPS=1"},
-			"outputs" : ["mqtt","db","iftt"] 
+			"outputs" : [] 
 		},{
 			"name" : "timeInput",
 			"modulePath" : "./time.module.js", 
@@ -14,7 +14,7 @@
 			"name" : "obdInput",
 			"modulePath" : "./obd/obd.module.js", 
 			"sourceOptions" : { "sampleRate" : 1000, "response" : "JSON"},
-			"outputs" : ["db"] 
+			"outputs" : [] 
 		}],
 	"outputs" : [
 		{
@@ -25,13 +25,11 @@
 			"name" : "db",
 			"modulePath" : "./db/db.module.js", 
 			"type": "db" 
-			},
-		{
+		},{
 			"name" : "iftt",
 			"modulePath" : "./iftt/iftt.module.js", 
 			"type": "api" 
-			},
-		{	
+		},{	
 			"name" : "console",
 			"modulePath" : "./outputs/console.module.js", 
 			"sourceOptions" : { "messageHeader" : "Console Output"}

@@ -25,7 +25,7 @@ DataLogger.prototype.configure = function (configJSON) {
 		return
 	}
 	if (isDefined(configJSON.outputs)) {
-		for (var index = 0; index < configJSON.inputs.length; index++) {
+		for (var index = 0; index < configJSON.outputs.length; index++) {
 			var outputConfig = configJSON.outputs[index];
 			this.addOutputSource(outputConfig);
 		}
@@ -60,11 +60,10 @@ DataLogger.prototype.addInputSource = function (inputConfig) {
 			} else {
 				// ak nie tak ich rovno posielame podla configu
 				for (var outputIndex = 0; outputIndex < inputConfig.outputs.length; outputIndex++) {
-					console.log(self);
 					if (!isDefined(self.outputs[inputConfig.outputs[outputIndex]])) {
-						console.error("DataLogger.configure.inputConfig has output source which is not defined");
+						console.error("DataLogger.configure.inputConfig["+inputConfig.name+"] has output source which is not defined");
 					} else {
-						self.outputs[inputConfig.outputs[ouputIndex]].module.send(readObject);
+						self.outputs[inputConfig.outputs[outputIndex]].module.send(readObject, inputConfig);
 					}
 				}
 			}
