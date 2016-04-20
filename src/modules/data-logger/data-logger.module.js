@@ -101,9 +101,9 @@ DataLogger.prototype.addOutputSource = function(outputConfig) {
 	try {
 		//ziskam module
 		outputConfig.module = require("../" + outputConfig.modulePath);
-		//inicializujem
+		//inicializujemS
 		outputConfig.module.init(outputConfig.sourceOptions);
-		//pridam do interneho zoznamu data-loggera
+		//pridam do interneho zoznamu data-loggeraloggeraloggera
 		self.outputs[outputConfig.name] = outputConfig;
 	} catch (err) {
 		console.error(err);

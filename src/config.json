@@ -9,7 +9,7 @@
 			"name" : "timeInput",
 			"modulePath" : "./time.module.js", 
 			"sourceOptions" : { "sampleRate" : 1000, "response" : "JSON"},
-			"outputs" : ["console"] 
+			"outputs" : ["console","rabbitMQ"] 
 		},{
 			"name" : "obdInput",
 			"modulePath" : "./obd/obd.module.js", 
@@ -18,9 +18,18 @@
 		}],
 	"outputs" : [
 		{
-			"name" : "mqtt",
-			"modulePath" : "./mqtt/mqtt.module.js", 
-			"type": "msg" 
+			"name" : "rabbitMQ",
+			"modulePath" : "./outputs/rabbitmq.module.js", 
+			"type": "msg",
+			"sourceOptions" : { 
+				"serverConnection" : {
+									"host" : "128.199.37.120",
+									"port" : 5672,
+									"login": "dejwoo",
+									"password": "qazxswedcvfr4rfvcdewsxzaq4*",
+									"authMechanism": "AMQPLAIN"
+								}
+							}
 		},{
 			"name" : "db",
 			"modulePath" : "./db/db.module.js", 
