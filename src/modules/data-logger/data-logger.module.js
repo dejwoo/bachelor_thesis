@@ -83,11 +83,12 @@ DataLogger.prototype.removeInputSource = function (inputSourceName) {
 		return;
 	}
 	try {
-		self.input[inputSourceName].stream.removeListener('readable', () => {
-			console.log(inptuSourceName + " successfully removed listener.");
+		self.inputs[inputSourceName].stream.removeListener('readable', function () {
+			console.log(inputSourceName + " successfully removed listener.");
 		});
 		//vymazem property z internej pamete data loggera
 		delete self.inputs[inputSourceName];
+        console.log(self.inputs)
 	} catch (err) {
 		console.error(err);
 	}
@@ -130,5 +131,23 @@ DataLogger.prototype.configureInputSource = function (inputSourceName, inputConf
 		console.error("data-logger.module.js: configureInputSource:: Input with name ["+inputSourceName+"] does not exists");
 	}
 	self.inputs[inputSourceName].stream.write(inputConfigJSON);
+}
+DataLogger.prototype.shutdown = function() {
+    console.info("DataLogger shutting down!")
+    for (var inputKey in this.inputs) {
+        if (!this.inputs.hasOwnProperty(inputKey)) {
+             continue
+        }
+        console.log("Closing Input: ", this.inputs[inputKey].name);
+        this.removeInputSource(inputKey);
+    }
+    for (var outputKey in this.outputs) {
+        console.log("Closing Output: ", this.outputs[outputKey].name);
+        if (!this.outputs.hasOwnProperty(outputKey)) {
+             continue
+        }
+        this.removeOutputSource(outputKey);
+    }
+    process.exit();
 }
 module.exports = new DataLogger();

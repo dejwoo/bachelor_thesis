@@ -3,7 +3,7 @@ const Duplex = require('stream').Duplex;
 util.inherits(inputStreamWrapper, Duplex);
 
 function inputStreamWrapper(inputSource, sourceOptions) {
-  var streamOptions = {};  
+  var streamOptions = {};
   streamOptions.writableObjectMode = true;
   streamOptions.readableObjectMode = true;
   Duplex.call(this, streamOptions);
@@ -38,10 +38,27 @@ inputStreamWrapper.prototype._read = function(size) {
   }
 };
 inputStreamWrapper.prototype._write = function(data, encoding, callback) {
-  console.log("WRITING: ");
-  console.log(data);
-  callback();
+    if (typeof this._source.configure === 'undefined') {
+        if (typeof callback !== "undefined") {
+            callback("inputStreamWrapper.write: Source does not implement configure!");
+        } else {
+         console.error("inputStreamWrapper.write: Source does not implement configure!");
+        }
+    }
+    console.log("Configuring", data);
+    this._source.configure(data);
+    if (typeof callback !== "undefined") {
+        callback();
+    }
 };
+inputStreamWrapper.prototype.close = function() {
+    this._source.readStop();
+    if (typeof this._source.close !== undefined ) {
+         this._source.close();
+    }
+    this._isReading = false;
+    this.push(null)
+}
 module.exports = inputStreamWrapper
 // const myInputStreamWrapper = new inputWrapper({},0);
 // myInputStreamWrapper.pipe(process.stdout);

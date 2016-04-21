@@ -4,10 +4,6 @@
 
 // Include Express
 const express = require('express');
-// const timeInput = require('./modules/time.js');
-const inputStream = require('./modules/inputStreamWrapper.js');
-const gpsInput = require('./modules/gps/gps.module.js');
-// const accInput = require('./modules/lsm303/accelerometer.js');
 const dataLogger = require('./modules/data-logger/data-logger.module.js');
 var fs = require('fs');
 var configJSON = JSON.parse(fs.readFileSync('config.json', 'utf8'));
@@ -27,6 +23,16 @@ server.get('/', function (req, res) {
 server.listen(8000);
 console.log('Application running!');
 dataLogger.configure(configJSON);
+setTimeout(function() {dataLogger.configureInputSource("timeInput", {"sampleRate":2000})}, 3000 );
+// listen for TERM signal .e.g. kill
+process.on('SIGTERM', function() {
+    dataLogger.shutdown();
+} );
+// listen for INT signal e.g. Ctrl-C
+process.on('SIGINT', function() {
+  dataLogger.shutdown();
+});
+
 // const myTimeInputStream = new inputStream(timeInput,{},500);
 // myTimeInputStream.on('readable', function () {
 //     process.stdout.write("Time: ");

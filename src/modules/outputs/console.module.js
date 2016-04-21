@@ -1,6 +1,6 @@
 function consoleOutput () {
 	var self = this;
-	
+
 }
 consoleOutput.prototype.init = function (config,callback) {
 	if (typeof config === 'undefined') {
@@ -11,8 +11,10 @@ consoleOutput.prototype.init = function (config,callback) {
 	}
 }
 consoleOutput.prototype.close = function (callback) {
-	callback();
-	return
+    if (typeof callback !== 'undefined') {
+        callback();
+    }
+	return;
 }
 consoleOutput.prototype.send = function (data,inputModule,callback) {
 	console.log(this.messageHeader + " | " + inputModule.name);
