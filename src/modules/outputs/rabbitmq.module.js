@@ -7,25 +7,27 @@ function rabbitOutput() {
 	this.ready = false;
 	this.queue = [];
 }
+rabbitOutput.prototype.configure = function(configJSON) {
+	var self = this;
+	if (typeof configJSON === 'undefined') {
+		console.error("rabbitMQ.module.js: Undefined configJSON");
+	}
+	if (typeof configJSON.serverConnection === 'undefined') {
+		console.error("rabbitMQ.module.js: RabbitMQ serverConnection is undefined configJSON");
+	}
+	this.config = configJSON;
+	if (typeof configJSON.exchangeOptions === 'undefined') {
+		this.configJSON.exchangeOptions = {};
+	}
+	this.amqpURI = "amqp://"
+	// authentication details
+	this.amqpURI += this.configJSON.serverConnection.login + ":" + this.configJSON.serverConnection.password + "@"
+	//  url:port
+	this.amqpURI += this.configJSON.serverConnection.host + ":" + this.configJSON.serverConnection.port;
+}
 rabbitOutput.prototype.init = function(config,callback) {
 	var self = this;
-	if (typeof config === 'undefined') {
-		console.error("rabbitMQ.module.js: Undefined config");
-	}
-	if (typeof config.serverConnection === 'undefined') {
-		console.error("rabbitMQ.module.js: RabbitMQ serverConnection is undefined config");
-	}
-	this.config = config;
-	if (typeof config.exchangeOptions === 'undefined') {
-		this.config.exchangeOptions = {};
-	}
-	var amqpURI = "amqp://"
-	// authentication details
-	amqpURI += this.config.serverConnection.login + ":" + this.config.serverConnection.password + "@"
-	//  url:port
-	amqpURI += this.config.serverConnection.host + ":" + this.config.serverConnection.port
-	console.log(amqpURI);
-    amqp.connect(amqpURI,function (err, con) {
+    amqp.connect(this.amqpURI,function (err, con) {
 		if (err) {
 			throw err;
 		}
