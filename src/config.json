@@ -18,7 +18,7 @@
 		},{
 			"name" : "accInput",
 			"modulePath" : "./inputs/accelerometer.module.js", 
-			"sourceOptions" : { "sampleRate" : 1000, "response" : "JSON"},
+			"sourceOptions" : { "sampleRate" : 500, "response" : "JSON"},
 			"outputs" : ["console"] 
 			}],
 	"outputs" : [

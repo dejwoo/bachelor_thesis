@@ -140,10 +140,10 @@ DataLogger.prototype.shutdown = function() {
         this.removeInputSource(inputKey);
     }
     for (var outputKey in this.outputs) {
-        console.log("Closing Output: ", this.outputs[outputKey].name);
         if (!this.outputs.hasOwnProperty(outputKey)) {
              continue
         }
+        console.log("Closing Output: ", this.outputs[outputKey].name);
         this.removeOutputSource(outputKey);
     }
     process.exit();
