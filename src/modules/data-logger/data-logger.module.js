@@ -53,7 +53,6 @@ DataLogger.prototype.addInputSource = function (inputConfig) {
 		inputConfig.stream.on('readable', function() {
 			var readObject = inputConfig.stream.read();
 			process.stdout.write(inputConfig.name + ": ");
-			console.log(readObject);
 			if (isDefined(inputConfig.transfromStream)) {
 				// ked chceme prekladat data
 				return;

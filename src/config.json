@@ -2,22 +2,22 @@
 	"inputs" : [
 		{
 			"name" : "gpsInput",
-			"modulePath" : "./gps/gps.modulse.js", 
+			"modulePath" : "./inputs/gps.modulse.js", 
 			"sourceOptions" : { "sampleRate" : -1, "device": "/dev/ttyUSB1", "init": "AT+CGPS=1"},
 			"outputs" : [] 
 		},{
 			"name" : "timeInput",
-			"modulePath" : "./time.module.js", 
+			"modulePath" : "./inputs/time.module.js", 
 			"sourceOptions" : { "sampleRate" : 1000, "response" : "JSON"},
 			"outputs" : [] 
 		},{
 			"name" : "obdInput",
-			"modulePath" : "./obd/obd.module.js", 
+			"modulePath" : "./inputs/obd.module.js", 
 			"sourceOptions" : { "sampleRate" : 1000, "response" : "JSON"},
 			"outputs" : [] 
 		},{
 			"name" : "accInput",
-			"modulePath" : "./lsm303/accelerometer.module.js", 
+			"modulePath" : "./inputs/accelerometer.module.js", 
 			"sourceOptions" : { "sampleRate" : 1000, "response" : "JSON"},
 			"outputs" : ["console"] 
 			}],
