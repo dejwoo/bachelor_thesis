@@ -1,12 +1,13 @@
 'use strict';
 const EventEmitter = require('events');
 const util = require('util');
-const accelerometer = require('lsm303');
+const accelerometer = require('lsm303/accelerometer.js');
 
 function accelEmmiter(config) {
   	EventEmitter.call(this);
   	var self = this;
-  	this.accel = accelerometer(config.accelerometerOptions);
+  	this.accel = new accelerometer(config.accelerometerOptions);
+	this.accel.init();
     if (typeof config !== undefined) {
         if (typeof config.sampleRate !== undefined) {
             this.sampleRate = config.sampleRate;
@@ -28,14 +29,16 @@ function accelEmmiter(config) {
 	}
 	// console.log(self);
 }
-timeEmitter.prototype.emitLoop = function () {
+accelEmmiter.prototype.emitLoop = function () {
     var self = this;
     if (typeof this.intervalis !== 'undefined') {
         clearInterval(this.intervalis)
     }
     this.intervalis = setInterval(function() {
         if (self.emitting) {
-            self.emit('data', self.accel.read());
+	    self.accel.read(function(result) {
+	   	self.emit('data',result);
+	    });
             self.emitLoop();
         }
         else {
@@ -43,7 +46,7 @@ timeEmitter.prototype.emitLoop = function () {
         }
     }, self.sampleRate);
 }
-timeEmitter.prototype.configure = function (config) {
+accelEmmiter.prototype.configure = function (config) {
     console.info("Configuring timeInput config: " + config);
     if (typeof config !== undefined) {
         if (typeof config.sampleRate !== undefined) {
@@ -56,4 +59,5 @@ timeEmitter.prototype.configure = function (config) {
         this.emitLoop();
     }
 }
-util.inherits(timeEmitter, EventEmitter);
+util.inherits(accelEmmiter, EventEmitter);
+module.exports = accelEmmiter;
