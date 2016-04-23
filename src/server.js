@@ -4,9 +4,9 @@
 
 // Include Express
 const express = require('express');
-const timeInput = require('./modules/time.js');
-const inputStream = require('./modules/inputStreamWrapper.js');
-const gpsInput = require('./modules/gps/gps.module.js');
+const dataLogger = require('./modules/data-logger/data-logger.module.js');
+var fs = require('fs');
+var configJSON = JSON.parse(fs.readFileSync('config.json', 'utf8'));
 
 // Create a new Express application
 var server = express();
@@ -22,14 +22,33 @@ server.get('/', function (req, res) {
 // // Bind to a port
 server.listen(8000);
 console.log('Application running!');
-const myTimeInputStream = new inputStream(timeInput,{},500);
-myTimeInputStream.on('readable', function () {
-    process.stdout.write("Time: ");
-    console.log(myTimeInputStream.read().toString());
+dataLogger.configure(configJSON);
+setTimeout(function() {dataLogger.configureInputSource("timeInput", {"sampleRate":2000})}, 3000 );
+// listen for TERM signal .e.g. kill
+process.on('SIGTERM', function() {
+    dataLogger.shutdown();
+} );
+// listen for INT signal e.g. Ctrl-C
+process.on('SIGINT', function() {
+  dataLogger.shutdown();
 });
-const myGpsInputStream = new inputStream(gpsInput,{},1000);
-myGpsInputStream.on('readable', function () {
-    process.stdout.write("GPS Time: ");
-    console.log(myGpsInputStream.read().time);
-});
+
+// const myTimeInputStream = new inputStream(timeInput,{},500);
+// myTimeInputStream.on('readable', function () {
+//     process.stdout.write("Time: ");
+//     var tim = myTimeInputStream.read();
+//     console.log(tim);
+// });
+// const myGpsInputStream = new inputStream(gpsInput,{},1000);
+// myGpsInputStream.on('readable', function () {
+//     process.stdout.write("GPS: ");
+//     var gpsObject = myGpsInputStream.read();
+//     console.log(gpsObject.time);
+// });
+// const myAccInputStream = new inputStream(accInput,{},1000);
+// myAccInputStream.on('readable', function () {
+//     process.stdout.write("GPS: ");
+//     var accObject = myAccInputStream.read();
+//     console.log(accObject);
+// });
 

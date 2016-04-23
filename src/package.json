@@ -10,9 +10,12 @@
   "author": "dejwoo",
   "license": "ISC",
   "dependencies": {
+    "amqplib": "^0.4.1",
     "duplexer2": "^0.1.4",
     "express": "^4.13.4",
     "gps": "0.0.8",
+    "lodash": "^4.11.1",
+    "redis": "^2.5.3",
     "serialport": "^2.0.7-beta5"
   }
 }

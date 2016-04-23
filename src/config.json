@@ -1,0 +1,46 @@
+{
+	"inputs" : [
+		{
+			"name" : "gpsInput",
+			"modulePath" : "./gps/gps.modulse.js", 
+			"sourceOptions" : { "sampleRate" : -1, "device": "/dev/ttyUSB1", "init": "AT+CGPS=1"},
+			"outputs" : [] 
+		},{
+			"name" : "timeInput",
+			"modulePath" : "./time.module.js", 
+			"sourceOptions" : { "sampleRate" : 1000, "response" : "JSON"},
+			"outputs" : ["console","rabbitMQ"] 
+		},{
+			"name" : "obdInput",
+			"modulePath" : "./obd/obd.module.js", 
+			"sourceOptions" : { "sampleRate" : 1000, "response" : "JSON"},
+			"outputs" : [] 
+		}],
+	"outputs" : [
+		{
+			"name" : "rabbitMQ",
+			"modulePath" : "./outputs/rabbitmq.module.js", 
+			"type": "msg",
+			"sourceOptions" : { 
+				"serverConnection" : {
+									"host" : "128.199.37.120",
+									"port" : 5672,
+									"login": "dejwoo",
+									"password": "qazxswedcvfr4rfvcdewsxzaq4*",
+									"authMechanism": "AMQPLAIN"
+								}
+							}
+		},{
+			"name" : "db",
+			"modulePath" : "./db/db.module.js", 
+			"type": "db" 
+		},{
+			"name" : "iftt",
+			"modulePath" : "./iftt/iftt.module.js", 
+			"type": "api" 
+		},{	
+			"name" : "console",
+			"modulePath" : "./outputs/console.module.js", 
+			"sourceOptions" : { "messageHeader" : "Console Output"}
+		}]
+}

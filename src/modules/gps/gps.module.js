@@ -28,7 +28,6 @@ function GpsInputSource(options) {
 		baudrate:4800,
 		parser: serialport.parsers.readline('\n')
 	});
-	console.log(self);
 	if (typeof self.serial === 'undefined') {
 		console.error("GPS.source: Something wrong with creating serial port.");
 	}
