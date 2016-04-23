@@ -23,7 +23,7 @@ server.get('/', function (req, res) {
 server.listen(8000);
 console.log('Application running!');
 dataLogger.configure(configJSON);
-setTimeout(function() {dataLogger.configureInputSource("timeInput", {"sampleRate":2000})}, 3000 );
+//setTimeout(function() {dataLogger.configureInputSource("timeInput", {"sampleRate":2000})}, 3000 );
 // listen for TERM signal .e.g. kill
 process.on('SIGTERM', function() {
     dataLogger.shutdown();

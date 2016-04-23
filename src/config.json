@@ -9,13 +9,18 @@
 			"name" : "timeInput",
 			"modulePath" : "./time.module.js", 
 			"sourceOptions" : { "sampleRate" : 1000, "response" : "JSON"},
-			"outputs" : ["console","rabbitMQ"] 
+			"outputs" : [] 
 		},{
 			"name" : "obdInput",
 			"modulePath" : "./obd/obd.module.js", 
 			"sourceOptions" : { "sampleRate" : 1000, "response" : "JSON"},
 			"outputs" : [] 
-		}],
+		},{
+			"name" : "accInput",
+			"modulePath" : "./lsm303/accelerometer.module.js", 
+			"sourceOptions" : { "sampleRate" : 1000, "response" : "JSON"},
+			"outputs" : ["console"] 
+			}],
 	"outputs" : [
 		{
 			"name" : "rabbitMQ",
