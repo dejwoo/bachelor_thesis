@@ -86,7 +86,6 @@ DataLogger.prototype.removeInputSource = function (inputSourceName) {
 		});
 		//vymazem property z internej pamete data loggera
 		delete self.inputs[inputSourceName];
-        console.log(self.inputs)
 	} catch (err) {
 		console.error(err);
 	}

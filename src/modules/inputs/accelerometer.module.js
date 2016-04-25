@@ -1,7 +1,7 @@
 'use strict';
 const EventEmitter = require('events');
 const util = require('util');
-const accelerometer = require('lsm303/accelerometer.js');
+const accelerometer = require('./lsm303/accelerometer.js');
 
 function accelEmmiter(config) {
   	EventEmitter.call(this);
