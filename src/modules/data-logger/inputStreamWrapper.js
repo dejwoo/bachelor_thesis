@@ -2,31 +2,62 @@ util = require('util');
 const Duplex = require('stream').Duplex;
 util.inherits(inputStreamWrapper, Duplex);
 
-function inputStreamWrapper(inputSource, sourceOptions) {
-  var streamOptions = {};
-  streamOptions.writableObjectMode = true;
-  streamOptions.readableObjectMode = true;
-  Duplex.call(this, streamOptions);
-  this._source = new inputSource(sourceOptions);
-  this._isReading = false;
+function isDefined(object) {
+  if (typeof object === 'undefined') {
+    return false;
+  }
+  return true;
+}
 
+function inputStreamWrapper(inputSource, inputConfig) {
+  this.inputConfig = inputConfig;
+  this.inputSource = inputSource;
+  this.init();
+}
+inputStreamWrapper.prototype.init = function() {
+  if (!isDefined(this.inputConfig.streamOptions)) {
+    var streamOptions = {};
+  } else {
+    var streamOptions = this.inputConfig.streamOptions;
+  }
+  //this settings must be always set to this value
+  streamOptions.readableObjectMode = true;
+  streamOptions.writableObjectMode = true;
+  Duplex.call(this, streamOptions);
+  this._source = new this.inputSource(this.inputConfig.sourceOptions);
+  this._isReading = false;
+  this.addEventListeners();
+}
+inputStreamWrapper.prototype.addEventListeners = function () {
+  var self = this;
   // Every time there's data, we push it into the internal buffer.
-  this._source.on('data', (chunk) => {
+  this._source.on('data', function(chunk) {
     // if push() returns false, then we need to stop reading from source
-    if (!this.push(chunk)) {
-      this._source.readStop();
-      this._isReading = false;
+    var emitObject = {};
+    if (!isDefined(self.inputConfig.header)) {
+      emitObject.header = {};
+      emitObject.header.name = self.inputConfig.name;
+    } else {
+      emitObject.header = self.inputConfig.header;
+      if (!isDefined(emitObject.header.name)) {
+        emitObject.header.name = self.inputConfig.name;
+      }
+    }
+    emitObject.body = chunk;
+    if (!self.push(emitObject)) {
+      self._source.readStop();
+      self._isReading = false;
     }
   });
   // When the source ends, we push the EOF-signaling `null` chunk
-  this._source.on('end', () => {
-    this.push(null);
+  this._source.on('end', function() {
+    self.push(null);
   });
-  this._source.on('configured', (response,err) => {
+  this._source.on('configured', function(response,err) {
     if (err) {
-      console.info("Config error of " + _source.name + ": " + response );
+      console.info("Config error of " + self._source.name + ": " + response );
     }
-    console.info("Config response of " + _source.name + ": " + response );
+    console.info("Config response of " + self._source.name + ": " + response );
   });
 }
 // _read will be called when the stream wants to pull more data in

@@ -4,6 +4,7 @@ function DataLogger (configJSON) {
 	var self = this;
 	this.inputs = {};
 	this.outputs = {};
+	this.transports = {};
 	if (typeof configJSON !== 'undefined') {
 		this.configure(configJSON)
 		console.log(this.inputs);
@@ -20,14 +21,14 @@ function isDefined(object) {
 	return true;
 }
 DataLogger.prototype.configure = function (configJSON) {
-	console.log(configJSON);
+	// console.log(configJSON);
 	if (!isDefined(configJSON)) {
 		return
 	}
 	if (isDefined(configJSON.outputs)) {
 		for (var index = 0; index < configJSON.outputs.length; index++) {
 			var outputConfig = configJSON.outputs[index];
-			this.addOutputSource(outputConfig);
+			this.addOutputSink(outputConfig);
 		}
 	}
 	if (isDefined(configJSON.inputs)) {
@@ -45,34 +46,35 @@ DataLogger.prototype.addInputSource = function (inputConfig) {
 	}
 	try {
 		//nacitam modul
-		//todo vyriesit folder strukturu
 		inputConfig.module = require("../" + inputConfig.modulePath);
-		//vytvorym stream
-		inputConfig.stream = new inputStream(inputConfig.module,inputConfig.sourceOptions);
-		//pripojim event na kazdy output source.
-		inputConfig.stream.on('readable', function() {
-			var readObject = inputConfig.stream.read();
-			if (isDefined(inputConfig.transfromStream)) {
-				// ked chceme prekladat data
-				return;
-			} else {
-				// ak nie tak ich rovno posielame podla configu
-				for (var outputIndex = 0; outputIndex < inputConfig.outputs.length; outputIndex++) {
-					if (!isDefined(self.outputs[inputConfig.outputs[outputIndex]])) {
-						console.error("DataLogger.configure.inputConfig["+inputConfig.name+"] has output source which is not defined");
-					} else {
-						self.outputs[inputConfig.outputs[outputIndex]].module.send(readObject, inputConfig);
-					}
+	} catch(err) {
+		console.error(err);
+		return;
+	}
+	//vytvorym stream
+	inputConfig.stream = new inputStream(inputConfig.module,inputConfig);
+	//pripojim event na kazdy output source.
+	inputConfig.stream.on('readable', function() {
+		if (!isDefined(inputConfig.outputs) || inputConfig.outputs.length == 0) {
+			inputConfig.stream.pause(); //zastavujem citanie
+		}
+		var readObject = inputConfig.stream.read();
+		if (isDefined(inputConfig.transfromStream)) {
+			// ked chceme prekladat data
+			return;
+		} else {
+			// ak nie tak ich rovno posielame podla configu
+			for (var outputIndex = 0; outputIndex < inputConfig.outputs.length; outputIndex++) {
+				if (!isDefined(self.outputs[inputConfig.outputs[outputIndex]])) {
+					console.error("DataLogger.configure.inputConfig["+inputConfig.name+"] has output source which is not defined");
+				} else {
+					self.outputs[inputConfig.outputs[outputIndex]].module.send(readObject);
 				}
 			}
-		});
-		//nakoniec pridam do interneho zoznamu data-loggera.
-		self.inputs[inputConfig.name] = inputConfig;
-
-	} catch(err) {
-		//nastala chyba v try blocku, vypisem spravu
-		console.error(err);
-	}
+		}
+	});
+	//nakoniec pridam do interneho zoznamu data-loggera.
+	self.inputs[inputConfig.name] = inputConfig;
 }
 DataLogger.prototype.removeInputSource = function (inputSourceName) {
 	var self = this;
@@ -84,13 +86,12 @@ DataLogger.prototype.removeInputSource = function (inputSourceName) {
 		self.inputs[inputSourceName].stream.removeListener('readable', function () {
 			console.log(inputSourceName + " successfully removed listener.");
 		});
-		//vymazem property z internej pamete data loggera
 		delete self.inputs[inputSourceName];
 	} catch (err) {
 		console.error(err);
 	}
 }
-DataLogger.prototype.addOutputSource = function(outputConfig) {
+DataLogger.prototype.addOutputSink = function(outputConfig) {
 	var self = this;
 	if (isDefined(self.outputs[outputConfig.name])) {
 		console.error("Output with that name already exists, please remove it first.");
@@ -99,25 +100,26 @@ DataLogger.prototype.addOutputSource = function(outputConfig) {
 	try {
 		//ziskam module
 		outputConfig.module = require("../" + outputConfig.modulePath);
-		//inicializujemS
-		outputConfig.module.init(outputConfig.sourceOptions);
+		//inicializujem
+		outputConfig.module.init(outputConfig);
 		//pridam do interneho zoznamu data-loggeraloggeraloggera
 		self.outputs[outputConfig.name] = outputConfig;
+		//console.log(self.outputs);
 	} catch (err) {
 		console.error(err);
 	}
 }
-DataLogger.prototype.removeOutputSource = function (outputSourceName) {
+DataLogger.prototype.removeOutputSink = function (outputSinkName) {
 	var self = this;
-	if (!isDefined(self.outputs[outputSourceName])) {
+	if (!isDefined(self.outputs[outputSinkName])) {
 		console.warn("Input with that name does not exists.");
 		return;
 	}
 	try {
 		//zavolam funkciu na korektne ukoncenie output modulu
-		self.outputs[outputSourceName].module.close();
+		self.outputs[outputSinkName].module.close();
 		//vymazem property z internej pamete data loggera
-		delete self.outputs[outputSourceName];
+		delete self.outputs[outputSinkName];
 	} catch (err) {
 		console.error(err);
 	}
@@ -126,8 +128,17 @@ DataLogger.prototype.configureInputSource = function (inputSourceName, inputConf
 	var self = this;
 	if (!isDefined(self.inputs[inputSourceName])) {
 		console.error("data-logger.module.js: configureInputSource:: Input with name ["+inputSourceName+"] does not exists");
+		return;
 	}
 	self.inputs[inputSourceName].stream.write(inputConfigJSON);
+}
+DataLogger.prototype.configureOutputSink = function (outputSinkName, outputConfigJSON) {
+	var self = this;
+	if (!isDefined(self.outputs[outputSinkName])) {
+		console.error("data-logger.module.js: configureOutputSink:: Output with name ["+outputSinkName+"] does not exists");
+		return;
+	}
+	self.outputs[outputSinkName].module.configure(outputConfigJSON);
 }
 DataLogger.prototype.shutdown = function() {
     console.info("DataLogger shutting down!")
@@ -143,8 +154,32 @@ DataLogger.prototype.shutdown = function() {
              continue
         }
         console.log("Closing Output: ", this.outputs[outputKey].name);
-        this.removeOutputSource(outputKey);
+        this.removeOutputSink(outputKey);
     }
     process.exit();
+}
+DataLogger.prototype.addTransportStream = function (transportConfig){
+	var self = this;
+	if (isDefined(this.transports[transportConfig.name])) {
+		console.error("Transport strean with that name already exists, please remove it first.");
+		return;
+	}
+	try {
+		//nacitam modul
+		transportConfig.module = require("../" + transportConfig.modulePath);
+	} catch (err) {
+		console.error(err);
+	}
+	//vytvorym stream
+	transportConfig.module.init(function (err) {
+		if (err) {
+			console.error(err);
+		}
+	});
+	try {
+		this.transports.push(transportConfig);
+	} catch (err) {
+		console.error(err);
+	}
 }
 module.exports = new DataLogger();

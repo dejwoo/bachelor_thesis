@@ -4,39 +4,41 @@ const _ = require('lodash');
 function RedisOutput() {
 	var self = this;
 }
-RedisOutput.prototype.configure = function (configJSON) {
-	if (! _.isUndefined(config) ) {
-		if (! _.isUndefined(config.hostname)) {
-			this.hostname = config.hostname
+RedisOutput.prototype.configure = function (outputConfig) {
+	if (! _.isUndefined(outputConfig) ) {
+		if (! _.isUndefined(outputConfig.hostname)) {
+			this.hostname = outputConfig.hostname
 		}
-		if (! _.isUndefined(config.port)) {
-			this.port = config.port;
+		if (! _.isUndefined(outputConfig.port)) {
+			this.port = outputConfig.port;
 		}
-		if (! _.isUndefined(config.password)) {
-			this.password;
+		if (! _.isUndefined(outputConfig.password)) {
+			this.password = outputConfig.password;
 		}
-		if (! _.isUndefined(config.snapshot)) {
+		if (! _.isUndefined(outputConfig.snapshot)) {
 			this.snapshot = snapshot;
 		} else {
 			this.snapshot = {};
-			this.snapshot.keys_changed = 1000;
-			this.snapshow.secs_passed = 60;
+			this.snapshot.keysChanged = 1000;
+			this.snapshot.secsPassed = 60;
 		}
 	}
 	this.ready = false;
 	this.queue = [];
+
 }
-RedisOutput.prototype.init = function (config) {
+RedisOutput.prototype.init = function (outputConfig) {
 	var self = this;
-	this.configure(config);
+	this.configure(outputConfig);
 	this.client =  redis.createClient(this.port, this.hostname, {no_ready_check: true});
-	this.client.auth(this.passowrd, function (err) {
+	this.client.auth(this.password, function (err) {
 		if (err) {
 			throw err;
 		}
 	});
-	client.on('connect', function() {
+	this.client.on('connect', function() {
 		self.ready = true;
+		console.log("Connection to redisDB successfull.");
 		for (var index = 0; index < self.queue.length; index++) {
 			var item = self.queue[index];
 			self.send(item.data, item.inputModule);
@@ -44,31 +46,32 @@ RedisOutput.prototype.init = function (config) {
 		self.queue = [];
 	});
 }
-RedisOutput.prototype.send = function (data,inputModule,callback) {
+RedisOutput.prototype.send = function (data,callback) {
 	var self = this;
 	if (this.ready === false) {
 		if (! _.isUndefined(this.queue)) {
 			try {
-				self.queue.push({"data":data,"inputModule":inputModule});
+				self.queue.push(data);
 			} catch(err) {
 				console.error(err);
 			}
 		}
 	} else {
-		client.exists(inputModule.name, function(err, reply) {
+		self.client.exists(data.header.name, function(err, reply) {
 			if (err) {
 				console.error(err);
 			}
 			if (reply === 1) { //kluc uz existuje
-				self.client.incr(inputModule.name, function(err, reply) {
+				var outputString = JSON.stringify(data);
+				self.client.incr(data.header.name, function(err, reply) {
 					if (err) {
 						console.error(err);
 					}
-        			self.client.hmset("" + inputModule.name + reply , data);
+        			self.client.set("" + data.header.name + reply , outputString);
    				 });
 			} else { //vytvaram kluc
-				self.client.set(inputModule.name, 0, fucntion() {
-					self.client.hmset("" + inputModule.name + 0 , data);
+				self.client.set(data.header.name, 0, function() {
+					self.client.set("" + data.header.name + 0 , outputString);
 				});
 			}
 		});
@@ -81,3 +84,4 @@ RedisOutput.prototype.close = function() {
 	}
 }
 
+module.exports = new RedisOutput();

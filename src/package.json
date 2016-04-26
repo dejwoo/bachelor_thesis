@@ -11,11 +11,20 @@
   "license": "ISC",
   "dependencies": {
     "amqplib": "^0.4.1",
+    "body-parser": "^1.15.0",
+    "cookie-parser": "^1.4.1",
     "duplexer2": "^0.1.4",
     "express": "^4.13.4",
+    "express-session": "^1.13.0",
     "gps": "0.0.8",
     "lodash": "^4.11.1",
+    "logger": "0.0.1",
+    "morgan": "^1.7.0",
+    "node-sass-middleware": "^0.9.8",
+    "path": "^0.12.7",
     "redis": "^2.5.3",
-    "serialport": "^2.0.7-beta5"
+    "serialport": "^2.0.7-beta5",
+    "serve-favicon": "^2.3.0",
+    "swig": "^1.4.2"
   }
 }

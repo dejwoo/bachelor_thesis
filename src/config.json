@@ -2,50 +2,60 @@
 	"inputs" : [
 		{
 			"name" : "gpsInput",
+			"label" : "GPS",
 			"modulePath" : "./inputs/gps.modulse.js", 
 			"sourceOptions" : { "sampleRate" : -1, "device": "/dev/ttyUSB1", "init": "AT+CGPS=1"},
 			"outputs" : [] 
 		},{
 			"name" : "timeInput",
+			"label" : "Time",
 			"modulePath" : "./inputs/time.module.js", 
 			"sourceOptions" : { "sampleRate" : 1000, "response" : "JSON"},
-			"outputs" : [] 
+			"outputs" : ["redis"] 
 		},{
 			"name" : "obdInput",
+			"label" : "OBD II",
 			"modulePath" : "./inputs/obd.module.js", 
 			"sourceOptions" : { "sampleRate" : 1000, "response" : "JSON"},
 			"outputs" : [] 
 		},{
 			"name" : "accInput",
+			"label" : "Accelerometer",
 			"modulePath" : "./inputs/accelerometer.module.js", 
 			"sourceOptions" : { "sampleRate" : 500, "response" : "JSON"},
-			"outputs" : ["console"] 
+			"outputs" : [] 
 			}],
 	"outputs" : [
 		{
 			"name" : "rabbitMQ",
+			"label" : "RabbitMQ",
 			"modulePath" : "./outputs/rabbitmq.module.js", 
-			"type": "msg",
-			"sourceOptions" : { 
-				"serverConnection" : {
-									"host" : "128.199.37.120",
-									"port" : 5672,
-									"login": "dejwoo",
-									"password": "qazxswedcvfr4rfvcdewsxzaq4*",
-									"authMechanism": "AMQPLAIN"
-								}
-							}
+			"serverConnection" : {
+								"host" : "128.199.37.120",
+								"port" : 5672,
+								"login": "dejwoo",
+								"password": "qazxswedcvfr4rfvcdewsxzaq4*",
+								"authMechanism": "AMQPLAIN"
+			}
 		},{
-			"name" : "db",
-			"modulePath" : "./db/db.module.js", 
-			"type": "db" 
+			"name" : "redis",
+			"label" : "Redis",
+			"modulePath" : "./outputs/redis.module.js",
+			"port" : "6379",
+			"hostname" : "localhost",
+			"configSet": ["CONFIG SET SAVE \"900 1 300 10\""] ,
+			"password" : "%oZtB6G2!AN(S)XiUFhN2kid@CR42J4$AjWYr7SVeSdiCxMR#54*&AhTTY4D2Kd7"
+
+
 		},{
 			"name" : "iftt",
+			"label" : "IFTT",
 			"modulePath" : "./iftt/iftt.module.js", 
 			"type": "api" 
 		},{	
 			"name" : "console",
+			"label" : "Console",
 			"modulePath" : "./outputs/console.module.js", 
-			"sourceOptions" : { "messageHeader" : "Console Output"}
+			"messageHeader" : "Console Output"
 		}]
 }

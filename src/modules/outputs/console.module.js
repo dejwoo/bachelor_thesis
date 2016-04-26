@@ -6,7 +6,8 @@ consoleOutput.prototype.init = function (config,callback) {
 	if (typeof config === 'undefined') {
 		console.error("console.module.js: Undefined config");
 	}
-	if (typeof config.messageHeader !== 'undefined') {
+	this.config = config;
+	if (typeof this.config.messageHeader !== 'undefined') {
 		this.messageHeader = config.messageHeader
 	}
 }
@@ -16,8 +17,8 @@ consoleOutput.prototype.close = function (callback) {
     }
 	return;
 }
-consoleOutput.prototype.send = function (data,inputModule,callback) {
-	console.log(this.messageHeader + " | " + inputModule.name);
-	console.log(data);
+consoleOutput.prototype.send = function (data,callback) {
+	console.log(this.messageHeader + " | " + data.header.name);
+	console.log(data.body);
 }
 module.exports = new consoleOutput();

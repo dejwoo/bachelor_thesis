@@ -1,26 +1,70 @@
-//Nothing yet here implemented just dumb http server,
-// I hope later today ill implement inputWrapper into this
-// server
 
-// Include Express
-const express = require('express');
 const dataLogger = require('./modules/data-logger/data-logger.module.js');
 var fs = require('fs');
 var configJSON = JSON.parse(fs.readFileSync('config.json', 'utf8'));
+var express = require('express');
+var path = require('path');
+var favicon = require('serve-favicon');
+var logger = require('morgan');
+var cookieParser = require('cookie-parser');
+var bodyParser = require('body-parser');
+var session = require('express-session');
+var swig = require('swig');
+
+var html = require('./routes/html');
+var api = require('./routes/api');
+
 
 // Create a new Express application
-var server = express();
+var app = express();
 
-// Add a basic route – index page
-server.get('/', function (req, res) {
-	res.writeHead(200, {'Content-Type': 'text/plain'});
+app.set('views', path.join(__dirname, 'views'));
+app.engine('html', swig.renderFile);
+app.set('view engine', 'html');
+app.use(logger('dev'));
+app.use(session({
+  secret: 'super duper secret'
+}));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(require('node-sass-middleware')({
+  src: path.join(__dirname, 'public'),
+  dest: path.join(__dirname, 'public'),
+  sourceMap: true
+}));
+app.use(express.static(path.join(__dirname, 'public')));
+app.use('/api', api);
+app.use('*', html);
+// catch 404 and forward to error handler
+app.use(function(req, res, next) {
+  var err = new Error('Not Found');
+  err.status = 404;
+  next(err);
 });
 
+if (app.get('env') === 'development') {
+  app.use(function(err, req, res, next) {
+    res.status(err.status || 500);
+    res.render('error', {
+      message: err.message,
+      error: err
+    });
+  });
+}
 
-
+// production error handler
+// no stacktraces leaked to user
+app.use(function(err, req, res, next) {
+  res.status(err.status || 500);
+  res.render('error', {
+    message: err.message,
+    error: {}
+  });
+});
 
 // // Bind to a port
-server.listen(8000);
+app.listen(8000);
 console.log('Application running!');
 dataLogger.configure(configJSON);
 //setTimeout(function() {dataLogger.configureInputSource("timeInput", {"sampleRate":2000})}, 3000 );
@@ -33,22 +77,4 @@ process.on('SIGINT', function() {
   dataLogger.shutdown();
 });
 
-// const myTimeInputStream = new inputStream(timeInput,{},500);
-// myTimeInputStream.on('readable', function () {
-//     process.stdout.write("Time: ");
-//     var tim = myTimeInputStream.read();
-//     console.log(tim);
-// });
-// const myGpsInputStream = new inputStream(gpsInput,{},1000);
-// myGpsInputStream.on('readable', function () {
-//     process.stdout.write("GPS: ");
-//     var gpsObject = myGpsInputStream.read();
-//     console.log(gpsObject.time);
-// });
-// const myAccInputStream = new inputStream(accInput,{},1000);
-// myAccInputStream.on('readable', function () {
-//     process.stdout.write("GPS: ");
-//     var accObject = myAccInputStream.read();
-//     console.log(accObject);
-// });
-
+module.exports = app;
