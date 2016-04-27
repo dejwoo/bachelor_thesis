@@ -22,8 +22,8 @@
 			"name" : "accInput",
 			"label" : "Accelerometer",
 			"modulePath" : "./inputs/accelerometer.module.js", 
-			"sourceOptions" : { "sampleRate" : 500, "response" : "JSON"},
-			"outputs" : [] 
+			"sourceOptions" : { "sampleRate" : 1000, "response" : "JSON"},
+			"outputs" : ["console","rabbitMQ"] 
 			}],
 	"outputs" : [
 		{

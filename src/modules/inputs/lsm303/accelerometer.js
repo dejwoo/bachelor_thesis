@@ -36,25 +36,33 @@ Accelerometer.prototype.init = function() {
   		console.log("LSM303 Accelerometer resolution and scale successfuly set.")
   	});
 }
-Accelerometer.prototype.read = function() {
+Accelerometer.prototype.twoBits = function(value, length) {
+  var limit = Math.pow(2, length);
+  if ( value > (limit/2) ) {
+    return value - limit;
+  }
+  else {
+    return value;
+  }
+}
+Accelerometer.prototype.read = function(callback) {
+	var self = this;
 	//asuming XYZ axes for now
 	var buf = new Buffer(6);
 	//puzzled by 0x80 shift, dont know why its there, read it from official adafruit library
-	var output = {};
-	var axes = ["x","y","z"];
 	this.i2c1.readI2cBlock(this.address, 0x28 | 0x80, 6, buf, function (err, bytesRead, buffer) {
 		if (err) {
 			throw err;
 		}
 		if (bytesRead != 6) {
-			console.log("Did not read intended length of bytes!");
+			throw ("Did not read intended length of bytes!");
 		}
+		var output = { 
+			"x": self.twoBits(( buffer[0] | (buffer[1] << 8)) >> 4,12) * 0.01,
+			"y": self.twoBits(( buffer[2] | (buffer[3] << 8)) >> 4,12) * 0.01,
+			"z": self.twoBits(( buffer[4] | (buffer[5] << 8)) >> 4,12) * 0.01 
+		};
+		callback(output);
 	});
-	//space for buffer operation's
-	for (var i = 0; i <= 4; i+=2) {
-		var n = buf[i] | (buf[i+1] << 8);
-		output[axes[i/2]] = n;
-	}
-	return output;
 }
-module.exports = Accelerometer
+module.exports = Accelerometer;

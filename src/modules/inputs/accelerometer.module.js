@@ -39,7 +39,7 @@ accelEmmiter.prototype.emitLoop = function () {
 	    self.accel.read(function(result) {
 	   	self.emit('data',result);
 	    });
-            self.emitLoop();
+            //self.emitLoop();
         }
         else {
             return;
