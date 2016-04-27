@@ -11,8 +11,24 @@
 
 <div>
 	<div class="banner">
-		<p>{{mainController.inputs[mainController.moduleName] | json}}</p>
-		<p>{{mainController.outputs[mainController.moduleName]| json}}</p>
+		<div data-ng-if="mainController.inputs[mainController.moduleName]">
+			<h1>{{mainController.inputs[mainController.moduleName].label}}</h1>
+			<div class="config">
+				<h3>Configuration</h3>
+				<div data-ng-repeat='(key,value) in mainController.inputs[mainController.moduleName] track by key'>
+					<p><b>{{key}}: </b>{{value}}</p>
+				</div>
+			</div>
+		</div>
+		<div data-ng-if="mainController.outputs[mainController.moduleName]">
+			<h1>{{mainController.outputs[mainController.moduleName].label}}</h1>
+			<div class="config">
+				<h3>Configuration</h3>
+				<div data-ng-repeat='(key,value) in mainController.outputs[mainController.moduleName] track by key'>
+					<p><b>{{key}}: </b>{{value}}</p>
+				</div>
+			</div>
+		</div>
 	</div>
 </div>
-{{mainController.route | json }}
+
