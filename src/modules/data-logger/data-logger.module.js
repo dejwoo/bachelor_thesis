@@ -1,10 +1,10 @@
 const inputStream = require('./inputStreamWrapper.js');
+const _ = require('lodash');
+
 
 function DataLogger (configJSON) {
 	var self = this;
-	this.inputs = {};
-	this.outputs = {};
-	this.transports = {};
+	this.modules = {}
 	if (typeof configJSON !== 'undefined') {
 		this.configure(configJSON)
 		console.log(this.inputs);
@@ -14,36 +14,47 @@ function DataLogger (configJSON) {
 		// TODO: configure with default settings
 	}
 }
-function isDefined(object) {
-	if (typeof object === 'undefined') {
-		return false;
-	}
-	return true;
-}
 DataLogger.prototype.configure = function (configJSON) {
+	var self = this;
 	// console.log(configJSON);
-	if (!isDefined(configJSON)) {
+	if (_.isUndefined(configJSON)) {
 		return
 	}
-	if (isDefined(configJSON.outputs)) {
-		for (var index = 0; index < configJSON.outputs.length; index++) {
-			var outputConfig = configJSON.outputs[index];
-			this.addOutputSink(outputConfig);
+	if (!_.isUndefined(configJSON.modules)) {
+		for (var index = 0; index < configJSON.modules.length; index++) {
+			this.addModule(configJSON.modules[index], function (err) {
+				if (err) {
+					console.error(err);
+				}
+			});
 		}
+	} else {
+		console.error("DataLogger.configure: No modules defined in config.json");
 	}
-	if (isDefined(configJSON.inputs)) {
-		for (var index = 0; index < configJSON.inputs.length; index++) {
-			var inputConfig = configJSON.inputs[index];
-			this.addInputSource(inputConfig);
-		}
+	if (!_.isUndefined(configJSON.routes)) {
+		_.forOwn(configJSON.modules, function(key,value) {
+			self.addRoute(key,value);
+		})
 	}
 }
-DataLogger.prototype.addInputSource = function (inputConfig) {
+DataLogger.prototype.addModule = function (config) {
 	var self = this;
-	if (isDefined(this.inputs[inputConfig.name])) {
-		console.error("Input with that name already exists, please remove it first.");
+	if (_.isUndefined(config.modulePath)) {
+		console.error("DataLogger.addModule: modulePath is not defined for ["+config.name+"]");
 		return;
 	}
+	try {
+		var module = require("../" + config.modulePath);
+	} catch(err) {
+		console.error(err);
+		return;
+	}
+	//vytvorym stream
+	inputConfig.stream = new inputStream(inputConfig.module,inputConfig);
+}
+DataLogger.prototype.addRoute = function (source, sink) {
+	var self = this;
+
 	try {
 		//nacitam modul
 		inputConfig.module = require("../" + inputConfig.modulePath);
@@ -51,8 +62,6 @@ DataLogger.prototype.addInputSource = function (inputConfig) {
 		console.error(err);
 		return;
 	}
-	//vytvorym stream
-	inputConfig.stream = new inputStream(inputConfig.module,inputConfig);
 	//pripojim event na kazdy output source.
 	inputConfig.stream.on('readable', function() {
 		if (!isDefined(inputConfig.outputs) || inputConfig.outputs.length == 0) {
