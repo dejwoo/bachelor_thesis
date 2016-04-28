@@ -1,7 +1,7 @@
 {
   "modules": [
     {
-      "name": "gpsModule",
+      "id": "gpsModule",
       "label": "GPS",
       "type": "gps",
       "modulePath": "./inputs/gps.modulse.js",
@@ -11,7 +11,7 @@
       }
     },
     {
-      "name": "timeModule",
+      "id": "timeModule",
       "label": "Time",
       "type": "time",
       "modulePath": "./inputs/time.module.js",
@@ -20,7 +20,7 @@
       }
     },
     {
-      "name": "obdModule",
+      "id": "obdModule",
       "label": "OBD II",
       "type": "obd",
       "modulePath": "./inputs/obd.module.js",
@@ -30,7 +30,7 @@
       }
     },
     {
-      "name": "accModule",
+      "id": "accModule",
       "label": "Accelerometer",
       "type": "acc",
       "modulePath": "./inputs/accelerometer.module.js",
@@ -39,7 +39,7 @@
       }
     },
     {
-      "name": "rabbitmqModule",
+      "id": "rabbitmqModule",
       "label": "RabbitMQ",
       "type": "message",
       "modulePath": "./outputs/rabbitmq.module.js",
@@ -52,7 +52,7 @@
       }
     },
     {
-      "name": "redisModule",
+      "id": "redisModule",
       "label": "Redis",
       "type": "db",
       "modulePath": "./outputs/redis.module.js",
@@ -64,7 +64,7 @@
       "password": "%oZtB6G2!AN(S)XiUFhN2kid@CR42J4$AjWYr7SVeSdiCxMR#54*&AhTTY4D2Kd7"
     },
     {
-      "name": "consoleModule",
+      "id": "consoleModule",
       "label": "Console",
       "type": "console",
       "modulePath": "./outputs/console.module.js",
