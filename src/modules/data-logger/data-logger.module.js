@@ -28,6 +28,7 @@ DataLogger.prototype.configure = function (configJSON) {
 				}
 			});
 		}
+		console.log(self.modules);
 	} else {
 		console.error("DataLogger.configure: No modules defined in config.json");
 	}
@@ -37,20 +38,28 @@ DataLogger.prototype.configure = function (configJSON) {
 		})
 	}
 }
-DataLogger.prototype.addModule = function (config) {
+DataLogger.prototype.addModule = function (config, callback) {
 	var self = this;
+	if (_.isUndefined(config.id)) {
+		callback("DataLogger.addModule: id is not defined for ["+config+"]");
+		return;
+	}
 	if (_.isUndefined(config.modulePath)) {
-		console.error("DataLogger.addModule: modulePath is not defined for ["+config.name+"]");
+		callback("DataLogger.addModule: modulePath is not defined for ["+config.id+"]");
 		return;
 	}
 	try {
 		var module = require("../" + config.modulePath);
 	} catch(err) {
-		console.error(err);
+		callback(err);
 		return;
 	}
-	//vytvorym stream
-	inputConfig.stream = new inputStream(inputConfig.module,inputConfig);
+	var moduleStream = new inputStream(module,config);
+	this.modules[config.id] = {
+		"module" : module,
+		"stream" : moduleStream,
+		"config" : config
+	};
 }
 DataLogger.prototype.addRoute = function (source, sink) {
 	var self = this;
