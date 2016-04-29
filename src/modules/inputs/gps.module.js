@@ -12,12 +12,13 @@ function GpsInputSource(options) {
     self.options = {};
 	//did not receive any configuration from main app, configuring by defaults
 	if (typeof options === 'undefined') {
-		self.options.device = options.device
-		self.options.sampleRate = 0;
+		self.options.device = "/dev/ttyUSB1";
+		self.options.init = "AT+CGPS=1";
 	} else {
 		//got config device
 		if (typeof options.device !== 'undefined') {
-			self.options.device = options.device
+			self.options.device = options.device;
+			self.options.init = options.init;
 		// did receive config, but no device specified.	
 		} else {
 			self.options.device = "/dev/ttyUSB1"

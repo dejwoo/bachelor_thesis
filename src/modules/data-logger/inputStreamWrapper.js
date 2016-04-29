@@ -24,7 +24,7 @@ inputStreamWrapper.prototype.init = function() {
   streamOptions.readableObjectMode = true;
   streamOptions.writableObjectMode = true;
   Duplex.call(this, streamOptions);
-  this._source = new this.inputSource(this.inputConfig.sourceOptions);
+  this._source = new this.inputSource(this.inputConfig.moduleOptions);
   this._isReading = false;
   this.addEventListeners();
 }
