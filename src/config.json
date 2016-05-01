@@ -4,7 +4,7 @@
       "id": "gpsModule",
       "label": "GPS",
       "type": "gps",
-      "modulePath": "./inputs/gps.modulse.js",
+      "modulePath": "./inputs/gps.module.js",
       "moduleOptions": {
         "device": "/dev/ttyUSB1",
         "init": "AT+CGPS=1"
@@ -72,8 +72,6 @@
     }
   ],
   "routes": {
-    "gpsModule": ["db","rabbitmqModule"],
-    "accModule": ["redisModule", "rabbitmqModule"],
-    "all": "console"
+    "time" : ["console"]
   }
 }

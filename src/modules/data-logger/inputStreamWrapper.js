@@ -1,4 +1,4 @@
-util = require('util');
+const util = require('util');
 const Duplex = require('stream').Duplex;
 util.inherits(inputStreamWrapper, Duplex);
 
@@ -9,22 +9,22 @@ function isDefined(object) {
   return true;
 }
 
-function inputStreamWrapper(inputSource, inputConfig) {
-  this.inputConfig = inputConfig;
-  this.inputSource = inputSource;
+function inputStreamWrapper(source, config) {
+  this.config = config;
+  this._source = source;
   this.init();
 }
 inputStreamWrapper.prototype.init = function() {
-  if (!isDefined(this.inputConfig.streamOptions)) {
+  var self = this;
+  if (!isDefined(this.config.streamOptions)) {
     var streamOptions = {};
   } else {
-    var streamOptions = this.inputConfig.streamOptions;
+    var streamOptions = this.config.streamOptions;
   }
   //this settings must be always set to this value
   streamOptions.readableObjectMode = true;
   streamOptions.writableObjectMode = true;
   Duplex.call(this, streamOptions);
-  this._source = new this.inputSource(this.inputConfig.sourceOptions);
   this._isReading = false;
   this.addEventListeners();
 }
@@ -34,13 +34,13 @@ inputStreamWrapper.prototype.addEventListeners = function () {
   this._source.on('data', function(chunk) {
     // if push() returns false, then we need to stop reading from source
     var emitObject = {};
-    if (!isDefined(self.inputConfig.header)) {
+    if (!isDefined(self.config.header)) {
       emitObject.header = {};
-      emitObject.header.name = self.inputConfig.name;
+      emitObject.header.id = self.config.id;
     } else {
-      emitObject.header = self.inputConfig.header;
-      if (!isDefined(emitObject.header.name)) {
-        emitObject.header.name = self.inputConfig.name;
+      emitObject.header = self.config.header;
+      if (!isDefined(emitObject.header.id)) {
+        emitObject.header.id = self.config.id;
       }
     }
     emitObject.body = chunk;

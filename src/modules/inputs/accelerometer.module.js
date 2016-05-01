@@ -1,44 +1,45 @@
 'use strict';
 const EventEmitter = require('events');
 const util = require('util');
-const accelerometer = require('./lsm303/accelerometer.js');
+const Accelerometer = require('./lsm303/accelerometer.js');
 
-function accelEmmiter(config) {
-  	EventEmitter.call(this);
-  	var self = this;
-  	this.accel = new accelerometer(config.accelerometerOptions);
-	this.accel.init();
-    if (typeof config !== undefined) {
-        if (typeof config.sampleRate !== undefined) {
-            this.sampleRate = config.sampleRate;
-        } else {
+function AccelerometerModule(config) {
+ EventEmitter.call(this);
+ var self = this;
+ if (typeof config !== undefined) {
+    if (typeof config.sampleRate !== undefined) {
+        this.sampleRate = config.sampleRate;
+    } else {
             this.sampleRate = 1000; //DEFAULT VALUE
         }
     }
-	this.readStop = function() {
-		console.log("Stoping emitting accelerometer data");
-        if (typeof this.intervalis !== 'undefined') {
-            clearInterval(this.intervalis)
-        }
-    }
-	this.readStart = function() {
-		console.log("Starting emitting accelerometer data");
-		self.emitting = true;
-		// console.log(this);
-		self.emitLoop();
-	}
-	// console.log(self);
 }
-accelEmmiter.prototype.emitLoop = function () {
+AccelerometerModule.prototype.init = function () {
+    this.accel = new Accelerometer(config.accelerometerOptions);
+    this.accel.init();
+}
+AccelerometerModule.prototype.readStop = function() {
+    if (typeof this.intervalis !== 'undefined') {
+        clearInterval(this.intervalis)
+    }
+}
+AccelerometerModule.prototype.readStart = function() {
+	console.log("Starting emitting accelerometer data");
+	self.emitting = true;
+	// console.log(this);
+	self.emitLoop();
+}
+
+AccelerometerModule.prototype.emitLoop = function () {
     var self = this;
     if (typeof this.intervalis !== 'undefined') {
         clearInterval(this.intervalis)
     }
     this.intervalis = setInterval(function() {
         if (self.emitting) {
-	    self.accel.read(function(result) {
-	   	self.emit('data',result);
-	    });
+           self.accel.read(function(result) {
+               self.emit('data',result);
+           });
             //self.emitLoop();
         }
         else {
@@ -46,7 +47,7 @@ accelEmmiter.prototype.emitLoop = function () {
         }
     }, self.sampleRate);
 }
-accelEmmiter.prototype.configure = function (config) {
+AccelerometerModule.prototype.configure = function (config) {
     console.info("Configuring timeInput config: " + config);
     if (typeof config !== undefined) {
         if (typeof config.sampleRate !== undefined) {
@@ -59,5 +60,9 @@ accelEmmiter.prototype.configure = function (config) {
         this.emitLoop();
     }
 }
-util.inherits(accelEmmiter, EventEmitter);
-module.exports = accelEmmiter;
+AccelerometerModule.prototype.close = function() {
+    this.readStop();
+    this.emit('data',null);
+}
+util.inherits(AccelerometerModule, EventEmitter);
+module.exports = AccelerometerModule;

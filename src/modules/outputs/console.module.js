@@ -1,24 +1,43 @@
-function consoleOutput () {
-	var self = this;
+const Writable = require('stream').Writable;
+const util = require('util');
+const _ = require('lodash');
 
-}
-consoleOutput.prototype.init = function (config,callback) {
-	if (typeof config === 'undefined') {
-		console.error("console.module.js: Undefined config");
-	}
+function ConsoleOutput (config) {
+	var self = this;
+	if (_.isUndefined(config)) {
+  		console.error("console.module.js: Undefined config!");
+  	}
 	this.config = config;
-	if (typeof this.config.messageHeader !== 'undefined') {
-		this.messageHeader = config.messageHeader
-	}
 }
-consoleOutput.prototype.close = function (callback) {
-    if (typeof callback !== 'undefined') {
-        callback();
-    }
+
+util.inherits(ConsoleOutput, Writable);
+
+ConsoleOutput.prototype.init = function () {
+	var self = this;
+	if (_.isUndefined(this.config.streamOptions)) {
+		var streamOptions = {};
+	} else {
+		var streamOptions = this.config.streamOptions;
+	}
+  //this settings must be always set to this value
+  streamOptions.objectMode = true;
+  Writable.call(this, streamOptions);
+  console.log("console.module.js: Module initialized!");
+}
+ConsoleOutput.prototype.close = function (callback) {
+	if (! _.isUndefined(callback)) {
+		console.log("console.module.js: Closing module!");
+		callback();
+	}
 	return;
 }
-consoleOutput.prototype.send = function (data,callback) {
-	console.log(this.messageHeader + " | " + data.header.name);
+ConsoleOutput.prototype.send = function (data,callback) {
+	console.log(this.config.messageHeader + " | " + data.header.id);
 	console.log(data.body);
 }
-module.exports = new consoleOutput();
+ConsoleOutput.prototype._write = function(chunk, encoding, cb) {
+	//ConsoleOutput writable stream is in object mode we can igonore encoding;
+	this.send(chunk);
+	cb();
+}
+module.exports = ConsoleOutput;

@@ -84,4 +84,4 @@ RedisOutput.prototype.close = function() {
 	}
 }
 
-module.exports = new RedisOutput();
+module.exports = RedisOutput;

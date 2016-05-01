@@ -1,5 +1,5 @@
 var amqp = require('amqplib/callback_api')
-
+const _ = require('lodash');
 
 function rabbitOutput() {
 	var self = this;
@@ -51,6 +51,9 @@ rabbitOutput.prototype.init = function(config,callback) {
     });
 }
 rabbitOutput.prototype.close = function (callback) {
+	if (_.isUndefined(this.connection)) {
+		return;
+	}
 	this.connection.close(function(err) {
 		if (err) {
 			if (typeof callback !== undefined) {
@@ -70,4 +73,4 @@ rabbitOutput.prototype.send = function (data) {
 		this.queue.push(data);
 	}
 }
-module.exports = new rabbitOutput();
+module.exports = rabbitOutput;

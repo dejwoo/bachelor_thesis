@@ -19,19 +19,19 @@ function Accelerometer(options) {
 Accelerometer.prototype.init = function() {
 	this.i2c1 = i2c.open(this.i2c_num, function (err) {
   		if (err) {
-  			throw err;
+  			throw (err);
   		}
   		console.log("I2C inicialized.")
   	});
   	this.i2c1.writeByte(this.address, LSM303_ACCEL.CTRL_REG1_A, this.reg1_a_cmd, function (err) {
   		if (err) {
-  			throw err;
+  			throw (err);
   		}
   		console.log("LSM303 Accelerometer inicialized.")
   	});
   	this.i2c1.writeByte(this.address, LSM303_ACCEL.CTRL_REG4_A, this.reg4_a_cmd, function (err) {
   		if (err) {
-  			throw err;
+  			throw (err);
   		}
   		console.log("LSM303 Accelerometer resolution and scale successfuly set.")
   	});
