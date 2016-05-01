@@ -22,6 +22,7 @@ DataLogger.prototype.configure = function (configJSON) {
 			this.addModule(configJSON.modules[index], function (err) {
 				if (err) {
 					console.error(err);
+					return;
 				}
 			});
 		}
