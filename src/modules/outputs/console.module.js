@@ -2,22 +2,23 @@ const Writable = require('stream').Writable;
 const util = require('util');
 const _ = require('lodash');
 
-function ConsoleOutput (config) {
+function ConsoleOutput (moduleConfig) {
 	var self = this;
-	if (_.isUndefined(config)) {
-  		console.error("console.module.js: Undefined config!");
+	if (_.isUndefined(moduleConfig)) {
+  		console.error("console.module.js: Undefined moduleConfig!");
   	}
-	this.config = config;
+	this.moduleConfig = moduleConfig;
 }
 
 util.inherits(ConsoleOutput, Writable);
 
 ConsoleOutput.prototype.init = function () {
 	var self = this;
-	if (_.isUndefined(this.config.streamOptions)) {
+	console.log(this.moduleConfig);
+	if (_.isUndefined(this.moduleConfig.streamOptions)) {
 		var streamOptions = {};
 	} else {
-		var streamOptions = this.config.streamOptions;
+		var streamOptions = this.moduleConfig.streamOptions;
 	}
   //this settings must be always set to this value
   streamOptions.objectMode = true;
@@ -32,7 +33,7 @@ ConsoleOutput.prototype.close = function (callback) {
 	return;
 }
 ConsoleOutput.prototype.send = function (data,callback) {
-	console.log(this.config.messageHeader + " | " + data.header.id);
+	console.log(this.moduleConfig.messageHeader + " | " + data.header.id);
 	console.log(data.body);
 }
 ConsoleOutput.prototype._write = function(chunk, encoding, cb) {

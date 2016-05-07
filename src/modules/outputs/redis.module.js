@@ -1,39 +1,52 @@
 const redis = require('redis');
+const Writable = require('stream').Writable;
+const util = require('util');
 const _ = require('lodash');
 
-function RedisOutput() {
+function RedisOutput(moduleConfig) {
 	var self = this;
+    this.ready = false;
+    this.moduleConfig = moduleConfig;
+    this.queue = [];
+    if (_.isUndefined(this.moduleConfig)) {
+        console.error("redis.module.js: Undefined moduleConfig");
+    }
+    this.configure();
 }
-RedisOutput.prototype.configure = function (outputConfig) {
-	if (! _.isUndefined(outputConfig) ) {
-		if (! _.isUndefined(outputConfig.hostname)) {
-			this.hostname = outputConfig.hostname
-		}
-		if (! _.isUndefined(outputConfig.port)) {
-			this.port = outputConfig.port;
-		}
-		if (! _.isUndefined(outputConfig.password)) {
-			this.password = outputConfig.password;
-		}
-		if (! _.isUndefined(outputConfig.snapshot)) {
-			this.snapshot = snapshot;
-		} else {
-			this.snapshot = {};
-			this.snapshot.keysChanged = 1000;
-			this.snapshot.secsPassed = 60;
-		}
+util.inherits(RedisOutput, Writable);
+
+RedisOutput.prototype.configure = function () {
+	if (_.isUndefined(this.moduleConfig.streamOptions)) {
+        var streamOptions = {};
+    } else {
+        var streamOptions = this.moduleConfig.streamOptions;
+    }
+    //this settings must be always set to this value
+    streamOptions.objectMode = true;
+    Writable.call(this, streamOptions);
+
+	if (_.isUndefined(this.moduleConfig.hostname)) {
+		console.error("redis.module.js: Undefined hostname!");
+	}
+	if (_.isUndefined(this.moduleConfig.port)) {
+		console.error("redis.module.js: Undefined port!");
+	}
+	if (_.isUndefined(this.moduleConfig.password)) {
+		console.error("redis.module.js: Undefined password!");
+	}
+	if (_.isUndefined(this.moduleConfig.configSet)) {
+		this.configSet = "CONFIG SET SAVE \"900 1 300 10\"";
 	}
 	this.ready = false;
 	this.queue = [];
 
 }
-RedisOutput.prototype.init = function (outputConfig) {
+RedisOutput.prototype.init = function () {
 	var self = this;
-	this.configure(outputConfig);
-	this.client =  redis.createClient(this.port, this.hostname, {no_ready_check: true});
-	this.client.auth(this.password, function (err) {
+	this.client =  redis.createClient(this.moduleConfig.port, this.moduleConfig.hostname, {no_ready_check: true});
+	this.client.auth(this.moduleConfig.password, function (err) {
 		if (err) {
-			throw err;
+			console.error(err);
 		}
 	});
 	this.client.on('connect', function() {
@@ -57,21 +70,23 @@ RedisOutput.prototype.send = function (data,callback) {
 			}
 		}
 	} else {
-		self.client.exists(data.header.name, function(err, reply) {
+		self.client.exists(data.header.id, function(err, reply) {
 			if (err) {
 				console.error(err);
 			}
+			var outputString = JSON.stringify(data);
 			if (reply === 1) { //kluc uz existuje
-				var outputString = JSON.stringify(data);
-				self.client.incr(data.header.name, function(err, reply) {
+				self.client.incr(data.header.id, function(err, reply) {
 					if (err) {
 						console.error(err);
 					}
-        			self.client.set("" + data.header.name + reply , outputString);
+        			self.client.set("" + data.header.id + reply , outputString);
    				 });
 			} else { //vytvaram kluc
-				self.client.set(data.header.name, 0, function() {
-					self.client.set("" + data.header.name + 0 , outputString);
+				console.log(data);
+				self.client.set(data.header.id, 0, function() {
+					console.log("" + data.header.id + 0 , outputString);
+					self.client.set("" + data.header.id + "0" , outputString);
 				});
 			}
 		});
@@ -83,5 +98,9 @@ RedisOutput.prototype.close = function() {
 		this.client.quit()
 	}
 }
-
+RedisOutput.prototype._write = function(chunk, encoding, cb) {
+    //ConsoleOutput writable stream is in object mode we can igonore encoding;
+    this.send(chunk);
+    cb();
+}
 module.exports = RedisOutput;

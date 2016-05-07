@@ -12,6 +12,7 @@ const util = require('util');
 
 function timeEmitter(config) {
   	EventEmitter.call(this);
+    console.log(config);
   	var self = this;
     if (typeof config !== undefined) {
         if (typeof config.sampleRate !== undefined) {

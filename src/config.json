@@ -43,12 +43,14 @@
       "label": "RabbitMQ",
       "type": "message",
       "modulePath": "./outputs/rabbitmq.module.js",
-      "serverConnection": {
-        "host": "128.199.37.120",
-        "port": 5672,
-        "login": "dejwoo",
-        "password": "qazxswedcvfr4rfvcdewsxzaq4*",
-        "authMechanism": "AMQPLAIN"
+      "moduleOptions": {
+        "serverConnection": {
+          "host": "128.199.37.120",
+          "port": 5672,
+          "login": "dejwoo",
+          "password": "%oZtB6G2!AN(S)XiUFhN2kid@CR42J4$AjWYr7SVeSdiCxMR#54*&AhTTY4D2Kd7",
+          "authMechanism": "AMQPLAIN"
+        }
       }
     },
     {
@@ -56,22 +58,31 @@
       "label": "Redis",
       "type": "db",
       "modulePath": "./outputs/redis.module.js",
-      "port": "6379",
-      "hostname": "localhost",
-      "configSet": [
-        "CONFIG SET SAVE \"900 1 300 10\""
-      ],
-      "password": "%oZtB6G2!AN(S)XiUFhN2kid@CR42J4$AjWYr7SVeSdiCxMR#54*&AhTTY4D2Kd7"
+      "moduleOptions": {
+        "port": "6379",
+        "hostname": "localhost",
+        "configSet": [
+          "CONFIG SET SAVE \"900 1 300 10\""
+        ],
+        "password": "%oZtB6G2!AN(S)XiUFhN2kid@CR42J4$AjWYr7SVeSdiCxMR#54*&AhTTY4D2Kd7"
+      }
     },
     {
       "id": "consoleModule",
       "label": "Console",
       "type": "console",
       "modulePath": "./outputs/console.module.js",
-      "messageHeader": "Console Output"
+      "moduleOptions": {
+        "messageHeader": "Console Output"
+      }
     }
   ],
   "routes": {
-    "time" : ["console"]
+    "time": [
+      "db",
+      "redisModule",
+      "db",
+      "console"
+    ]
   }
 }

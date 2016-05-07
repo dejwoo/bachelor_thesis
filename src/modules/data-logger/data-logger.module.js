@@ -27,7 +27,7 @@ DataLogger.prototype.configure = function (configJSON) {
 			});
 		}
 	} else {
-		console.error("DataLogger.configure: No modules defined in config.json");
+		console.error("data-logger.module.configure: No modules defined in config.json");
 	}
 	if (!_.isUndefined(configJSON.routes)) {
 		_.forOwn(configJSON.routes, function(value,key) {
@@ -38,11 +38,11 @@ DataLogger.prototype.configure = function (configJSON) {
 DataLogger.prototype.addModule = function (config, callback) {
 	var self = this;
 	if (_.isUndefined(config.id)) {
-		callback("DataLogger.addModule: id is not defined for ["+config+"]");
+		callback("data-logger.module.addModule: id is not defined for ["+config+"]");
 		return;
 	}
 	if (_.isUndefined(config.modulePath)) {
-		callback("DataLogger.addModule: modulePath is not defined for ["+config.id+"]");
+		callback("data-logger.module.addModule: modulePath is not defined for ["+config.id+"]");
 		return;
 	}
 	try {
@@ -70,6 +70,7 @@ DataLogger.prototype.addModule = function (config, callback) {
 	this.modules[config.id] = module;
 	this.modules[config.id].id = config.id;
 	this.modules[config.id].config = config;
+	this.modules[config.id].initialized = false;
 }
 // "gpsModule": ["db","rabbitmqModule"],
 // "accModule": ["redisModule", "rabbitmqModule"],
@@ -80,52 +81,94 @@ DataLogger.prototype.addRoute = function (routeFrom, routeTo) {
 	console.log("addRoute",routeFrom,routeTo);
 	if (_.has(this.modules, routeFrom)) {
 		// source is defined directly by id
+		console.log("1");
 		source = this.modules[routeFrom];
-		source.init();
+		if (source.initialized == false) {
+			source.init();
+		}
 		if (_.isUndefined(source.stream)) {
 			source.stream = new InputStream(source, source.config);
 		}
 		for (var index = 0; index < routeTo.length; index++) {
-			console.log("routeTo[index]", routeTo[index]);
-			console.log("types", this.types);
+			console.log(index,routeTo.length,"routeTo[index]", routeTo[index]);
 			if (_.has(this.modules, routeTo[index])) {
+				//kontrola viacnasobneho routovania, zatial nie je dovolene
+				if (_.has(this.routes, routeFrom)) {
+					var findValue = _.findIndex(this.routes[source.id], function(id) {
+						return id == routeTo[index];
+					});
+					if (findValue != -1) {
+						console.error("data-logger.module.addRoute: double defined route!");
+						continue;
+					}
+				}
 				// sink is defined directly by id
+				console.log("2");
+
 				sink = this.modules[routeTo[index]];
-				sink.init();
+				console.log(sink);
+				if (sink.initialized == false) {
+					sink.init();
+				}
 				if( _.isUndefined(this.routes[source.id])) {
 					this.routes[source.id] = [sink.id];
 				} else {
 					try {
-						this.routes[source.id].push(sink.id)
+						var findValue = _.findIndex(this.routes[source.id], function(id) {
+							return id == sink.id;
+						});
+						if (findValue == -1) {
+							this.routes[source.id].push(sink.id);
+						}
 					} catch (err) {
-					console.error(err);
+						console.error(err);
 					}
 				}
 				// actual data route, through stream piping
 				source.stream.pipe(sink);
+				continue;
 
 			} else if (_.has(this.types, routeTo[index])) {
 			//sink is defined by type of data
-				_.map(this.types[routeTo[index]], (id) => {
-					self.modules[id].init();
-					if( _.isUndefined(this.routes[source.id])) {
-						this.routes[source.id] = [id];
-					} else {
-						try {
-							this.routes[source.id].push(id)
-						} catch (err) {
-							console.error(err);
-						}
+			_.map(this.types[routeTo[index]], (id) => {
+				if (_.has(this.routes, routeFrom)) {
+					var findValue = _.findIndex(this.routes[source.id], function(moduleId) {
+						return moduleId == id;
+					});
+					if (findValue != -1) {
+						console.error("data-logger.module.addRoute: double defined route T!");
+						return;
 					}
-					return source.stream.pipe(self.modules[id]);
-				});
-			} else {
-			console.error("DataLogger.addRoute: sink["+routeTo[index]+"] not found in modules");
-			}
+				}
+				sink = self.modules[id];
+				if (sink.initialized == false) {
+					sink.init();
+				}
+				if( _.isUndefined(this.routes[source.id])) {
+					this.routes[source.id] = [sink.id];
+				} else {
+					try {
+						var findValue = _.findIndex(this.routes[source.id], function(index) {
+							return index == sink.id;
+						});
+						if (findValue == -1) {
+							this.routes[source.id].push(sink.id);
+						}
+					} catch (err) {
+						console.error(err);
+					}
+				}
+				return source.stream.pipe(self.modules[id]);
+			});
+			continue;
+		} else {
+			console.error("data-logger.module.addRoute: sink["+routeTo[index]+"] not found in modules");
 		}
 	}
+}
 	// did not found valid id => source defined by type
 	if (_.has(this.types, routeFrom)) {
+		console.log("3");
 		//route is defined by type of data
 		source = this.types[routeFrom];
 		for (var index = 0; index < source.length; index++) {
@@ -163,9 +206,14 @@ DataLogger.prototype.configureModule = function (id,config) {
 		console.warn("DataLogger.configureModule: id["+id+"] is not the same as in proided config");
 	}
 	this.addModule(newConfig);
-	console.log(this.routes);
 	if (_.has(this.routes, id)) {
-		// this.addRoute(id, this.routes[id]);
+		var sinks = this.routes[id];
+		try {
+			delete this.routes[id];
+		} catch (err) {
+			console.error(err);
+		}
+		this.addRoute(id, sinks);
 	}
 }
 
