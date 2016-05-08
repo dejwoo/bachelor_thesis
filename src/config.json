@@ -25,7 +25,7 @@
       "type": "obd",
       "modulePath": "./inputs/obd.module.js",
       "moduleOptions": {
-        "sampleRate": 1000,
+        "sampleRate": 4000,
         "device": "/dev/ttyACM0"
       }
     },
@@ -78,10 +78,7 @@
     }
   ],
   "routes": {
-    "time": [
-      "db",
-      "redisModule",
-      "db",
+    "obd": [
       "console"
     ]
   }
