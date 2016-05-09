@@ -210,6 +210,10 @@ ObdOutput.prototype.addCmdToLoop = function(cmd) {
 	} else {
 		console.info("obd.module.addCmdToLoop: cmd["+cmd+"] is already in loop");
 	}
+	if (!_.isUndefined(this.loopInterval)) {
+		this.stopCmdLoop();
+		this.startCmdLoop();
+	}
 }
 ObdOutput.prototype.removeCmdFromLoop = function (cmd) {
 	var self = this;
@@ -220,7 +224,12 @@ ObdOutput.prototype.startCmdLoop = function() {
 		return;
 	}
 	var self = this;
-	var intervalTime = this.moduleConfig.sampleRate;
+	if (this.moduleConfig.sampleRate > this.cmdtoLoop.length*this.moduleConfig.writeDelay) {
+		var intervalTime = this.moduleConfig.sampleRate;
+	} else {
+		var intervalTime = this.cmdtoLoop.length*this.moduleConfig.writeDelay;
+		console.info("obd.module.startCmdLoop: sampleRate set to ["+intervalTime+"] due to writeDelay");
+	}
 	this.loopInterval = setInterval(function(){
 		_.map(self.cmdToLoop, function(value){
 			self.sendCmd(value);

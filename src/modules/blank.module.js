@@ -30,6 +30,9 @@ BlankModule = function(moduleConfig) {
   	//module accepting incoming data have to be instance of Writable stream
   	Writable.call(this, streamOptions);
 }
+util.inherits(BlankModule, Writable);
+util.inherits(BlankModule, EventEmitter);
+
 BlankModule.prototype.configure = function() {
 	//space for declaring values needed for module to work
 }

@@ -4,7 +4,7 @@
       "id": "gpsModule",
       "label": "GPS",
       "type": "gps",
-      "modulePath": "./inputs/gps.module.js",
+      "modulePath": "./gps.module.js",
       "moduleOptions": {
         "device": "/dev/ttyUSB1",
         "init": "AT+CGPS=1"
@@ -14,7 +14,7 @@
       "id": "timeModule",
       "label": "Time",
       "type": "time",
-      "modulePath": "./inputs/time.module.js",
+      "modulePath": "./time.module.js",
       "moduleOptions": {
         "sampleRate": 1000
       }
@@ -23,9 +23,10 @@
       "id": "obdModule",
       "label": "OBD II",
       "type": "obd",
-      "modulePath": "./inputs/obd.module.js",
+      "modulePath": "./obd.module.js",
       "moduleOptions": {
         "sampleRate": 4000,
+        "writeDelay":50,
         "device": "/dev/ttyACM0"
       }
     },
@@ -33,7 +34,7 @@
       "id": "accModule",
       "label": "Accelerometer",
       "type": "acc",
-      "modulePath": "./inputs/accelerometer.module.js",
+      "modulePath": "./accelerometer.module.js",
       "moduleOptions": {
         "sampleRate": 500
       }
@@ -42,7 +43,7 @@
       "id": "rabbitmqModule",
       "label": "RabbitMQ",
       "type": "message",
-      "modulePath": "./outputs/rabbitmq.module.js",
+      "modulePath": "./rabbitmq.module.js",
       "moduleOptions": {
         "serverConnection": {
           "host": "128.199.37.120",
@@ -57,7 +58,7 @@
       "id": "redisModule",
       "label": "Redis",
       "type": "db",
-      "modulePath": "./outputs/redis.module.js",
+      "modulePath": "./redis.module.js",
       "moduleOptions": {
         "port": "6379",
         "hostname": "localhost",
@@ -71,9 +72,19 @@
       "id": "consoleModule",
       "label": "Console",
       "type": "console",
-      "modulePath": "./outputs/console.module.js",
+      "modulePath": "./console.module.js",
       "moduleOptions": {
         "messageHeader": "Console Output"
+      }
+    },
+    {
+      "id": "bulkModule",
+      "label": "Bulk Data send",
+      "type": "bulk",
+      "modulePath": "./bulk.module.js",
+      "moduleOptions": {
+        "timePassed": 5000,
+        "payloadSize": 300
       }
     }
   ],
