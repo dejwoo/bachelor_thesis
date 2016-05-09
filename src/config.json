@@ -1,61 +1,96 @@
 {
-	"inputs" : [
-		{
-			"name" : "gpsInput",
-			"label" : "GPS",
-			"modulePath" : "./inputs/gps.modulse.js", 
-			"sourceOptions" : { "sampleRate" : -1, "device": "/dev/ttyUSB1", "init": "AT+CGPS=1"},
-			"outputs" : [] 
-		},{
-			"name" : "timeInput",
-			"label" : "Time",
-			"modulePath" : "./inputs/time.module.js", 
-			"sourceOptions" : { "sampleRate" : 1000, "response" : "JSON"},
-			"outputs" : ["redis"] 
-		},{
-			"name" : "obdInput",
-			"label" : "OBD II",
-			"modulePath" : "./inputs/obd.module.js", 
-			"sourceOptions" : { "sampleRate" : 1000, "response" : "JSON"},
-			"outputs" : [] 
-		},{
-			"name" : "accInput",
-			"label" : "Accelerometer",
-			"modulePath" : "./inputs/accelerometer.module.js", 
-			"sourceOptions" : { "sampleRate" : 1000, "response" : "JSON"},
-			"outputs" : ["console","rabbitMQ"] 
-			}],
-	"outputs" : [
-		{
-			"name" : "rabbitMQ",
-			"label" : "RabbitMQ",
-			"modulePath" : "./outputs/rabbitmq.module.js", 
-			"serverConnection" : {
-								"host" : "128.199.37.120",
-								"port" : 5672,
-								"login": "dejwoo",
-								"password": "qazxswedcvfr4rfvcdewsxzaq4*",
-								"authMechanism": "AMQPLAIN"
-			}
-		},{
-			"name" : "redis",
-			"label" : "Redis",
-			"modulePath" : "./outputs/redis.module.js",
-			"port" : "6379",
-			"hostname" : "localhost",
-			"configSet": ["CONFIG SET SAVE \"900 1 300 10\""] ,
-			"password" : "%oZtB6G2!AN(S)XiUFhN2kid@CR42J4$AjWYr7SVeSdiCxMR#54*&AhTTY4D2Kd7"
-
-
-		},{
-			"name" : "iftt",
-			"label" : "IFTT",
-			"modulePath" : "./iftt/iftt.module.js", 
-			"type": "api" 
-		},{	
-			"name" : "console",
-			"label" : "Console",
-			"modulePath" : "./outputs/console.module.js", 
-			"messageHeader" : "Console Output"
-		}]
+  "modules": [
+    {
+      "id": "gpsModule",
+      "label": "GPS",
+      "type": "gps",
+      "modulePath": "./gps.module.js",
+      "moduleOptions": {
+        "device": "/dev/ttyUSB1",
+        "init": "AT+CGPS=1"
+      }
+    },
+    {
+      "id": "timeModule",
+      "label": "Time",
+      "type": "time",
+      "modulePath": "./time.module.js",
+      "moduleOptions": {
+        "sampleRate": 1000
+      }
+    },
+    {
+      "id": "obdModule",
+      "label": "OBD II",
+      "type": "obd",
+      "modulePath": "./obd.module.js",
+      "moduleOptions": {
+        "sampleRate": 4000,
+        "writeDelay":50,
+        "device": "/dev/ttyACM0"
+      }
+    },
+    {
+      "id": "accModule",
+      "label": "Accelerometer",
+      "type": "acc",
+      "modulePath": "./accelerometer.module.js",
+      "moduleOptions": {
+        "sampleRate": 500
+      }
+    },
+    {
+      "id": "rabbitmqModule",
+      "label": "RabbitMQ",
+      "type": "message",
+      "modulePath": "./rabbitmq.module.js",
+      "moduleOptions": {
+        "serverConnection": {
+          "host": "128.199.37.120",
+          "port": 5672,
+          "login": "dejwoo",
+          "password": "%oZtB6G2!AN(S)XiUFhN2kid@CR42J4$AjWYr7SVeSdiCxMR#54*&AhTTY4D2Kd7",
+          "authMechanism": "AMQPLAIN"
+        }
+      }
+    },
+    {
+      "id": "redisModule",
+      "label": "Redis",
+      "type": "db",
+      "modulePath": "./redis.module.js",
+      "moduleOptions": {
+        "port": "6379",
+        "hostname": "localhost",
+        "configSet": [
+          "CONFIG SET SAVE \"900 1 300 10\""
+        ],
+        "password": "%oZtB6G2!AN(S)XiUFhN2kid@CR42J4$AjWYr7SVeSdiCxMR#54*&AhTTY4D2Kd7"
+      }
+    },
+    {
+      "id": "consoleModule",
+      "label": "Console",
+      "type": "console",
+      "modulePath": "./console.module.js",
+      "moduleOptions": {
+        "messageHeader": "Console Output"
+      }
+    },
+    {
+      "id": "bulkModule",
+      "label": "Bulk Data send",
+      "type": "bulk",
+      "modulePath": "./bulk.module.js",
+      "moduleOptions": {
+        "timePassed": 5000,
+        "payloadSize": 300
+      }
+    }
+  ],
+  "routes": {
+    "obd": [
+      "console"
+    ]
+  }
 }
