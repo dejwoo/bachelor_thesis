@@ -247,7 +247,7 @@ ObdOutput.prototype.parseObdResponse= function(packet) {
 	var payload = packet.slice(2);
 	payload = strToHex(payload);
 	console.log(this.queue.length,pid.description,pid.convert(payload));
-	this.emit("data",pid.convert(payload));
+	this.emit("data",{"code":pid.code,"response":pid.convert(payload)});;
 }
 ObdOutput.prototype.getPid = function(mode, cmd) {
 	if (! _.isUndefined(PIDs[mode])) {
