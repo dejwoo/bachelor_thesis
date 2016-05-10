@@ -10,13 +10,16 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
 var swig = require('swig');
-
+const _ = require('lodash');
 var html = require('./routes/html');
 var api = require('./routes/api');
+swig.setDefaults({ varControls: ['<{', '}>'] });
 
 
 // Create a new Express application
 var app = express();
+var http = require('http').Server(app);
+var io = require('socket.io')(http);
 
 app.set('views', path.join(__dirname, 'views'));
 app.engine('html', swig.renderFile);
@@ -64,8 +67,10 @@ app.use(function(err, req, res, next) {
 });
 
 // // Bind to a port
-app.listen(8000);
-console.log('Application running!');
+
+http.listen(8000, function(){
+  console.log('Application running!');
+});
 dataLogger.configure(configJSON);
 setTimeout(function() {
   dataLogger.configureModule("timeModule", { moduleOptions: {sampleRate : 500} });
@@ -79,5 +84,16 @@ process.on('SIGTERM', function() {
 process.on('SIGINT', function() {
   dataLogger.shutdown();
 });
+io.on('connection', function(socket){
+  console.log("IO connected");
+  _.forIn(dataLogger.modules, function(module, id) {
+     if (! _.isUndefined(module.on)) {
+      module.on('data', function(data) {
+        socket.emit('data',id,data);
+      })
+     }
+  });
+});
+
 
 module.exports = app;

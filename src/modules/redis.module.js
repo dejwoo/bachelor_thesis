@@ -51,7 +51,7 @@ RedisOutput.prototype.init = function () {
 	});
 	this.client.on('connect', function() {
 		self.ready = true;
-		console.log("Connection to redisDB successfull.");
+		console.log("redis.module.js: Connection to redisDB successfull.");
 		for (var index = 0; index < self.queue.length; index++) {
 			var item = self.queue[index];
 			self.send(item.data, item.inputModule);
