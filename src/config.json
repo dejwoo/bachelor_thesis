@@ -16,7 +16,7 @@
       "type": "time",
       "modulePath": "./time.module.js",
       "moduleOptions": {
-        "sampleRate": 100
+        "sampleRate": 1000
       }
     },
     {
@@ -89,11 +89,6 @@
     }
   ],
   "routes": {
-      "time": [
-      "bulk"
-    ],
-    "bulk": [
-    "console"
-    ]
+      "time":["console"]
   }
 }

@@ -3,7 +3,7 @@
 		<div class="menu-wrap">
 			<ul class="nav nav-tabs">
 				<li><a href="/"> Home </a></li>
-				<li data-ng-repeat="item in mainController.menus"><a href="/module/{{item.name}}"> {{item.label}} </a></li>
+				<li data-ng-repeat="item in mainController.menus"><a href="/module/{{item.id}}"> {{item.label}} </a></li>
 			</ul>
 		</div>
 	</nav>
@@ -11,22 +11,17 @@
 
 <div>
 	<div class="banner">
-		<div data-ng-if="mainController.inputs[mainController.moduleName]">
-			<h1>{{mainController.inputs[mainController.moduleName].label}}</h1>
+		<div>
+			<h1>{{mainController.modules[mainController.moduleName].label}}</h1>
 			<div class="config">
 				<h3>Configuration</h3>
-				<div data-ng-repeat='(key,value) in mainController.inputs[mainController.moduleName] track by key'>
-					<p><b>{{key}}: </b>{{value}}</p>
+				<div data-ng-repeat='(key,value) in mainController.modules[mainController.moduleName] track by key'>
+					<p data-ng-if="key != 'lastData'"><b>{{key}}: </b>{{value}}</p>
 				</div>
 			</div>
-		</div>
-		<div data-ng-if="mainController.outputs[mainController.moduleName]">
-			<h1>{{mainController.outputs[mainController.moduleName].label}}</h1>
 			<div class="config">
-				<h3>Configuration</h3>
-				<div data-ng-repeat='(key,value) in mainController.outputs[mainController.moduleName] track by key'>
-					<p><b>{{key}}: </b>{{value}}</p>
-				</div>
+				<h3>Last Data</h3>
+				<p>{{mainController.modules[mainController.moduleName].lastData | json}}
 			</div>
 		</div>
 	</div>

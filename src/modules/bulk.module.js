@@ -82,6 +82,5 @@ BulkModule.prototype._write = function(chunk, encoding, cb) {
 BulkModule.prototype.close = function (cb) {
 	//function for ending module correctly, function will be called when nodejs will receive end.
 	this.send();
-	this.resetCounter();
 }
 var exports = module.exports = BulkModule;
