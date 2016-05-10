@@ -12,6 +12,7 @@ const util = require('util');
 
 function timeEmitter(config) {
   	EventEmitter.call(this);
+    console.log(config);
   	var self = this;
     if (typeof config !== undefined) {
         if (typeof config.sampleRate !== undefined) {
@@ -20,20 +21,23 @@ function timeEmitter(config) {
             this.sampleRate = 1000; //DEFAULT HODNOTA
         }
     }
-	this.readStop = function() {
-		console.log("Stoping emitting time");
-        if (typeof this.intervalis !== 'undefined') {
-            clearInterval(this.intervalis)
-        }
-    }
-	this.readStart = function() {
-		console.log("Starting emitting time");
-		self.emitting = true;
-		// console.log(this);
-		self.emitLoop();
-	}
-	// console.log(self);
 }
+timeEmitter.prototype.init = function () {
+    var self = this;
+}
+timeEmitter.prototype.readStop = function() {
+    if (typeof this.intervalis !== 'undefined') {
+        clearInterval(this.intervalis);
+        this.emitting = false;
+    }
+}
+
+timeEmitter.prototype.readStart = function() {
+	this.emitting = true;
+	// console.log(this);
+	this.emitLoop();
+}
+
 timeEmitter.prototype.emitLoop = function () {
     var self = this;
     if (typeof this.intervalis !== 'undefined') {
@@ -63,6 +67,11 @@ timeEmitter.prototype.configure = function (config) {
         this.emitLoop();
     }
 }
+timeEmitter.prototype.close = function (cb) {
+    this.emit('data',null);
+    this.readStop();
+}
+
 util.inherits(timeEmitter, EventEmitter);
 
 

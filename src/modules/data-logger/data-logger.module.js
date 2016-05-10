@@ -1,185 +1,231 @@
-const inputStream = require('./inputStreamWrapper.js');
+const InputStream = require('./inputStreamWrapper.js');
+const _ = require('lodash');
+
 
 function DataLogger (configJSON) {
 	var self = this;
-	this.inputs = {};
-	this.outputs = {};
-	this.transports = {};
+	this.modules = {};
+	this.types = {};
+	this.routes = {};
 	if (typeof configJSON !== 'undefined') {
-		this.configure(configJSON)
-		console.log(this.inputs);
-
+		this.configure(configJSON);
 	}
-	else {
-		// TODO: configure with default settings
-	}
-}
-function isDefined(object) {
-	if (typeof object === 'undefined') {
-		return false;
-	}
-	return true;
 }
 DataLogger.prototype.configure = function (configJSON) {
+	var self = this;
 	// console.log(configJSON);
-	if (!isDefined(configJSON)) {
+	if (_.isUndefined(configJSON)) {
 		return
 	}
-	if (isDefined(configJSON.outputs)) {
-		for (var index = 0; index < configJSON.outputs.length; index++) {
-			var outputConfig = configJSON.outputs[index];
-			this.addOutputSink(outputConfig);
+	if (!_.isUndefined(configJSON.modules)) {
+		for (var index = 0; index < configJSON.modules.length; index++) {
+			this.addModule(configJSON.modules[index], function (err) {
+				if (err) {
+					console.error(err);
+					return;
+				}
+			});
 		}
+	} else {
+		console.error("data-logger.module.configure: No modules defined in config.json");
 	}
-	if (isDefined(configJSON.inputs)) {
-		for (var index = 0; index < configJSON.inputs.length; index++) {
-			var inputConfig = configJSON.inputs[index];
-			this.addInputSource(inputConfig);
-		}
+	if (!_.isUndefined(configJSON.routes)) {
+		_.forOwn(configJSON.routes, function(value,key) {
+			self.addRoute(key,value);
+		})
 	}
 }
-DataLogger.prototype.addInputSource = function (inputConfig) {
+DataLogger.prototype.addModule = function (config, callback) {
 	var self = this;
-	if (isDefined(this.inputs[inputConfig.name])) {
-		console.error("Input with that name already exists, please remove it first.");
+	if (_.isUndefined(config.id)) {
+		callback("data-logger.module.addModule: id is not defined for ["+config+"]");
+		return;
+	}
+	if (_.isUndefined(config.modulePath)) {
+		callback("data-logger.module.addModule: modulePath is not defined for ["+config.id+"]");
 		return;
 	}
 	try {
-		//nacitam modul
-		inputConfig.module = require("../" + inputConfig.modulePath);
+		var factory = require("../" + config.modulePath);
+		var module = new factory(config.moduleOptions);
 	} catch(err) {
-		console.error(err);
+		callback(err);
 		return;
 	}
-	//vytvorym stream
-	inputConfig.stream = new inputStream(inputConfig.module,inputConfig);
-	//pripojim event na kazdy output source.
-	inputConfig.stream.on('readable', function() {
-		if (!isDefined(inputConfig.outputs) || inputConfig.outputs.length == 0) {
-			inputConfig.stream.pause(); //zastavujem citanie
-		}
-		var readObject = inputConfig.stream.read();
-		if (isDefined(inputConfig.transfromStream)) {
-			// ked chceme prekladat data
-			return;
+	if (! _.isUndefined(this.types)) {
+		if (_.isUndefined(this.types[config.type])) {
+			this.types[config.type] = [config.id];
 		} else {
-			// ak nie tak ich rovno posielame podla configu
-			for (var outputIndex = 0; outputIndex < inputConfig.outputs.length; outputIndex++) {
-				if (!isDefined(self.outputs[inputConfig.outputs[outputIndex]])) {
-					console.error("DataLogger.configure.inputConfig["+inputConfig.name+"] has output source which is not defined");
-				} else {
-					self.outputs[inputConfig.outputs[outputIndex]].module.send(readObject);
-				}
+			try {
+				this.types[config.type].push(config.id);
+			} catch(err) {
+				console.error(err);
+				return;
 			}
 		}
-	});
-	//nakoniec pridam do interneho zoznamu data-loggera.
-	self.inputs[inputConfig.name] = inputConfig;
+	} else {
+		this.types = {};
+		this.types[config.type] = [config.id];
+	}
+	this.modules[config.id] = module;
+	this.modules[config.id].id = config.id;
+	this.modules[config.id].config = config;
+	this.modules[config.id].initialized = false;
 }
-DataLogger.prototype.removeInputSource = function (inputSourceName) {
+// "gpsModule": ["db","rabbitmqModule"],
+// "accModule": ["redisModule", "rabbitmqModule"],
+// "all": "console"
+DataLogger.prototype.addRoute = function (routeFrom, routeTo) {
 	var self = this;
-	if (!isDefined(self.inputs[inputSourceName])) {
-		console.warn("Input with that name does not exists.");
-		return;
-	}
-	try {
-		self.inputs[inputSourceName].stream.removeListener('readable', function () {
-			console.log(inputSourceName + " successfully removed listener.");
-		});
-		delete self.inputs[inputSourceName];
-	} catch (err) {
-		console.error(err);
+	var source,sink;
+	console.log("addRoute",routeFrom,routeTo);
+	if (_.has(this.modules, routeFrom)) {
+		// source is defined directly by id
+		console.log("1");
+		source = this.modules[routeFrom];
+		if (source.initialized == false) {
+			source.init();
+		}
+		if (_.isUndefined(source.stream)) {
+			source.stream = new InputStream(source, source.config);
+		}
+		for (var index = 0; index < routeTo.length; index++) {
+			console.log(index,routeTo.length,"routeTo[index]", routeTo[index]);
+			if (_.has(this.modules, routeTo[index])) {
+				//kontrola viacnasobneho routovania, zatial nie je dovolene
+				if (_.has(this.routes, routeFrom)) {
+					var findValue = _.findIndex(this.routes[source.id], function(id) {
+						return id == routeTo[index];
+					});
+					if (findValue != -1) {
+						console.error("data-logger.module.addRoute: double defined route!");
+						continue;
+					}
+				}
+				// sink is defined directly by id
+				console.log("2");
+
+				sink = this.modules[routeTo[index]];
+				console.log(sink);
+				if (sink.initialized == false) {
+					sink.init();
+				}
+				if( _.isUndefined(this.routes[source.id])) {
+					this.routes[source.id] = [sink.id];
+				} else {
+					try {
+						var findValue = _.findIndex(this.routes[source.id], function(id) {
+							return id == sink.id;
+						});
+						if (findValue == -1) {
+							this.routes[source.id].push(sink.id);
+						}
+					} catch (err) {
+						console.error(err);
+					}
+				}
+				// actual data route, through stream piping
+				source.stream.pipe(sink);
+				continue;
+
+			} else if (_.has(this.types, routeTo[index])) {
+			//sink is defined by type of data
+			_.map(this.types[routeTo[index]], (id) => {
+				if (_.has(this.routes, routeFrom)) {
+					var findValue = _.findIndex(this.routes[source.id], function(moduleId) {
+						return moduleId == id;
+					});
+					if (findValue != -1) {
+						console.error("data-logger.module.addRoute: double defined route T!");
+						return;
+					}
+				}
+				sink = self.modules[id];
+				if (sink.initialized == false) {
+					sink.init();
+				}
+				if( _.isUndefined(this.routes[source.id])) {
+					this.routes[source.id] = [sink.id];
+				} else {
+					try {
+						var findValue = _.findIndex(this.routes[source.id], function(index) {
+							return index == sink.id;
+						});
+						if (findValue == -1) {
+							this.routes[source.id].push(sink.id);
+						}
+					} catch (err) {
+						console.error(err);
+					}
+				}
+				return source.stream.pipe(self.modules[id]);
+			});
+			continue;
+		} else {
+			console.error("data-logger.module.addRoute: sink["+routeTo[index]+"] not found in modules");
+		}
 	}
 }
-DataLogger.prototype.addOutputSink = function(outputConfig) {
+	// did not found valid id => source defined by type
+	if (_.has(this.types, routeFrom)) {
+		console.log("3");
+		//route is defined by type of data
+		source = this.types[routeFrom];
+		for (var index = 0; index < source.length; index++) {
+			this.addRoute(source[index], routeTo);
+		}
+	}
+}
+DataLogger.prototype.deleteModule = function(id) {
 	var self = this;
-	if (isDefined(self.outputs[outputConfig.name])) {
-		console.error("Output with that name already exists, please remove it first.");
-		return;
-	}
-	try {
-		//ziskam module
-		outputConfig.module = require("../" + outputConfig.modulePath);
-		//inicializujem
-		outputConfig.module.init(outputConfig);
-		//pridam do interneho zoznamu data-loggeraloggeraloggera
-		self.outputs[outputConfig.name] = outputConfig;
-		//console.log(self.outputs);
-	} catch (err) {
-		console.error(err);
-	}
-}
-DataLogger.prototype.removeOutputSink = function (outputSinkName) {
-	var self = this;
-	if (!isDefined(self.outputs[outputSinkName])) {
-		console.warn("Input with that name does not exists.");
-		return;
-	}
-	try {
-		//zavolam funkciu na korektne ukoncenie output modulu
-		self.outputs[outputSinkName].module.close();
-		//vymazem property z internej pamete data loggera
-		delete self.outputs[outputSinkName];
-	} catch (err) {
-		console.error(err);
-	}
-}
-DataLogger.prototype.configureInputSource = function (inputSourceName, inputConfigJSON) {
-	var self = this;
-	if (!isDefined(self.inputs[inputSourceName])) {
-		console.error("data-logger.module.js: configureInputSource:: Input with name ["+inputSourceName+"] does not exists");
-		return;
-	}
-	self.inputs[inputSourceName].stream.write(inputConfigJSON);
-}
-DataLogger.prototype.configureOutputSink = function (outputSinkName, outputConfigJSON) {
-	var self = this;
-	if (!isDefined(self.outputs[outputSinkName])) {
-		console.error("data-logger.module.js: configureOutputSink:: Output with name ["+outputSinkName+"] does not exists");
-		return;
-	}
-	self.outputs[outputSinkName].module.configure(outputConfigJSON);
-}
-DataLogger.prototype.shutdown = function() {
-    console.info("DataLogger shutting down!")
-    for (var inputKey in this.inputs) {
-        if (!this.inputs.hasOwnProperty(inputKey)) {
-             continue
-        }
-        console.log("Closing Input: ", this.inputs[inputKey].name);
-        this.removeInputSource(inputKey);
-    }
-    for (var outputKey in this.outputs) {
-        if (!this.outputs.hasOwnProperty(outputKey)) {
-             continue
-        }
-        console.log("Closing Output: ", this.outputs[outputKey].name);
-        this.removeOutputSink(outputKey);
-    }
-    process.exit();
-}
-DataLogger.prototype.addTransportStream = function (transportConfig){
-	var self = this;
-	if (isDefined(this.transports[transportConfig.name])) {
-		console.error("Transport strean with that name already exists, please remove it first.");
-		return;
-	}
-	try {
-		//nacitam modul
-		transportConfig.module = require("../" + transportConfig.modulePath);
-	} catch (err) {
-		console.error(err);
-	}
-	//vytvorym stream
-	transportConfig.module.init(function (err) {
-		if (err) {
+	if (_.has(this.modules, id)) {
+		var module = this.modules[id];
+		if (_.has(module, "stream")) {
+			module.stream.unpipe();
+		}
+		module.close();
+		try {
+			delete this.modules[id];
+		} catch (err) {
 			console.error(err);
 		}
-	});
-	try {
-		this.transports.push(transportConfig);
-	} catch (err) {
-		console.error(err);
+	} else {
+		console.error("DataLogger.deleteModule: Module["+id+"] is not defined!");
 	}
 }
+DataLogger.prototype.configureModule = function (id,config) {
+	var self = this;
+	var newConfig = this.modules[id].config;
+	_.forIn(config, function(value, key) {
+		newConfig[key] = value;
+	})
+	if (_.has(this.modules, id)) {
+		this.deleteModule(id);
+	}
+	if (id != newConfig.id) {
+		console.warn("DataLogger.configureModule: id["+id+"] is not the same as in proided config");
+	}
+	this.addModule(newConfig);
+	if (_.has(this.routes, id)) {
+		var sinks = this.routes[id];
+		try {
+			delete this.routes[id];
+		} catch (err) {
+			console.error(err);
+		}
+		this.addRoute(id, sinks);
+	}
+}
+
+
+DataLogger.prototype.shutdown = function() {
+	var self = this;
+	console.info("DataLogger shutting down!");
+	_.forOwn(this.modules, function(value,key) {
+		console.log("Closing module " + key + "!");
+		self.deleteModule(key);
+	});
+	process.exit();
+}
+
 module.exports = new DataLogger();

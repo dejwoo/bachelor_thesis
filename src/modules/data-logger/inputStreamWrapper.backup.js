@@ -1,63 +1,32 @@
-const util = require('util');
+util = require('util');
 const Duplex = require('stream').Duplex;
 util.inherits(inputStreamWrapper, Duplex);
 
-function isDefined(object) {
-  if (typeof object === 'undefined') {
-    return false;
-  }
-  return true;
-}
-
-function inputStreamWrapper(source, config) {
-  this.config = config;
-  this._source = source;
-  this.init();
-}
-inputStreamWrapper.prototype.init = function() {
-  var self = this;
-  if (!isDefined(this.config.streamOptions)) {
-    var streamOptions = {};
-  } else {
-    var streamOptions = this.config.streamOptions;
-  }
-  //this settings must be always set to this value
-  streamOptions.readableObjectMode = true;
+function inputStreamWrapper(inputSource, sourceOptions) {
+  var streamOptions = {};
   streamOptions.writableObjectMode = true;
+  streamOptions.readableObjectMode = true;
   Duplex.call(this, streamOptions);
+  this._source = new inputSource(sourceOptions);
   this._isReading = false;
-  this.addEventListeners();
-}
-inputStreamWrapper.prototype.addEventListeners = function () {
-  var self = this;
+
   // Every time there's data, we push it into the internal buffer.
-  this._source.on('data', function(chunk) {
+  this._source.on('data', (chunk) => {
     // if push() returns false, then we need to stop reading from source
-    var emitObject = {};
-    if (!isDefined(self.config.header)) {
-      emitObject.header = {};
-      emitObject.header.id = self.config.id;
-    } else {
-      emitObject.header = self.config.header;
-      if (!isDefined(emitObject.header.id)) {
-        emitObject.header.id = self.config.id;
-      }
-    }
-    emitObject.body = chunk;
-    if (!self.push(emitObject)) {
-      self._source.readStop();
-      self._isReading = false;
+    if (!this.push(chunk)) {
+      this._source.readStop();
+      this._isReading = false;
     }
   });
   // When the source ends, we push the EOF-signaling `null` chunk
-  this._source.on('end', function() {
-    self.push(null);
+  this._source.on('end', () => {
+    this.push(null);
   });
-  this._source.on('configured', function(response,err) {
+  this._source.on('configured', (response,err) => {
     if (err) {
-      console.info("Config error of " + self._source.name + ": " + response );
+      console.info("Config error of " + _source.name + ": " + response );
     }
-    console.info("Config response of " + self._source.name + ": " + response );
+    console.info("Config response of " + _source.name + ": " + response );
   });
 }
 // _read will be called when the stream wants to pull more data in
@@ -76,7 +45,6 @@ inputStreamWrapper.prototype._write = function(data, encoding, callback) {
          console.error("inputStreamWrapper.write: Source does not implement configure!");
         }
     }
-    console.log("Configuring", data);
     this._source.configure(data);
     if (typeof callback !== "undefined") {
         callback();
