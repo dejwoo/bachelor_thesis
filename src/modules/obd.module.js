@@ -2,7 +2,7 @@ const EventEmitter = require("events");
 const util = require("util");
 const serialport = require("serialport")
 const SerialPort = serialport.SerialPort;
-const PIDs = require("./obdPidList.js");
+const PIDs = require("./obd.pids.js");
 const _ = require("lodash");
 "use strict";
 ObdOutput = function(moduleConfig) {

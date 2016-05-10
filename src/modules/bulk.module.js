@@ -22,7 +22,6 @@ BulkModule = function(moduleConfig) {
 	}
 
 	//data generating modul have to be able to emit data event
-	EventEmitter.call(this);
 
 	//streamOptions potentially passed from config, objectMode is not configurable
 	if (_.isUndefined(this.moduleConfig.streamOptions)) {
@@ -33,11 +32,12 @@ BulkModule = function(moduleConfig) {
   	//this settings must be always set to this value
   	streamOptions.objectMode = true;
   	//module accepting incoming data have to be instance of Writable stream
-  	Writable.call(this, streamOptions);
+  	Writable.call(this,streamOptions);
+  	EventEmitter.call(this);
+  	this.configure();
 }
+Object.setPrototypeOf(BulkModule.prototype, Writable.prototype);
 
-util.inherits(BulkModule, Writable);
-util.inherits(BulkModule, EventEmitter);
 
 BulkModule.prototype.configure = function() {
 	this.outputMessage = [];
@@ -48,7 +48,8 @@ BulkModule.prototype.configure = function() {
 BulkModule.prototype.init = function() {
 	//initializing module, space for creating connections, opening serial ports, etc
 	this.checkConditions = function() {
-		if (Date.now() - this.timeNow > this.moduleConfig.timePassed || this.outputSize > this.moduleConfig.payloadSize) {
+		if (Date.now() - this.timeNow > this.moduleConfig.timePassed || this.outputSize > this.moduleConfig.payloadSize*1000) {
+			console.log("SIZE:", this.outputSize);
 			this.send();
 			this.resetCounter();
 		}
@@ -60,7 +61,7 @@ BulkModule.prototype.init = function() {
 	}
 }
 BulkModule.prototype.send = function (cb) {
-	self.emit('data', this.outputMessage);
+	this.emit('data', this.outputMessage);
 	if (cb) {
 		cb();
 	}
@@ -83,3 +84,4 @@ BulkModule.prototype.close = function (cb) {
 	this.send();
 	this.resetCounter();
 }
+var exports = module.exports = BulkModule;

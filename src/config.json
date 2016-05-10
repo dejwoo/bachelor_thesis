@@ -16,7 +16,7 @@
       "type": "time",
       "modulePath": "./time.module.js",
       "moduleOptions": {
-        "sampleRate": 1000
+        "sampleRate": 100
       }
     },
     {
@@ -83,14 +83,17 @@
       "type": "bulk",
       "modulePath": "./bulk.module.js",
       "moduleOptions": {
-        "timePassed": 5000,
+        "timePassed": 5005,
         "payloadSize": 300
       }
     }
   ],
   "routes": {
-    "obd": [
-      "console"
+      "time": [
+      "bulk"
+    ],
+    "bulk": [
+    "console"
     ]
   }
 }

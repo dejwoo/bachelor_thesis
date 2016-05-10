@@ -30,8 +30,8 @@ BlankModule = function(moduleConfig) {
   	//module accepting incoming data have to be instance of Writable stream
   	Writable.call(this, streamOptions);
 }
-util.inherits(BlankModule, Writable);
-util.inherits(BlankModule, EventEmitter);
+Object.setPrototypeOf(BulkModule.prototype, Writable.prototype);
+
 
 BlankModule.prototype.configure = function() {
 	//space for declaring values needed for module to work
@@ -51,3 +51,5 @@ BlankModule.prototype._write = function(chunk, encoding, cb) {
 BlankModule.prototype.close = function (cb) {
 	//function for ending module correctly, function will be called when nodejs will receive end.
 }
+
+var exports = module.exports = BlankModule;
