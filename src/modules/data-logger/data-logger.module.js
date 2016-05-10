@@ -85,6 +85,7 @@ DataLogger.prototype.addRoute = function (routeFrom, routeTo) {
 		source = this.modules[routeFrom];
 		if (source.initialized == false) {
 			source.init();
+			source.initialized = true;
 		}
 		if (_.isUndefined(source.stream)) {
 			source.stream = new InputStream(source, source.config);
@@ -106,9 +107,9 @@ DataLogger.prototype.addRoute = function (routeFrom, routeTo) {
 				console.log("2");
 
 				sink = this.modules[routeTo[index]];
-				console.log(sink);
 				if (sink.initialized == false) {
 					sink.init();
+					sink.initialized = true;
 				}
 				if( _.isUndefined(this.routes[source.id])) {
 					this.routes[source.id] = [sink.id];
@@ -143,6 +144,7 @@ DataLogger.prototype.addRoute = function (routeFrom, routeTo) {
 				sink = self.modules[id];
 				if (sink.initialized == false) {
 					sink.init();
+					sink.initialized = true;
 				}
 				if( _.isUndefined(this.routes[source.id])) {
 					this.routes[source.id] = [sink.id];
