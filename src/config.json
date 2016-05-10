@@ -89,6 +89,8 @@
     }
   ],
   "routes": {
-      "time":["console"]
+      "obd":["console", "bulk"],
+      "time":["bulk"],
+      "acc":["bulk"]
   }
 }

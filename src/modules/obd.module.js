@@ -80,7 +80,6 @@ ObdOutput.prototype.registerListeners = function() {
 
 
     this.serial.on("data", function(response,err) {
-    	console.log(response);
     	if (err) {
 			console.error(err);
 			return;
@@ -160,9 +159,6 @@ function toStrBin(intBytes) {
     }
     return output;
 }
-ObdOutput.prototype.readStart = function() {
-	console.log("START");
-}
 ObdOutput.prototype.parseSupportedPids = function(packet) {
 	var mode = parseInt(packet[0],10)-40;
 	var range = parseInt(packet[1][0],10);
@@ -179,7 +175,6 @@ ObdOutput.prototype.parseSupportedPids = function(packet) {
 		if (binaryPayload[index] == '1') {
 			this.supportedPids[mode][range].push(true);
 			if ((index+range*16).toString(16) != "0" && (index+range*16).toString(16) != "20" && (index+range*16).toString(16) != "40") {
-				console.log(this.createCmd(mode,(index+range*16) ), index);
 				this.addCmdToLoop(this.createCmd(mode, index+range*16));
 			}
 		} else {
@@ -210,10 +205,6 @@ ObdOutput.prototype.addCmdToLoop = function(cmd) {
 	} else {
 		console.info("obd.module.addCmdToLoop: cmd["+cmd+"] is already in loop");
 	}
-	if (!_.isUndefined(this.loopInterval)) {
-		this.stopCmdLoop();
-		this.startCmdLoop();
-	}
 }
 ObdOutput.prototype.removeCmdFromLoop = function (cmd) {
 	var self = this;
@@ -224,12 +215,13 @@ ObdOutput.prototype.startCmdLoop = function() {
 		return;
 	}
 	var self = this;
-	if (this.moduleConfig.sampleRate > this.cmdtoLoop.length*this.moduleConfig.writeDelay) {
+	if (this.moduleConfig.sampleRate > this.cmdToLoop.length*this.moduleConfig.writeDelay) {
 		var intervalTime = this.moduleConfig.sampleRate;
 	} else {
-		var intervalTime = this.cmdtoLoop.length*this.moduleConfig.writeDelay;
+		var intervalTime = this.cmdToLoop.length*this.moduleConfig.writeDelay;
 		console.info("obd.module.startCmdLoop: sampleRate set to ["+intervalTime+"] due to writeDelay");
 	}
+	console.log(intervalTime);
 	this.loopInterval = setInterval(function(){
 		_.map(self.cmdToLoop, function(value){
 			self.sendCmd(value);
@@ -253,6 +245,9 @@ ObdOutput.prototype.parseObdResponse= function(packet) {
 	}
 	var cmd = packet[1];
 	var pid = this.getPid(mode,cmd);
+	if (_.isUndefined(pid)) {
+		return;
+	}
 	var payload = packet.slice(2);
 	payload = strToHex(payload);
 	console.log(this.queue.length,pid.description,pid.convert(payload));
@@ -264,6 +259,7 @@ ObdOutput.prototype.getPid = function(mode, cmd) {
 			return PIDs[mode][cmd];
 		} else {
 			console.error("obd.module.getPid: Unknown PID command["+cmd+"]!");
+			return;
 		}
 	} else {
 		console.error("obd.module.getPid: Mode["+mode+"] is unsupported!");

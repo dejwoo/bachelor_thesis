@@ -6,6 +6,7 @@ const Accelerometer = require('./lsm303/accelerometer.js');
 function AccelerometerModule(config) {
  EventEmitter.call(this);
  var self = this;
+ this.config = config;
  if (typeof config !== undefined) {
     if (typeof config.sampleRate !== undefined) {
         this.sampleRate = config.sampleRate;
@@ -15,7 +16,7 @@ function AccelerometerModule(config) {
     }
 }
 AccelerometerModule.prototype.init = function () {
-    this.accel = new Accelerometer(config.accelerometerOptions);
+    this.accel = new Accelerometer(this.config.accelerometerOptions);
     this.accel.init();
 }
 AccelerometerModule.prototype.readStop = function() {
@@ -25,9 +26,9 @@ AccelerometerModule.prototype.readStop = function() {
 }
 AccelerometerModule.prototype.readStart = function() {
 	console.log("Starting emitting accelerometer data");
-	self.emitting = true;
+	this.emitting = true;
 	// console.log(this);
-	self.emitLoop();
+	this.emitLoop();
 }
 
 AccelerometerModule.prototype.emitLoop = function () {
