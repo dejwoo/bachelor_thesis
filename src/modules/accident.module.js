@@ -5,7 +5,7 @@ const _ = require("lodash");
 "use strict";
 
 AccidentModule = function(moduleConfig) {
-	var self = this;
+    var self = this;
     this.moduleConfig = {};
     //creating module without any configuration passed
 	if (_.isUndefined(moduleConfig)) {
@@ -31,6 +31,7 @@ AccidentModule = function(moduleConfig) {
   	streamOptions.objectMode = true;
   	//module accepting incoming data have to be instance of Writable stream
   	Writable.call(this, streamOptions);
+	this.configure();
 }
 Object.setPrototypeOf(AccidentModule.prototype, Writable.prototype);
 
@@ -38,21 +39,27 @@ Object.setPrototypeOf(AccidentModule.prototype, Writable.prototype);
 AccidentModule.prototype.configure = function() {
 	this.lastAcc = [];
 	this.maxAcc = {};
-	tihs.lastGps = [];
+	this.lastGps = [];
 	//space for declaring values needed for module to work
 }
 AccidentModule.prototype.init = function() {
+	var self = this;
 	this.checkTreshold = function() {
-		var last = _.last(this.lastAcc);
-		if (_.isEmpty(this.maxAcc)) {
-			this.maxAcc = last;
+		var last = _.last(self.lastAcc);
+		console.log("LAST:",last);
+		if (_.isEmpty(self.lastAcc)) {
+			return;
+		}
+		if (_.isEmpty(self.maxAcc)) {
+			self.maxAcc = last;
 			return;
 		}
 		_.forIn(last, function(lastValue, key) {
-			if (this.maxAcc[key] < lastVaule[key]) {
-				this.maxAcc[key] = lastVaule[key];
-				if (lastValue > this.moduleConfig.treshold) {
-					this.send({"g-force": this.maxAcc, "gps": this.lastGps, "acc":this.lastAcc});
+			console.log("LASTV:",lastValue, "max: ",self.maxAcc, ");
+			if (self.maxAcc[key] < lastValue) {
+				self.maxAcc[key] = lastValue;
+				if (lastValue > self.moduleConfig.treshold) {
+					self.send({"g-force": self.maxAcc, "gps": self.lastGps, "acc":self.lastAcc});
 				}
 			}
 		});
@@ -60,18 +67,18 @@ AccidentModule.prototype.init = function() {
 	this.pushData = function(type, data) {
 		if (type == "acc") {
 			try {
-				this.lastAcc .push(data);
-				if (this.lastAcc.length > 10) {
-					this.lastAcc.shift();
+				self.lastAcc .push(data);
+				if (self.lastAcc.length > 10) {
+					self.lastAcc.shift();
 				}
 			} catch(err) {
 				console.error(err);
 			}
 		} else if (type == "gps") {
 			try {
-				this.lastGps.push(data);
-				if (this.lastGps.length > 10) {
-					this.lastGps.shift();
+				self.lastGps.push(data);
+				if (self.lastGps.length > 10) {
+					self.lastGps.shift();
 				}
 			} catch(err) {
 				console.error(err);

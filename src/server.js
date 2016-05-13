@@ -72,9 +72,9 @@ http.listen(8000, function(){
   console.log('Application running!');
 });
 dataLogger.configure(configJSON);
-setTimeout(function() {
-  dataLogger.configureModule("timeModule", { moduleOptions: {sampleRate : 500} });
-},5000);
+//setTimeout(function() {
+//  dataLogger.configureModule("timeModule", { moduleOptions: {sampleRate : 500} });
+//},5000);
 //setTimeout(function() {dataLogger.configureInputSource("timeInput", {"sampleRate":2000})}, 3000 );
 // listen for TERM signal .e.g. kill
 process.on('SIGTERM', function() {
