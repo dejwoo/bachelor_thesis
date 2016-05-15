@@ -43,12 +43,19 @@ RedisOutput.prototype.configure = function () {
 }
 RedisOutput.prototype.init = function () {
 	var self = this;
-	this.client =  redis.createClient(this.moduleConfig.port, this.moduleConfig.hostname, {no_ready_check: true});
+	this.client =  redis.createClient(this.moduleConfig.port, this.moduleConfig.hostname, 
+		{
+			no_ready_check: true,
+		});
+	this.client.on('error', function(err){
+		console.error(err);
+	});
 	this.client.auth(this.moduleConfig.password, function (err) {
 		if (err) {
 			console.error(err);
 		}
 	});
+	t
 	this.client.on('connect', function() {
 		self.ready = true;
 		console.log("redis.module.js: Connection to redisDB successfull.");

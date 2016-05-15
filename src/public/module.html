@@ -8,20 +8,27 @@
 		</div>
 	</nav>
 </div >
-
 <div>
 	<div class="banner">
 		<div>
 			<h1>{{mainController.modules[mainController.moduleName].label}}</h1>
 			<div class="config">
 				<h3>Configuration</h3>
-				<div data-ng-repeat='(key,value) in mainController.modules[mainController.moduleName] track by key'>
+				<button type="button" class="btn btn-primary" data-ng-click="mainController.enableConfiguration()" data-ng-if="!mainController.editConfig">Configure</button>
+				<div data-ng-repeat='(key,value) in mainController.modules[mainController.moduleName] track by key' data-ng-if="!mainController.editConfig">
 					<p data-ng-if="key != 'lastData'"><b>{{key}}: </b>{{value}}</p>
 				</div>
+				<form data-ng-if="mainController.editConfig" name="editConfig" data-ng-submit="mainController.submitConfiguration(mainController.moduleName)">
+					<textarea ng-model="mainController.editModules(mainController.moduleName)" ng-model-options="{ updateOn: 'submit', getterSetter: true }" rows={{mainController.textRows}} cols={{mainController.textCols}}></textarea>
+				<div class="configButtons">
+					<button type="submit" class="btn btn-success">Apply</button>
+					<button type="button" class="btn btn-danger" data-ng-click="mainController.disableConfiguration()">Cancel</button>
+				</div>
+				</form>
 			</div>
 			<div class="config">
 				<h3>Last Data</h3>
-				<p>{{mainController.modules[mainController.moduleName].lastData | json}}
+				<p>{{mainController.data | json}}
 			</div>
 		</div>
 	</div>

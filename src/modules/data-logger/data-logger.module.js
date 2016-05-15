@@ -1,15 +1,22 @@
 const InputStream = require('./inputStreamWrapper.js');
 const _ = require('lodash');
-
+const fs = require('fs');
 
 function DataLogger (configJSON) {
 	var self = this;
 	this.modules = {};
 	this.types = {};
 	this.routes = {};
+	this.configRoutes = {};
 	if (typeof configJSON !== 'undefined') {
 		this.configure(configJSON);
 	}
+}
+DataLogger.prototype.reset = function() {
+	this.modules = {};
+	this.types = {};
+	this.routes = {};
+	this.configRoutes = {};
 }
 DataLogger.prototype.configure = function (configJSON) {
 	var self = this;
@@ -32,6 +39,7 @@ DataLogger.prototype.configure = function (configJSON) {
 	if (!_.isUndefined(configJSON.routes)) {
 		_.forOwn(configJSON.routes, function(value,key) {
 			self.addRoute(key,value);
+			self.configRoutes[key] = value;
 		})
 	}
 }
@@ -200,23 +208,46 @@ DataLogger.prototype.configureModule = function (id,config) {
 	var newConfig = this.modules[id].config;
 	_.forIn(config, function(value, key) {
 		newConfig[key] = value;
-	})
-	if (_.has(this.modules, id)) {
-		this.deleteModule(id);
-	}
-	if (id != newConfig.id) {
-		console.warn("DataLogger.configureModule: id["+id+"] is not the same as in proided config");
-	}
-	this.addModule(newConfig);
-	if (_.has(this.routes, id)) {
-		var sinks = this.routes[id];
+	});
+	this.modules[id].config = newConfig;
+	var outputModuleConfig = [];
+	_.forIn(this.modules, function(module, id){
 		try {
-			delete this.routes[id];
+			outputModuleConfig.push(module.config);
 		} catch (err) {
 			console.error(err);
 		}
-		this.addRoute(id, sinks);
-	}
+	});
+	var outputRouteConfig = {};
+	_.forIn(this.configRoutes, function(route, id){
+		outputRouteConfig[id] = route;
+	});
+	var outputConfig = {"modules":outputModuleConfig, "routes":outputRouteConfig};
+	fs.writeFile("configNew.json", JSON.stringify(outputConfig,undefined,2),function (err) {
+		if (err) {
+			console.error(err);
+		}
+		self.shutdown();
+		self.reset();
+		self.configure(outputConfig);
+	})
+	// if (_.has(this.modules, id)) {
+	// 	this.deleteModule(id);
+	// }
+	// if (id != newConfig.id) {
+	// 	console.warn("DataLogger.configureModule: id["+id+"] is not the same as in proided config");
+	// }
+	// console.log(newConfig);
+	// this.addModule(newConfig);
+	// if (_.has(this.routes, id)) {
+	// 	var sinks = this.routes[id];
+	// 	try {
+	// 		delete this.routes[id];
+	// 	} catch (err) {
+	// 		console.error(err);
+	// 	}
+	// 	this.addRoute(id, sinks);
+	// }
 }
 
 
@@ -227,7 +258,7 @@ DataLogger.prototype.shutdown = function() {
 		console.log("Closing module " + key + "!");
 		self.deleteModule(key);
 	});
-	process.exit();
+
 }
 
 module.exports = new DataLogger();
