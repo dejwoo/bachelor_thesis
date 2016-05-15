@@ -99,9 +99,6 @@
   ],
   "routes": {
       "obd":["bulk"],
-      "acc":["bulk"],
-      "gps":["bulk"],
-      "time":["bulk"],
-      "bulk":["rabbitmqModule"]
+      "time":["bulk"]
   }
 }

@@ -72,28 +72,35 @@ http.listen(8000, function(){
   console.log('Application running!');
 });
 dataLogger.configure(configJSON);
-//setTimeout(function() {
-//  dataLogger.configureModule("timeModule", { moduleOptions: {sampleRate : 500} });
-//},5000);
+// setTimeout(function() {
+//   dataLogger.configureModule("timeModule", { moduleOptions: {sampleRate : 500} });
+// },5000);
 //setTimeout(function() {dataLogger.configureInputSource("timeInput", {"sampleRate":2000})}, 3000 );
 // listen for TERM signal .e.g. kill
 process.on('SIGTERM', function() {
     dataLogger.shutdown();
+    process.exit();
 } );
 // listen for INT signal e.g. Ctrl-C
 process.on('SIGINT', function() {
   dataLogger.shutdown();
+  process.exit();
 });
 io.on('connection', function(socket){
   console.log("IO connected");
   _.forIn(dataLogger.modules, function(module, id) {
      if (! _.isUndefined(module.on)) {
       module.on('data', function(data) {
-        socket.emit('data',id,data);
+        socket.emit('data',id,data,dataLogger.modules[id].config.type);
       })
      }
   });
+  socket.on('configure', function (obj) {
+    console.log("CONFIGURE: ", obj);
+    dataLogger.configureModule(obj.id, obj.moduleConfig);
+  });
 });
+
 
 
 module.exports = app;

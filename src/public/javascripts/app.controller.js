@@ -78,7 +78,7 @@ angular.module('mainApp').controller('MainController', function ($http, $routePa
 					self.data[id].last = data;
 				}
     			self.data[id].type = type;
-    			console.log(Date(data), type);
+    			console.log(id, data, type);
   			});
 		}, function (err) {
 			if (err) {
