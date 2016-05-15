@@ -30,7 +30,7 @@ BlankModule = function(moduleConfig) {
   	//module accepting incoming data have to be instance of Writable stream
   	Writable.call(this, streamOptions);
 }
-Object.setPrototypeOf(BulkModule.prototype, Writable.prototype);
+Object.setPrototypeOf(BlankModule.prototype, Writable.prototype);
 
 
 BlankModule.prototype.configure = function() {

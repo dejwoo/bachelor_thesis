@@ -49,7 +49,7 @@
           "host": "128.199.37.120",
           "port": 5672,
           "login": "dejwoo",
-          "password": "%oZtB6G2!AN(S)XiUFhN2kid@CR42J4$AjWYr7SVeSdiCxMR#54*&AhTTY4D2Kd7",
+          "password": "qazxswedcvfr4rfvcdewsxzaq4*",
           "authMechanism": "AMQPLAIN"
         }
       }
@@ -86,9 +86,22 @@
         "timePassed": 5005,
         "payloadSize": 300
       }
+    },
+    {
+      "id": "accidentModule",
+      "label": "Accident detection",
+      "type": "accident",
+      "modulePath": "./accident.module.js",
+      "moduleOptions": {
+        "threshold": 0.5
+      }
     }
   ],
   "routes": {
-      "time":["console"]
+      "obd":["bulk"],
+      "acc":["bulk"],
+      "gps":["bulk"],
+      "time":["bulk"],
+      "bulk":["rabbitmqModule"]
   }
 }

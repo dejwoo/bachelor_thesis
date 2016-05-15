@@ -28,11 +28,11 @@ function GpsInputSource(options) {
 	}
 }
 GpsInputSource.prototype.init = function () {
-	self.serial = new SerialPort(self.options.device, {
+	this.serial = new SerialPort(this.options.device, {
 		baudrate:4800,
 		parser: serialport.parsers.readline('\n')
 	});
-	if (typeof self.serial === 'undefined') {
+	if (typeof this.serial === 'undefined') {
 		console.error("GPS.source: Something wrong with creating serial port.");
 	}
 }
