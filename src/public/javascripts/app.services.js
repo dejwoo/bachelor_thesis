@@ -18,6 +18,6 @@ angular.module('mainApp').factory('socket', function ($rootScope) {
           }
         });
       })
-    }
+    },
   };
 });

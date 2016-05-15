@@ -1,7 +1,6 @@
 var express = require('express');
 var router = express.Router();
 var fs = require('fs');
-var configJSON = JSON.parse(fs.readFileSync('config.json', 'utf8'));
 const _ = require('lodash');
 const redis = require('redis');
 
@@ -18,11 +17,18 @@ client.on('connect', function() {
 router.route('/config')
 	//returns all journal
 	.get(function (req,res) {
-		// temp
-		if (_.isUndefined(configJSON)) {
-			return res.send(500, err);
-		}
-		return res.json(configJSON);
-
+		fs.readFile('config.json', 'utf8', function(err, configJSON) {
+			if (_.isUndefined(configJSON) || err) {
+				console.error(err);
+				return res.send(500, err);
+			}
+			try {
+				configJSON = JSON.parse(configJSON);
+			} catch(err) {
+				console.error(err);
+				return res.send(500, err);
+			}
+			return res.json(configJSON);
+		});
 	});
 module.exports = router;

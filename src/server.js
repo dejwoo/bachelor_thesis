@@ -26,50 +26,50 @@ app.engine('html', swig.renderFile);
 app.set('view engine', 'html');
 app.use(logger('dev'));
 app.use(session({
-  secret: 'super duper secret'
+	secret: 'super duper secret'
 }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(require('node-sass-middleware')({
-  src: path.join(__dirname, 'public'),
-  dest: path.join(__dirname, 'public'),
-  sourceMap: true
+	src: path.join(__dirname, 'public'),
+	dest: path.join(__dirname, 'public'),
+	sourceMap: true
 }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/api', api);
 app.use('*', html);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  var err = new Error('Not Found');
-  err.status = 404;
-  next(err);
+	var err = new Error('Not Found');
+	err.status = 404;
+	next(err);
 });
 
 if (app.get('env') === 'development') {
-  app.use(function(err, req, res, next) {
-    res.status(err.status || 500);
-    res.render('error', {
-      message: err.message,
-      error: err
-    });
-  });
+	app.use(function(err, req, res, next) {
+		res.status(err.status || 500);
+		res.render('error', {
+			message: err.message,
+			error: err
+		});
+	});
 }
 
 // production error handler
 // no stacktraces leaked to user
 app.use(function(err, req, res, next) {
-  res.status(err.status || 500);
-  res.render('error', {
-    message: err.message,
-    error: {}
-  });
+	res.status(err.status || 500);
+	res.render('error', {
+		message: err.message,
+		error: {}
+	});
 });
 
 // // Bind to a port
 
 http.listen(8000, function(){
-  console.log('Application running!');
+	console.log('Application running!');
 });
 dataLogger.configure(configJSON);
 // setTimeout(function() {
@@ -78,27 +78,45 @@ dataLogger.configure(configJSON);
 //setTimeout(function() {dataLogger.configureInputSource("timeInput", {"sampleRate":2000})}, 3000 );
 // listen for TERM signal .e.g. kill
 process.on('SIGTERM', function() {
-    dataLogger.shutdown();
-    process.exit();
+	dataLogger.shutdown();
+	process.exit();
 } );
 // listen for INT signal e.g. Ctrl-C
 process.on('SIGINT', function() {
-  dataLogger.shutdown();
-  process.exit();
+	dataLogger.shutdown();
+	process.exit();
 });
 io.on('connection', function(socket){
-  console.log("IO connected");
-  _.forIn(dataLogger.modules, function(module, id) {
-     if (! _.isUndefined(module.on)) {
-      module.on('data', function(data) {
-        socket.emit('data',id,data,dataLogger.modules[id].config.type);
-      })
-     }
-  });
-  socket.on('configure', function (obj) {
-    console.log("CONFIGURE: ", obj);
-    dataLogger.configureModule(obj.id, obj.moduleConfig);
-  });
+	console.log("IO connected");
+	_.forIn(dataLogger.modules, function(module, id) {
+		if (! _.isUndefined(module.on)) {
+			module.on('data', function(data) {
+				socket.emit('data',id,data,dataLogger.modules[id].config.type);
+			})
+		}
+	});
+	socket.on('configureModule', function (obj) {
+		dataLogger.configureModule(obj.id, obj.moduleConfig, function() {
+			_.forIn(dataLogger.modules, function(module, id) {
+				if (! _.isUndefined(module.on)) {
+					module.on('data', function(data) {
+						socket.emit('data',id,data,dataLogger.modules[id].config.type);
+					})
+				}
+			});
+		});
+	});
+	socket.on('configureRoute', function (obj) {
+		dataLogger.configureRoute(obj.routes, function() {
+			_.forIn(dataLogger.modules, function(module, id) {
+				if (! _.isUndefined(module.on)) {
+					module.on('data', function(data) {
+						socket.emit('data',id,data,dataLogger.modules[id].config.type);
+					})
+				}
+			});
+		});
+	});
 });
 
 

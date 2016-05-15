@@ -35,7 +35,7 @@ inputStreamWrapper.prototype.addEventListeners = function () {
 		emitObject.header.type = self.config.type;
 	} else {
 		emitObject.header = self.config.header;
-		if (!isDefined(emitObject.header.id)) {
+		if (_.isUndefined(emitObject.header.id)) {
 			emitObject.header.id = self.config.id;
 			emitObject.header.type = self.config.type;
 		}

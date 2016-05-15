@@ -15,6 +15,11 @@
       "label": "Time",
       "type": "time",
       "modulePath": "./time.module.js",
+      "header": {
+        "iftttEvent": "time",
+        "id": "timeModule",
+        "type": "time"
+      },
       "moduleOptions": {
         "sampleRate": 1000
       }
@@ -26,8 +31,10 @@
       "modulePath": "./obd.module.js",
       "moduleOptions": {
         "sampleRate": 4000,
-        "writeDelay":50,
-        "device": "/dev/ttyACM0"
+        "writeDelay": 50,
+        "device": "/dev/ttyACM0",
+        "maxQueue": 100,
+        "failedDelay": 3000
       }
     },
     {
@@ -51,7 +58,8 @@
           "login": "dejwoo",
           "password": "qazxswedcvfr4rfvcdewsxzaq4*",
           "authMechanism": "AMQPLAIN"
-        }
+        },
+        "amqpURI": "amqp://dejwoo:qazxswedcvfr4rfvcdewsxzaq4*@128.199.37.120:5672"
       }
     },
     {
@@ -88,17 +96,22 @@
       }
     },
     {
-      "id": "accidentModule",
-      "label": "Accident detection",
-      "type": "accident",
-      "modulePath": "./accident.module.js",
+      "id": "iftttModule",
+      "label": "IFTTT Module",
+      "type": "ifttt",
+      "modulePath": "./ifttt.module.js",
       "moduleOptions": {
-        "threshold": 0.5
+        "firstPartUrl": "https://maker.ifttt.com/trigger/",
+        "secondPartUrl": "/with/key/gK76TGpxm7FoxEglsxfI2aPo7_UqW2_I8-hm1ebq6zR"
       }
     }
   ],
   "routes": {
-      "obd":["bulk"],
-      "time":["bulk"]
+    "ifttt": [
+      "console"
+    ],
+    "time": [
+      "ifttt"
+    ]
   }
 }

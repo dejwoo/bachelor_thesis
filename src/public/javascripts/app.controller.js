@@ -8,14 +8,24 @@ angular.module('mainApp').controller('MainController', function ($http, $routePa
 	this.editConfig = false;
 	this.enableConfiguration = function() {
 		self.editConfig = true;
-		
 	}
-	this.submitConfiguration = function(id) {
-		socket.emit('configure', {"id":id, "moduleConfig": self.modules[id]});
+	socket.on('disconnect', function () {
+		console.log("Socket.io disconnected");
+	});
+	this.submitModuleConfiguration = function(id) {
+		socket.emit('configureModule', {"id":id, "moduleConfig": self.modules[id]});
 		self.disableConfiguration();
 		socket.on('data', function (id,data) {
-    			self.data[id].last = data;
-  			});
+			self.data[id].last = data;
+		});
+	}
+	this.submitRouteConfiguration = function() {
+		console.log("CONFIGURE ROUTE:", self.routes);
+		socket.emit('configureRoute', {"routes": self.routes });
+		self.disableConfiguration();
+		socket.on('data', function (id,data) {
+			self.data[id].last = data;
+		});
 	}
 	this.disableConfiguration = function() {
 		self.editConfig = false;
@@ -27,65 +37,81 @@ angular.module('mainApp').controller('MainController', function ($http, $routePa
 	this.setGetters = function() {
 		self.editModules = function (id) {
 			return function(newStr) {
-				console.log(self.modules[id]);
 				if (arguments.length) {
 					try {
 						self.modules[id] = JSON.parse(newStr)
 						return self.modules[id];
 					} catch (err) {
+						console.error(err);
 						self.parseErr(err);
-						return
 					}
 				} else {
-					return JSON.stringify(self.modules[id],undefined,2)
+					return JSON.stringify(self.modules[id],undefined,2);
+				}
+			}
+		}
+		self.editRoutes = function() {
+			return function(newStr) {
+				if (arguments.length) {
+					try {
+						self.routes = JSON.parse(newStr)
+						return self.routes;
+					} catch (err) {
+						console.error(err);
+						self.parseErr(err);
+					}
+				} else {
+					return JSON.stringify(self.routes,undefined,2);
 				}
 			}
 		}
 	}
-	this.setTextareaDims = function(id) {
+	this.setModuleTextareaDims = function(id) {
 		if (typeof id == 'undefined') {
 			return;
 		}
-		self.textCols = JSON.stringify(self.modules[id]).length/2;
+		self.textCols = JSON.stringify(self.modules[id]).length/2.5;
 		self.textRows = self.textCols/6;
-		// for (var key in self.modules[id]) {
-		// 	if (self.modules[id].hasOwnProperty(key)) {
-		// 		self.textRows++;
-		// 		self.textCols = Math.max(self.textCols, self.modules[id][key].length);
-		// 	}
-		// }
-		console.log(self.textCols,self.textRows);
+
+	}
+	this.setRouteTextareaDims = function() {
+		self.textCols = JSON.stringify(self.routes).length/2;
+		self.textRows = self.textCols/2;
 	}
 
 	$http.get('/api/config')
-		.then(function(response) {
-			self.menus = [];
-			self.modules = {};
-			self.routes = {};
-			self.data = {};
-			self.config = response.data;
-			for (var index = 0; index < self.config.modules.length; index++) {
-				self.menus.push({"label":self.config.modules[index].label,"id":self.config.modules[index].id});
-				self.modules[self.config.modules[index].id] = self.config.modules[index];
-				self.data[self.config.modules[index].id] = {};
+	.then(function(response) {
+		self.menus = [];
+		self.modules = {};
+		self.data = {};
+		self.routes = {};
+		self.config = response.data;
+		self.routes = self.config.routes;
+		console.log(response.data.routes);
+		for (var index = 0; index < self.config.modules.length; index++) {
+			self.menus.push({"label":self.config.modules[index].label,"id":self.config.modules[index].id});
+			self.modules[self.config.modules[index].id] = self.config.modules[index];
+			self.data[self.config.modules[index].id] = {};
+		}
+		self.setGetters();
+		if (typeof self.moduleName == 'undefined') {
+			self.setRouteTextareaDims();
+		} else {
+			self.setModuleTextareaDims(self.moduleName);
+		}
+		socket.on('data', function (id,data,type) {
+			if (type == 'time') {
+				self.data[id].last = data;
+			} else {
+				self.data[id].last = data;
 			}
-			self.setGetters();
-			self.setTextareaDims(self.moduleName);
-			socket.on('data', function (id,data,type) {
-				if (type == 'time') {
-					self.data[id].last = data;
-				} else {
-					self.data[id].last = data;
-				}
-    			self.data[id].type = type;
-    			console.log(id, data, type);
-  			});
-		}, function (err) {
-			if (err) {
-				console.error(err);
-			}
+			self.data[id].type = type;
 		});
-	console.log(self);
+	}, function (err) {
+		if (err) {
+			console.error(err);
+		}
+	});
 
 })
 

@@ -203,7 +203,7 @@ DataLogger.prototype.deleteModule = function(id) {
 		console.error("DataLogger.deleteModule: Module["+id+"] is not defined!");
 	}
 }
-DataLogger.prototype.configureModule = function (id,config) {
+DataLogger.prototype.configureModule = function (id,config, cb) {
 	var self = this;
 	var newConfig = this.modules[id].config;
 	_.forIn(config, function(value, key) {
@@ -223,31 +223,47 @@ DataLogger.prototype.configureModule = function (id,config) {
 		outputRouteConfig[id] = route;
 	});
 	var outputConfig = {"modules":outputModuleConfig, "routes":outputRouteConfig};
-	fs.writeFile("configNew.json", JSON.stringify(outputConfig,undefined,2),function (err) {
+	fs.writeFile("config.json", JSON.stringify(outputConfig,undefined,2),function (err) {
 		if (err) {
 			console.error(err);
 		}
 		self.shutdown();
 		self.reset();
 		self.configure(outputConfig);
-	})
-	// if (_.has(this.modules, id)) {
-	// 	this.deleteModule(id);
-	// }
-	// if (id != newConfig.id) {
-	// 	console.warn("DataLogger.configureModule: id["+id+"] is not the same as in proided config");
-	// }
-	// console.log(newConfig);
-	// this.addModule(newConfig);
-	// if (_.has(this.routes, id)) {
-	// 	var sinks = this.routes[id];
-	// 	try {
-	// 		delete this.routes[id];
-	// 	} catch (err) {
-	// 		console.error(err);
-	// 	}
-	// 	this.addRoute(id, sinks);
-	// }
+		if (! _.isUndefined(cb)) {
+			cb();
+		}
+	});
+}
+DataLogger.prototype.configureRoute = function(newRoutes, cb) {
+	var self = this;
+	_.forIn(newRoutes, function(value, key) {
+		self.configRoutes[key] = value;
+	});
+	var outputModuleConfig = [];
+	_.forIn(this.modules, function(module, id){
+		try {
+			outputModuleConfig.push(module.config);
+		} catch (err) {
+			console.error(err);
+		}
+	});
+	var outputRouteConfig = {};
+	_.forIn(this.configRoutes, function(route, id){
+		outputRouteConfig[id] = route;
+	});
+	var outputConfig = {"modules":outputModuleConfig, "routes":outputRouteConfig};
+	fs.writeFile("config.json", JSON.stringify(outputConfig,undefined,2),function (err) {
+		if (err) {
+			console.error(err);
+		}
+		self.shutdown();
+		self.reset();
+		self.configure(outputConfig);
+		if (! _.isUndefined(cb)) {
+			cb();
+		}
+	});
 }
 
 
