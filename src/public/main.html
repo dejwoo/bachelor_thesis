@@ -11,8 +11,47 @@
 
 <div>
 	<div class="banner">
-		<h1>IoT in automotive industry</h1>
-		<h3>Aim of this bachelor thesis is to explore possibilities of combining Internet of Things, Big Data and automotive industry, e.g. cars. Solve how to connect cars to the Internet. Explore what data can be collected with connected car. Design how to structure and collect data. Analyze capabilities of collected data. Develop an application which will use the collected data. Create a Proof-of-Concept device showing the capabilities of combining Internet of Things with vehicles. Present use-case of the designed device and possible future development.</h3>
+		<div class="col-md-6" data-ng-repeat="(key,value) in mainController.data track by key">
+			<div class="panel panel-success" data-ng-if="value.last">
+				<div class="panel-heading">
+					<h3 class="panel-title">{{key}}</h3>
+				</div>
+				<div ng-switch on="value.type">
+					<div class="panel-body" ng-switch-when="time">{{value.last | date:'yyyy-MM-dd HH:mm:ss:sss'}}</div>
+					<table class="table" ng-switch-when="acc">
+					<thead>
+						<tr>
+							<th>#</th>
+							<th>Firstname</th>
+							<th>Lastname</th>
+							<th>Age</th>
+							<th>City</th>
+							<th>Country</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>1</td>
+							<td>Anna</td>
+							<td>Pitt</td>
+							<td>35</td>
+							<td>New York</td>
+							<td>USA</td>
+						</tr>
+					</tbody>
+				</table>
+				<div class="panel-body" ng-switch-default>{{value.last}}</div>
+			</div>
+		</div>
+		<div class="panel panel-danger" data-ng-if="!value.last">
+			<div class="panel-heading">
+				<h3 class="panel-title">{{key}}</h3>
+			</div>
+			<div class="panel-body">
+				NOT ACTIVE
+			</div>
+		</div>
 	</div>
+</div>
 </div>
 {{mainController.route | json }}
