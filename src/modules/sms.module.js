@@ -181,7 +181,7 @@ SmsModule.prototype.send = function (data,cb) {
 	//if module is accepting data, this function is primarily to send data to defined destination in module
 	var cmdToCreate = 'AT+CMGS=\"';
 	cmdToCreate += this.moduleConfig.number;
-	cmdToCreate += '"\r' + data '\r';
+	cmdToCreate += '"\r' + data + '\r';
 	cmdToCreate += '\x1A'
 	console.log(cmdToCreate);
 	//this.sendCmd(cmdToCreate);
