@@ -15,6 +15,7 @@ AccidentModule = function(moduleConfig) {
 		//creating module with configuration
 		this.moduleConfig = moduleConfig;
 		this.moduleConfig.treshold = moduleConfig.treshold ? moduleConfig.treshold : 2;
+		this.sosMessage = moduleConfig.sosMessage ? moduleConfig.sosMessage : "Bol som ucastnikom dopravnej nehody, moje meno je XXX, d.n.r YYY, mam taketo ochorenia/alergie a beriem tieto lieky"
 		//space for safe check of said config
 	}
 

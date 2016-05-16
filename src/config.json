@@ -103,6 +103,15 @@
       "moduleOptions": {
         "secret":"bbBvwBTGf4XLxL2NkP8Eid"
       }
+    },
+    {
+      "id": "accidentModule",
+      "label": "Accident Detection",
+      "type": "accident",
+      "modulePath": "./accident.module.js",
+      "moduleOptions": {
+        "sosMessage":"Bol som ucastnikom dopravnej nehody, moje meno je XXX, d.n.r YYY, mam taketo ochorenia/alergie a beriem tieto lieky"
+      }
     }
   ],
   "routes": {
