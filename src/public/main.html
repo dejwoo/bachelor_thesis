@@ -19,22 +19,29 @@
 				</div>
 				<div ng-switch on="value.type">
 					<div class="panel-body" ng-switch-when="time">{{value.last | date:'yyyy-MM-dd HH:mm:ss:sss'}}</div>
+					<div class="panel-body" ng-switch-when="gps">
+						<p> Lat: {{value.last.lat}} </p>
+						<p> Lon: {{value.last.lon}} </p>
+						<p> Speed: {{value.last.speed}}</p>
+						<p> Sats: {{value.last.sats_visible.length}}</p>
+						<p> Fix: {{value.last.fix}} </p>
+					</div>
 					<table class="table" ng-switch-when="acc">
-					<thead>
-						<tr>
-							<th>x</th>
-							<th>y</th>
-							<th>x</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td>{{value.last.x}}</td>
-							<td>{{value.last.y}}</td>
-							<td>{{value.last.z}}</td>
-						</tr>
-					</tbody>
-				</table>
+						<thead>
+							<tr>
+								<th>x</th>
+								<th>y</th>
+								<th>x</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>{{value.last.x}}</td>
+								<td>{{value.last.y}}</td>
+								<td>{{value.last.z}}</td>
+							</tr>
+						</tbody>
+					</table>
 				<div class="panel-body" ng-switch-default>{{value.last}}</div>
 			</div>
 		</div>
