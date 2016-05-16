@@ -27,8 +27,20 @@ SmsModule = function(moduleConfig) {
 		this.moduleConfig.number = _.isUndefined(this.moduleConfig.number) ? 0901744988 : this.moduleConfig.number;
 		this.moduleConfig.maxQueue = _.isUndefined(this.moduleConfig.maxQueue) ? 10 : this.moduleConfig.maxQueue;
 	}
+	//streamOptions potentially passed from config, objectMode is not configurable
+    if (_.isUndefined(this.moduleConfig.streamOptions)) {
+		var streamOptions = {};
+	} else {
+		var streamOptions = this.moduleConfig.streamOptions;
+	}
+  	//this settings must be always set to this value
+  	streamOptions.objectMode = true;
+  	//module accepting incoming data have to be instance of Writable stream
+  	Writable.call(this, streamOptions);
 	this.configure();
 }
+Object.setPrototypeOf(BlankModule.prototype, Writable.prototype);
+
 SmsModule.prototype.configure = function() {
 	this.queue = [];
 	this.cmdToRespond = "";
@@ -124,6 +136,7 @@ SmsModule.prototype.sendInitCmds = function() {
 		this.sendCmd("ATI");
 		this.sendCmd("ATE0");
 		this.sendCmd("AT+CMGF=1");
+		this.send("test SMS");
 	}
 }
 
@@ -158,6 +171,20 @@ SmsModule.prototype.close = function() {
 			self.emit("end");
 		});
 	}
+}
+SmsModule.prototype._write = function(chunk, encoding, cb) {
+	//write method of Writable stream, if stream is in object mode,
+	//we can ingore encoding and send object directly, usually nothing else needed here.
+	this.send(chunk, cb);
+}
+SmsModule.prototype.send = function (data,cb) {
+	//if module is accepting data, this function is primarily to send data to defined destination in module
+	var cmdToCreate = 'AT+CMGS=\"';
+	cmdToCreate += this.moduleConfig.number;
+	cmdToCreate += '"\r' + data '\r';
+	cmdToCreate += '\x1A'
+	console.log(cmdToCreate);
+	//this.sendCmd(cmdToCreate);
 }
 util.inherits(SmsModule, EventEmitter);
 
