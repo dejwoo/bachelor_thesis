@@ -10,11 +10,11 @@ AccidentModule = function(moduleConfig) {
     //creating module without any configuration passed
 	if (_.isUndefined(moduleConfig)) {
 		//space for defining default settings
-		this.moduleConfig.treshold = 5;
+		this.moduleConfig.treshold = 2;
 	} else {
 		//creating module with configuration
 		this.moduleConfig = moduleConfig;
-		this.moduleConfig.treshold = moduleConfig.treshold ? moduleConfig.treshold : 5;
+		this.moduleConfig.treshold = moduleConfig.treshold ? moduleConfig.treshold : 2;
 		//space for safe check of said config
 	}
 
@@ -55,7 +55,7 @@ AccidentModule.prototype.init = function() {
 			return;
 		}
 		_.forIn(last, function(lastValue, key) {
-			console.log("LASTV:",lastValue, "max: ",self.maxAcc, ");
+			console.log("LASTV:",lastValue, "max: ",self.maxAcc);
 			if (self.maxAcc[key] < lastValue) {
 				self.maxAcc[key] = lastValue;
 				if (lastValue > self.moduleConfig.treshold) {

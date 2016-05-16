@@ -12,13 +12,11 @@ iftttModule = function(moduleConfig) {
     //creating module without any configuration passed
 	if (_.isUndefined(moduleConfig)) {
 		//space for defining default settings
-		this.moduleConfig.firstPartUrl = "https://maker.ifttt.com/trigger/";
-		this.moduleConfig.secondPartUrl = "/with/key/bbBvwBTGf4XLxL2NkP8Eid";
+		this.moduleConfig.secret =  "bbBvwBTGf4XLxL2NkP8Eid"
 	} else {
 		//creating module with configuration
 		this.moduleConfig = moduleConfig;
-		this.moduleConfig.firstPartUrl = this.moduleConfig.firstPartUrl ?  moduleConfig.firstPartUrl : "https://maker.ifttt.com/trigger/";
-		this.moduleConfig.secondPartUrl = this.moduleConfig.secondPartUrl ?  moduleConfig.secondPartUrl : "/with/key/bbBvwBTGf4XLxL2NkP8Eid";
+		this.moduleConfig.secret = this.moduleConfig.secret ?  moduleConfig.secret : "bbBvwBTGf4XLxL2NkP8Eid";
 		//space for safe check of said config
 	}
 
@@ -35,36 +33,48 @@ iftttModule = function(moduleConfig) {
   	streamOptions.objectMode = true;
   	//module accepting incoming data have to be instance of Writable stream
   	Writable.call(this, streamOptions);
+  	this.configure();
 }
 Object.setPrototypeOf(iftttModule.prototype, Writable.prototype);
 
 
 iftttModule.prototype.configure = function() {
 	//space for declaring values needed for module to work
+	this.firstPartUrl = "https://maker.ifttt.com/trigger/";
+	this.secondPartUrl = "/with/key/";
 }
 iftttModule.prototype.init = function() {
 	//initializing module, space for creating connections, opening serial ports, etc
 }
 iftttModule.prototype.send = function (data,cb) {
 	//if module is accepting data, this function is primarily to send data to defined destination in module
+	var self = this;
 	var iftttUrl = "";
-	iftttUrl += this.moduleConfig.firstPartUrl;
+	iftttUrl += this.firstPartUrl;
 	if (_.isUndefined(data.header.iftttEvent)) {
 		iftttUrl += data.header.id;
 	} else {
 		iftttUrl += data.header.iftttEvent;
 	}
-	iftttUrl += this.moduleConfig.secondPartUrl;
+	iftttUrl += this.secondPartUrl;
+	iftttUrl += this.moduleConfig.secret;
 	//transorm of keys in data packet cuz of IFTTT dumbness
 	var outputData ={};
 	outputData.value1 = data.header;
 	outputData.value2 = data.body;
-	console.log(outputData);
-	require('request').debug = true
-	request.post(iftttUrl,{form:outputData}, function(error, msg, response){
+	request.post(iftttUrl,{
+		body:JSON.stringify(outputData),
+		headers:{
+			"Content-Type": "application/json"
+		}
+	}, function(err, msg, response){
+		if (err) {
+			console.error(err);
+		}
+		self.emit('data', response);
 		// console.log("ERROR", error);
 		 // console.log("MSG", msg);
-		 console.log("RESPONSE", response);
+		 // console.log("RESPONSE", response);
 	});
 }
 iftttModule.prototype._write = function(chunk, encoding, cb) {

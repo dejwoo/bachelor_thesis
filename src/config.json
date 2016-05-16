@@ -97,12 +97,11 @@
     },
     {
       "id": "iftttModule",
-      "label": "IFTTT Module",
+      "label": "IFTTT",
       "type": "ifttt",
       "modulePath": "./ifttt.module.js",
       "moduleOptions": {
-        "firstPartUrl": "https://maker.ifttt.com/trigger/",
-        "secondPartUrl": "/with/key/gK76TGpxm7FoxEglsxfI2aPo7_UqW2_I8-hm1ebq6zR"
+        "secret":"bbBvwBTGf4XLxL2NkP8Eid"
       }
     }
   ],
