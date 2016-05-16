@@ -20,7 +20,7 @@ SmsModule = function(moduleConfig) {
 		this.moduleConfig = moduleConfig;
 		if (_.isUndefined(this.moduleConfig.device)) {
 			// did receive config, but no device specified.
-			console.error("obd.module: Undefined serial device, setting default /dev/ttyUSB2");
+			console.error("sms.module: Undefined serial device, setting default /dev/ttyUSB2");
 			this.moduleConfig.device = "/dev/ttyUSB2";
 		}
 		this.moduleConfig.device = _.isUndefined(this.moduleConfig.device) ? 100 : this.moduleConfig.device;

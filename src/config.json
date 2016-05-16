@@ -120,21 +120,34 @@
       "type": "sms",
       "modulePath": "./sms.module.js",
       "moduleOptions": {
+        "device": 100,
+        "failedDelay": 3000,
+        "number": "0901744988",
+        "maxQueue": 10
       }
+    },
+    {
+      "id": "rpmModule",
+      "label": "RPM Advisor",
+      "type": "rpm",
+      "header": {
+        "iftttEvent": "shift",
+        "id": "rpmModule",
+        "type": "rpm"
+      },
+      "modulePath": "./rpm.module.js",
+      "moduleOptions": {}
     }
   ],
   "routes": {
-    "sms": [
-	"console"
+    "obd": [
+      "rpm"
     ],
-    "accident": [
-      "sms"
+    "rpm": [
+      "console", "ifttt"
     ],
-    "acc": [
-      "accident"
-    ],
-    "gps": [
-      "accident"
+    "ifttt":[
+    "console"
     ]
   }
 }

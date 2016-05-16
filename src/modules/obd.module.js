@@ -221,12 +221,12 @@ ObdOutput.prototype.startCmdLoop = function() {
 		var intervalTime = this.cmdToLoop.length*this.moduleConfig.writeDelay;
 		console.info("obd.module.startCmdLoop: sampleRate set to ["+intervalTime+"] due to writeDelay");
 	}
-	console.log(intervalTime);
+	// console.log(intervalTime);
 	this.loopInterval = setInterval(function(){
 		_.map(self.cmdToLoop, function(value){
 			self.sendCmd(value);
 		});
-		console.log(self.queue.length);
+		// console.log(self.queue.length);
 	}, intervalTime);
 }
 ObdOutput.prototype.stopCmdLoop = function() {
@@ -250,7 +250,7 @@ ObdOutput.prototype.parseObdResponse= function(packet) {
 	}
 	var payload = packet.slice(2);
 	payload = strToHex(payload);
-	console.log(this.queue.length,pid.description,pid.convert(payload));
+	// console.log(this.queue.length,pid.description,pid.convert(payload));
 	this.emit("data",{"code":pid.code,"response":pid.convert(payload)});;
 }
 ObdOutput.prototype.getPid = function(mode, cmd) {
@@ -344,7 +344,7 @@ ObdOutput.prototype.close = function() {
 					console.info("OBD.source: Emmiting err on close");
 					self.emit("err", err);
 			}
-			self.emit("end");
+			self.stopCmdLoop();
 		});
 	}
 }

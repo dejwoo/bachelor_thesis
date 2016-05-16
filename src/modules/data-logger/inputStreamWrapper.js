@@ -42,7 +42,9 @@ inputStreamWrapper.prototype.addEventListeners = function () {
 	}
 	emitObject.body = chunk;
 	if (!self.push(emitObject)) {
-		self._source.readStop();
+		if (! _.isUndefined(self._source.readStop)) {
+			self._source.readStop();
+		}
 		self._isReading = false;
 	}
 });
