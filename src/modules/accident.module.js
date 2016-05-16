@@ -47,7 +47,6 @@ AccidentModule.prototype.init = function() {
 	var self = this;
 	this.checkTreshold = function() {
 		var last = _.last(self.lastAcc);
-		console.log("LAST:",last);
 		if (_.isEmpty(self.lastAcc)) {
 			return;
 		}
@@ -56,12 +55,11 @@ AccidentModule.prototype.init = function() {
 			return;
 		}
 		_.forIn(last, function(lastValue, key) {
-			console.log("LASTV:",lastValue, "max: ",self.maxAcc);
 			if (self.maxAcc[key] < lastValue) {
 				self.maxAcc[key] = lastValue;
-				if (lastValue > self.moduleConfig.treshold) {
-					self.send({"g-force": self.maxAcc, "gps": self.lastGps, "acc":self.lastAcc});
-				}
+			}
+			if (lastValue > self.moduleConfig.treshold) {
+				self.send({"g-force": self.maxAcc, "gps": self.lastGps, "acc":self.lastAcc});
 			}
 		});
 	}

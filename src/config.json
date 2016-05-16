@@ -101,7 +101,7 @@
       "type": "ifttt",
       "modulePath": "./ifttt.module.js",
       "moduleOptions": {
-        "secret":"bbBvwBTGf4XLxL2NkP8Eid"
+        "secret": "bbBvwBTGf4XLxL2NkP8Eid"
       }
     },
     {
@@ -110,16 +110,20 @@
       "type": "accident",
       "modulePath": "./accident.module.js",
       "moduleOptions": {
-        "sosMessage":"Bol som ucastnikom dopravnej nehody, moje meno je XXX, d.n.r YYY, mam taketo ochorenia/alergie a beriem tieto lieky"
+        "sosMessage": "Bol som ucastnikom dopravnej nehody, moje meno je XXX, d.n.r YYY, mam taketo ochorenia/alergie a beriem tieto lieky",
+        "treshold": 0.5
       }
     }
   ],
   "routes": {
-    "ifttt": [
+    "accident": [
       "console"
     ],
-    "time": [
-      "ifttt"
+    "acc": [
+      "accident"
+    ],
+    "gps": [
+      "accident"
     ]
   }
 }
