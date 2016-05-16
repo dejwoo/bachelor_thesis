@@ -66,15 +66,7 @@ SmsModule.prototype.registerListeners = function() {
 		if (response === "") {
 			return
 		}
-		// var firstChar = response.substr(0,1);
-  //   	if (firstChar === "\n" || firstChar === ">") {
-		// 	response = response.substr(1);
-		// 	firstChar = response.substr(0,1);
-		// 	if (firstChar === ">") {
-		// 		response = response.substr(1);
-		// 	}
-		// }
-		response = response.split("\r\n");
+		response = response.split("\r");
 		//only one packet of data arrived, no multi message
 		if (response.length == 1) {
 			var packet = _.head(response);
@@ -89,9 +81,11 @@ SmsModule.prototype.registerListeners = function() {
 				return;
 				//TODO: interval repetition of failed command
 			}
-			console.log("RESPONSE", response);
+			console.log("CMDQ", self.queue, "CMD",self.cmdToRespond,"RESPONSE", response);
+			if (packet === "OK") {
+				self.nextCmd();
+			}
 		}
-		setTimeout(function() {self.nextCmd();},50);
     });
 }
 SmsModule.prototype.nextCmd = function() {
@@ -128,6 +122,7 @@ SmsModule.prototype.sendInitCmds = function() {
 	var self = this;
 	if (this.serial && this.ready) {
 		this.sendCmd("ATI");
+		this.sendCmd("ATE0");
 		this.sendCmd("AT+CMGF=1");
 	}
 }
@@ -135,12 +130,10 @@ SmsModule.prototype.sendInitCmds = function() {
 SmsModule.prototype.sendCmd = function(cmd) {
 	var self = this;
 	if (this.ready) {
-		console.log(self.queue);
 		console.log(this.moduleConfig.maxQueue);
         if (this.queue.length < this.moduleConfig.maxQueue) {
         	try {
 	            self.queue.push(cmd);
-	            console.log(self.queue);
         	} catch (err) {
         		console.error(err);
         	}
