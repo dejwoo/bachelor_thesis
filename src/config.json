@@ -111,13 +111,24 @@
       "modulePath": "./accident.module.js",
       "moduleOptions": {
         "sosMessage": "Bol som ucastnikom dopravnej nehody, moje meno je XXX, d.n.r YYY, mam taketo ochorenia/alergie a beriem tieto lieky",
-        "treshold": 0.5
+        "treshold": 1
+      }
+    },
+    {
+      "id": "smsModule",
+      "label": "SMS",
+      "type": "sms",
+      "modulePath": "./sms.module.js",
+      "moduleOptions": {
       }
     }
   ],
   "routes": {
+    "sms": [
+	"console"
+    ],
     "accident": [
-      "console"
+      "sms"
     ],
     "acc": [
       "accident"

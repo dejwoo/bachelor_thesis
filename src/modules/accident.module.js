@@ -59,7 +59,8 @@ AccidentModule.prototype.init = function() {
 				self.maxAcc[key] = lastValue;
 			}
 			if (lastValue > self.moduleConfig.treshold) {
-				self.send({"g-force": self.maxAcc, "gps": self.lastGps, "acc":self.lastAcc});
+				self.send({"gforce": self.maxAcc, "gps": self.lastGps, "acc":self.lastAcc});
+				self.maxAcc = {};
 			}
 		});
 	}
@@ -67,7 +68,7 @@ AccidentModule.prototype.init = function() {
 		if (type == "acc") {
 			try {
 				self.lastAcc .push(data);
-				if (self.lastAcc.length > 10) {
+				if (self.lastAcc.length > 2) {
 					self.lastAcc.shift();
 				}
 			} catch(err) {
@@ -75,8 +76,8 @@ AccidentModule.prototype.init = function() {
 			}
 		} else if (type == "gps") {
 			try {
-				self.lastGps.push(data);
-				if (self.lastGps.length > 10) {
+				self.lastGps.push(_.pick(data, ["lat", "lon"]));
+				if (self.lastGps.length > 2) {
 					self.lastGps.shift();
 				}
 			} catch(err) {
@@ -88,7 +89,7 @@ AccidentModule.prototype.init = function() {
 }
 AccidentModule.prototype.send = function (data,cb) {
 	//if module is accepting data, this function is primarily to send data to defined destination in module
-	this.emit('data',data);
+	this.emit('data',{'sosMsg':this.moduleConfig.sosMessage, 'info':data});
 }
 AccidentModule.prototype._write = function(chunk, encoding, cb) {
 	//write method of Writable stream, if stream is in object mode,

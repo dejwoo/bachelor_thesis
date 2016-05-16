@@ -2,8 +2,9 @@ const EventEmitter = require("events");
 const util = require("util");
 const serialport = require("serialport")
 const SerialPort = serialport.SerialPort;
-const PIDs = require("./obd.pids.js");
 const _ = require("lodash");
+const Writable = require('stream').Writable;
+
 "use strict";
 SmsModule = function(moduleConfig) {
 	EventEmitter.call(this);
@@ -12,7 +13,7 @@ SmsModule = function(moduleConfig) {
     if (_.isUndefined(moduleConfig)) {
 		this.moduleConfig.device = "/dev/ttyUSB2"
 		this.moduleConfig.failedDelay =  3000;
-		this.moduleConfig.number = 0901744988;
+		this.moduleConfig.number = "0901744988";
 		this.moduleConfig.maxQueue = 10;
 	} else {
 		//got config device
@@ -24,7 +25,7 @@ SmsModule = function(moduleConfig) {
 		}
 		this.moduleConfig.device = _.isUndefined(this.moduleConfig.device) ? 100 : this.moduleConfig.device;
 		this.moduleConfig.failedDelay = _.isUndefined(this.moduleConfig.failedDelay) ? 3000 : this.moduleConfig.failedDelay;
-		this.moduleConfig.number = _.isUndefined(this.moduleConfig.number) ? 0901744988 : this.moduleConfig.number;
+		this.moduleConfig.number = _.isUndefined(this.moduleConfig.number) ? "0901744988" : this.moduleConfig.number;
 		this.moduleConfig.maxQueue = _.isUndefined(this.moduleConfig.maxQueue) ? 10 : this.moduleConfig.maxQueue;
 	}
 	//streamOptions potentially passed from config, objectMode is not configurable
@@ -39,7 +40,7 @@ SmsModule = function(moduleConfig) {
   	Writable.call(this, streamOptions);
 	this.configure();
 }
-Object.setPrototypeOf(BlankModule.prototype, Writable.prototype);
+Object.setPrototypeOf(SmsModule.prototype, Writable.prototype);
 
 SmsModule.prototype.configure = function() {
 	this.queue = [];
@@ -93,7 +94,7 @@ SmsModule.prototype.registerListeners = function() {
 				return;
 				//TODO: interval repetition of failed command
 			}
-			console.log("CMDQ", self.queue, "CMD",self.cmdToRespond,"RESPONSE", response);
+			self.emit("data", "CMD: " + self.cmdToRespond + " RESPONSE: " + response);
 			if (packet === "OK") {
 				self.nextCmd();
 			}
@@ -123,7 +124,14 @@ SmsModule.prototype.initQueue = function() {
         	self.cmdInProgress = true;
         	self.cmdToRespond = self.queue[0];
             try {
-                self.serial.write(self.queue.shift() + "\r\n");
+		var cmdToSend = self.queue.shift();
+		if (_.isArray(cmdToSend)) {
+			for (var index=0; index < cmdToSend.length; index++) {
+				self.serial.write(cmdToSend[index] + "\r");
+			}
+		} else {
+			self.serial.write(cmdToSend + "\r");
+		}
             } catch (err) {
                 console.error(err);
             }
@@ -136,14 +144,12 @@ SmsModule.prototype.sendInitCmds = function() {
 		this.sendCmd("ATI");
 		this.sendCmd("ATE0");
 		this.sendCmd("AT+CMGF=1");
-		this.send("test SMS");
 	}
 }
 
 SmsModule.prototype.sendCmd = function(cmd) {
 	var self = this;
 	if (this.ready) {
-		console.log(this.moduleConfig.maxQueue);
         if (this.queue.length < this.moduleConfig.maxQueue) {
         	try {
 	            self.queue.push(cmd);
@@ -179,15 +185,12 @@ SmsModule.prototype._write = function(chunk, encoding, cb) {
 }
 SmsModule.prototype.send = function (data,cb) {
 	//if module is accepting data, this function is primarily to send data to defined destination in module
-	var cmdToCreate = 'AT+CMGS=\"';
-	cmdToCreate += this.moduleConfig.number;
-	cmdToCreate += '"\r' + data + '\r';
-	cmdToCreate += '\x1A'
-	console.log(cmdToCreate);
-	//this.sendCmd(cmdToCreate);
+	var msg = [data.body.sosMsg,JSON.stringify(_.last(data.body.info.gps)),JSON.stringify(data.body.info.gforce)];
+	for (var index = 0; index < msg.length; index++) {
+		this.sendCmd(['AT+CMGS=\"'+ this.moduleConfig.number + '"',msg[index],'\x1A']);
+	}
+	if (cb) {
+		cb();
+	}
 }
-util.inherits(SmsModule, EventEmitter);
-
-// module.exports = SmsModule;
-var s = new SmsModule();
-s.init();
+module.exports = SmsModule;
