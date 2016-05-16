@@ -13,6 +13,7 @@ SmsModule = function(moduleConfig) {
 		this.moduleConfig.device = "/dev/ttyUSB2"
 		this.moduleConfig.failedDelay =  3000;
 		this.moduleConfig.number = 0901744988;
+		this.moduleConfig.maxQueue = 10;
 	} else {
 		//got config device
 		this.moduleConfig = moduleConfig;
@@ -24,6 +25,7 @@ SmsModule = function(moduleConfig) {
 		this.moduleConfig.device = _.isUndefined(this.moduleConfig.device) ? 100 : this.moduleConfig.device;
 		this.moduleConfig.failedDelay = _.isUndefined(this.moduleConfig.failedDelay) ? 3000 : this.moduleConfig.failedDelay;
 		this.moduleConfig.number = _.isUndefined(this.moduleConfig.number) ? 0901744988 : this.moduleConfig.number;
+		this.moduleConfig.maxQueue = _.isUndefined(this.moduleConfig.maxQueue) ? 10 : this.moduleConfig.maxQueue;
 	}
 	this.configure();
 }
@@ -108,7 +110,7 @@ SmsModule.prototype.initQueue = function() {
 	var self = this;
 	this.on("sendCmd", function() {
 		if (self.cmdInProgress == true) {
-           console.info("obd.module.processQueue: awaitingReply!");
+           console.info("sms.module.processQueue: awaitingReply!");
            return;
         }
         if (self.queue.length > 0 && self.ready) {
@@ -133,9 +135,12 @@ SmsModule.prototype.sendInitCmds = function() {
 SmsModule.prototype.sendCmd = function(cmd) {
 	var self = this;
 	if (this.ready) {
+		console.log(self.queue);
+		console.log(this.moduleConfig.maxQueue);
         if (this.queue.length < this.moduleConfig.maxQueue) {
         	try {
 	            self.queue.push(cmd);
+	            console.log(self.queue);
         	} catch (err) {
         		console.error(err);
         	}
@@ -143,10 +148,10 @@ SmsModule.prototype.sendCmd = function(cmd) {
                 this.emit("sendCmd");
             }
         } else {
-            console.error("obd.module.sendCmd: Maximum Queue reached!");
+            console.error("sms.module.sendCmd: Maximum Queue reached!");
         }
     } else {
-        console.error("obd.module.sendCmd:Serial port is not ready!");
+        console.error("sms.module.sendCmd:Serial port is not ready!");
     }
 }
 SmsModule.prototype.close = function() {
@@ -154,7 +159,7 @@ SmsModule.prototype.close = function() {
 	if (! _.isUndefined(this.serial)) {
 		this.serial.close(function(err) {
 			if (err) {
-					console.info("OBD.source: Emmiting err on close");
+					console.info("sms.source: Emmiting err on close");
 					self.emit("err", err);
 			}
 			self.emit("end");
