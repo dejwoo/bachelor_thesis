@@ -43,7 +43,20 @@ The FONA 3G has better coverage, GSM backwards-compatibility and even sports a b
 \subsection{Problem abstraction} % (fold)
 \label{sub:problem_abstraction}
 To solve given task, lets firts look at data gathering and what can be done to optimize proccess of collecting infromation from often vary different sources. For correct conclusion to be made, we need to abstract the meaning of car connection as merely only as one of infromation sources. To solve how to easily interconnect different input sources(information producing) to even more different output sinks(information sending), lets develop a framework. A data applicaton module which will provide easy connecting of different sources with data producing modules to any data accepting modules. So to begin lets define some construction blocks of this framework so we can easily build a suitable application.
+% subsection problem_abstraction (end)
+\subsection{Data Logger framework} % (fold)
+This framework will be a standalone module which will be incorporated in the final application. Main goal of this framework is to provide easy way how to setup communication between various inputs(sensoric data, IoT devices, cars,etc) and outputs(database,application, server, cloud,etc). Framework is structured by main app, modules and routes. Data Logger is configurable trough internal function and by file which serves for storing configurations of each model and routes. This is the first version of the framework and will probably undergo some more development.
+\subsubsection{Module}
+\label{ssub:module}
+Module is basic structure for every item. It is a encapsulating class for every information creating or sending application/module. By this framework is able to objectify every application be it different, and extract data from generating one or send data to to accepting one. By this single feature we will be albe to get data from OBD port of the car system the same way as from accelometer present at Adafruit 10 DOF sensoric board. This is achieved by writing specific modules to parse/get data from the source, which are then run under Data Logger. Every module can be generating data, or accepting data and acting upon it. For modul to be generating or accepting one, module must be implemented by the same interface so it can be easily handled by Data Logger, otherwise this would not be much of a framework if for every module there would need to be specific functions to run to obtain or accept data. Configurating modules are easy as from framework we can pass settings for every module separatly, either from application or much easier from a file. This configuration file has a specific block of configruation settings for every module present in current implementation of Data Logger.[Picture needed]
+\subsubsection{Route} % (fold)
+\label{ssub:route}
+Route is another basic structure how to define a dataflow from or to every module. Routes are defined with simple principle in mind, you define source and then every possible sink to which data have to be sent. By this configuration Data Logger will begin to accessing modules based on which side of the equation they are. If the module is generating data, framework will use specific general interface to gather data provided by the module and then distribute it to every sink defined by the route again by using general interface to sending data to module. With this principle one can define a very detailed data flow and by which assamble a data handling application in no time. If we would scale this framework to enourmous proportions, say we would have 10 sensors producing same data but they would need different modules to be handled, it would become soon tedious to write routes based only on id matching of modules. So for every module theres a specific setting to be set, a type, by which we can more easily define routes, e.g. \verb|accelerometer -> database| and from now on, every data produced by module which has type set to acceloremeter will be routed to every module which as type of database, may there be big number of them.[Picture needed]
+% subsubsection route (end)
+\label{sub:data_logger_framework}
 
-% subsubsection problem_abstraction (end)
+% subsection data_logger_framework (end)
+
+
 
 % subsection software (end)
