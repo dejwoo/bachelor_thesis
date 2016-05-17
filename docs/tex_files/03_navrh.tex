@@ -1,7 +1,49 @@
-farby a dalsie klucove slova na zvyraznenie sa daju urcit v definicii lstset ktora je v  main.tex \\
-nasleduje nieco ako JQuery....
-\lstinputlisting{ukazkovySkript.js}
+In this chapter of bachelor thesis I will provide a solution of my bachelor thesis problem.
+\section{Hardware}
+For the start we need device which will be capable of running operating system. There are many various platforms which provide single board computers, and after considering pros and cons I have choosen raspberry platform as most suitable becouse is is capable of running full linux operating system, have 4 USB slots which will be needed for peripheral devices and foremost there is a pleathora of hardware addons, sensors and boards which works with raspberry models, not to mention availablilty of information how to connect them, tutorials how to setup them. In time of writing this thesis I can say raspberry platform is the most popular platform for single board computers.
+\subsection{Device}
+After picking the right platform we need to pick model. Newest model on the market from raspberry platform in time of developing this thesis was Raspberry Pi Zero which was not suitable for the needs of this thesis becouse it lacks usb ports. It has support for On-the-go USB cables but we need device which supports atleast 2 or 3 usb ports. Which we would need to solve by buying USB hubs. The best suitable device was Raspberry Pi 2, which has 4 USB ports, 40 GPIO pins and micro SD card slot. This device covers almost all the needs of this thesis. We will need to extend it with WiFi/Bluetooth USB dongle which will enable us to create WiFi access point. In time of writing this thesis Raspberry Foundation released new device Raspberry Pi 3 which is even more suitable for us because it has buitl-in Wireless LAN. So my recommendation for the reader is to go with Raspberry Pi 3 model.
+\subsection{Operating System}
+The most suitable operating system for our needs is Linux based, because it is open-source. Concrete distribution of Linux based operating system will be Arch Linux. The main gain of using Arch Linux is it is extremely lightweight distribution with KISS principle in mind also it is a rolling release which means it is always always up-to-date. Port of Arch Linux distribution is Arch Linux ARM which carries forward the Arch Linux philosophy of simplicity and user-centrism, targeting and accommodating competent Linux users by giving them complete control and responsibility over the system. Instructions are provided to assist in navigating the nuances of installation on the various ARM platforms; however, the system itself will offer little assistance to the user[CITATION NEEDED].
+Installing and basic configuration of Arch Linux will not be covered in this thesis, as I would repeat myself. Arch Linux has one of the best documentation online, so if you are not familiar with how to install and configure this particular Linux distribution, follow documentation from Arch Linux website.
+\newpage
+\section{Configuration} % (fold)
+\label{sec:configuration}
+In this section I will cover configuration of various applications and system properties to set up our device properly for our needs, howewer it will not be complete configuration, as peripherals connected to this device will also need some degree of setup and configuration I will cover that in their respective sections.
+\subsection{Database} % (fold)
+\label{sub:database}
+For storing information on developing device, it needs to be capable of running database. As it is with linux there, are a lot of databases to choose from and to suit our needs we need to vary on one fact, and that is where all gathered information will be stored. Raspberry can support very large memory cards, up to 512 gigabytes, and with various read/write speeds, so one could find card which will suit oneself needs.[Citation needed] In spite of availability of different micro SD cards, everyone has limited read/write cycles after which card become unreliable. Another solution is not to store information on card at all. Typical linux database will create database file to which it stores data, in configurating we could point database to create this file in a special directory. On Linux it is called /tmp[citation needed], this direcory is allocated not on memory card but instead on RAM memory, which would save us need of large and expensive card. It comes with disadvantage, after restart or shutdown of the device, we would not be able to access stored data as RAM memory is votelatile[citation needed].
+My solution for database is to use special database which sets the database in RAM memory but it is configurable to save snapshots(copies) to the micro SD card. Database is called Redis. Redis is an open source, in-memory data structure store, used as database, cache and message broker.[citation needed] Sample configuration on which database runs on our device will be provided with other configurations on GitHub repository under name ``redis.conf'' in folder ``confs''.
+% subsubsection database (end)
+\subsection{Wireless Access Point} % (fold)
+\label{sub:wireless_access_point}
+To automaticly create wireless access point when the device boots up we need several configrations and applications. Firstly the compatibility of device. To create software access point you will need nl80211 compatible wireless device[Citation needed], which support AP operating mode. Application which will be needed is hostapd, iw and dhcpcd. In the confs folder on github you can find configuration file for hostapd which needs to be copied into \verb|/etc/hostapd/|, and a systemctl rule, which needs to be copied into \verb|/lib/systemd/system/|. After that reload systemctl dameon, start and enable wifi-ap.service. If you have compliant device it will automatically create wireless Access Point which is defined in hostapd.conf.
+% subsubsection wireless_access_point (end)
+\subsection{Internet} % (fold)
+\label{sub:internet}
+As I am using Adafruit FONA 3G Cellular + GPS modem, creating connection to the Internet is possible in different ways. First is using pppd daemon which is capable upon configuration to create ppp0 device which will be used to connect to the internet. Configuration files for ppp can be found again on GitHub repository in \verb|conf/ppp| folder. Another approach is with wvdial, which congiguration can also be found in repository. At last FONA 3G is supported by QMI modem protocol. For dialing with qmi one needs to install libqmi and net-tools packages. You will need to know to which apn you need to connect from your mobile internet service provider. After that replace APN in qmi-network.conf from config folder at GitHub, copy it to \verb|/etc/|. From script folder found in thesis repository copy a helper script, and then simple \verb|qmi_setup.sh start| starts the connection to the internet. If your SIM card is PIN locked you will need to unlock it manually trough AT command or with help from \verb|mmcli| command.
+% subsubsection internet (end)
+% subsection configuration (end)
+\newpage
+\section{Peripherals} % (fold)
+\label{sec:peripherals}
+For providing proof of concept device which is capable of gathering information from various sources I will connect to the device numerous peripherals which will generate information. In upcoming subsections I will describe them and provide configuration instructions if necessary. I believe that connecting this peripherals is such trivia that it does not need to be explained to the reader, if however someone would not have sufficient knowledge of how to connect these to the raspberry pi I suggest to find some guide on the internet for correct connections to be made.
+\subsection{Adafruit 10-DOF} % (fold)
+\label{sub:adafruit_10_dof}
+This inertial-measurement-unit combines 3 sensors  to give you 11 axes of data: 3 axes of accelerometer data, 3 axes gyroscopic, 3 axes magnetic (compass), barometric pressure/altitude and temperature. Since all of them use I2C, you can communicate with all of them using only two wires. Most will be pretty happy with just the plain I2C interfacing, but we also break out the data ready and interrupt pins, so advanced users can interface with if they choose.[Citation needed]. As for configuration you will need packages \verb|i2c-tools| and \verb|lm_sensors|, then get config config.txt from thesis reposirtory and copy it to /boot/config.txt, enable mondules \verb|i2c-dev, i2c-bcm2708| in \verb|/etc/modules-load.d/raspberrypi.conf|. Thats it, now with command \verb|i2cdetect -y 0| is should work. if not follow troubleshoot documentation on raspberry pi on archlinux wiki.
+% subsubsection adafruit_10_dof (end)
+\subsection{Adafruit FONA 3G Cellular + GPS} % (fold)
+\label{sub:adafruit_fona_3g_cellular_gps_}
+The FONA 3G has better coverage, GSM backwards-compatibility and even sports a built-in GPS module for geolocation & asset tracking. This all-in-one cellular phone module with that lets you add location-tracking, voice, text, SMS and data to your project in a single breakout.[citation needed] As for configuration there are multiple ways how to connect to the internet, send SMS and make voice calls, all of them boils down to using right AT commands through serial console which is automatically created by the kernel.After connecting modem through usb to the raspberry, kernel will create 4 serial ports(debug,nmea,serial,modem). After starting gps chip with correct command \verb|at+cgps=1| at serial port nmea will start to push gps data on nmea port at 115200 baud rate.
+% subsubsection adafruit_fona_3g_cellular_gps_ (end)
+% subsection peripherals (end)
+\newpage
+\section{Software} % (fold)
+\label{sec:software}
+\subsection{Problem abstraction} % (fold)
+\label{sub:problem_abstraction}
+To solve given task, lets firts look at data gathering and what can be done to optimize proccess of collecting infromation from often vary different sources. For correct conclusion to be made, we need to abstract the meaning of car connection as merely only as one of infromation sources. To solve how to easily interconnect different input sources(information producing) to even more different output sinks(information sending), lets develop a framework. A data applicaton module which will provide easy connecting of different sources with data producing modules to any data accepting modules. So to begin lets define some construction blocks of this framework so we can easily build a suitable application.
 
-Momentalne je lstset nastaveny na jazyk PHP, tak automaticky zvyrazni syntax aj bez pridavania klucovych slov \\
-ukazka php kodu
-\lstinputlisting{ukazkaPhp.php}
+% subsubsection problem_abstraction (end)
+
+% subsection software (end)
