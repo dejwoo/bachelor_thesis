@@ -54,8 +54,60 @@ Module is basic structure for every item. It is a encapsulating class for every 
 Route is another basic structure how to define a dataflow from or to every module. Routes are defined with simple principle in mind, you define source and then every possible sink to which data have to be sent. By this configuration Data Logger will begin to accessing modules based on which side of the equation they are. If the module is generating data, framework will use specific general interface to gather data provided by the module and then distribute it to every sink defined by the route again by using general interface to sending data to module. With this principle one can define a very detailed data flow and by which assamble a data handling application in no time. If we would scale this framework to enourmous proportions, say we would have 10 sensors producing same data but they would need different modules to be handled, it would become soon tedious to write routes based only on id matching of modules. So for every module theres a specific setting to be set, a type, by which we can more easily define routes, e.g. \verb|accelerometer -> database| and from now on, every data produced by module which has type set to acceloremeter will be routed to every module which as type of database, may there be big number of them.[Picture needed]
 % subsubsection route (end)
 \label{sub:data_logger_framework}
-
 % subsection data_logger_framework (end)
+\subsection{Data Logger modules}
+
+In this section of bachelor thesis I will desciribe modules which I developed in order to complete assignment.
+\subsubsection{Blank module} % (fold)
+\label{ssub:blank_module}
+% subsubsection blank_module (end)
+
+\subsubsection{Time module} % (fold)
+\label{ssub:time_module}
+This is simple `dumb' module which will be used to beta test others modules. Advantage of having this simiplistic module is it is not dependent on any hardware. Interval defined by sample rate will provide current time as data.
+% subsubsection time_module (end)
+\subsubsection{Accelerometer module} % (fold)
+This module will be dependent on Adafruit 10 DOF sensor board and will utilize onboard LSM303 accelerometer sensor, communicating over I2C protocol. Module will emit proper acceleration in 3 axis, maximum acceleration +- 16g in each direction, sample rate will be configurable. LSM303 accelerometer sensor supports various settings as which axis acceleration is registered, how fast are these values checked, this constants for these settings are implemented, but I do not see the benefit of selecting only one axis or sampling at lower rate, so defaults are every axis is registered, and sampled as fast as it can be for accident checking module.
+% subsubsection accelerometer_module (end)
+\label{ssub:accelerometer_module}
+\subsubsection{GPS module} % (fold)
+\label{ssub:gps_module}
+GPS module as name suggests will parse nmea sentences from FONA 3g modem which has built-in GPS chip. AS for this module there is not much to be configured, because modem emits nmea sentences at 115200 rate, which to my best knowledge is not configurable, only thing found which could be configured is to switch output port for nmea sentences from nmea to serial, but then sending SMS and calling would not be possible, so it is not a feasible setting.
+% subsubsection gps_module (end)
+\subsubsection{Accident module} % (fold)
+\label{ssub:accident_module}
+This module will be both accepting input data and creating new information for other modules. New cars electronic crash sensors are accelometers. They are used to determine exactly when the airbag should be deployed to prevent injury to a driver or passenger.   When an impact occurs, it results in vehicle deceleration, which is sensed by the accelerometer. This change is monitored by electronic control unit, which sends a signal to trigger the airbag. Not to rely on car accelerometer sensors the application will be polling LSM303 accelerometer sensor attached to the device. Problem with car accelerometer sensors is missing common interface to communicate with airbag/ECU system. If it is even possible then every car manafacturer has proprietary system in place, which would result in buying different specifications for every make, maybe even model. As for giving the gathered information value, I am not suitable for the task for simple reason, I am application comuter science undergrad and I can create, gather, store, act upon, etc based on information but to assign which value from accelerometer is right to register accident I have no knowledge, it is probably better task for someone from physics field. To create this module smart, in settings can be found treshold value which says that if accelerometer module registers acceleration over treshold accident module will be trigered and will compose a sos message to be sent to emergency dispatch centre. This message will be composed of latest GPS positon, maximal g-forces registred and medical information about driver. Medical information about driver, or in other words custom message is also configurable through settings.
+% subsubsection accident_module (end)
+\subsubsection{SMS module} % (fold)
+\label{ssub:sms_module}
+% subsubsection sms_module (end)
+\subsubsection{OBD-II module} % (fold)
+\label{ssub:obd_ii_module}
+% subsubsection obd_ii_module (end)
+\subsubsection{IFTTT module} % (fold)
+\label{ssub:ifttt_module}
+% subsubsection ifttt_module (end)
+\subsubsection{Redis module} % (fold)
+\label{ssub:redis_module}
+% subsubsection redis_module (end)
+\subsubsection{RPM module} % (fold)
+\label{ssub:rpm_module}
+% subsubsection rpm_module (end)
+\subsubsection{RabbitMQ module} % (fold)
+\label{ssub:rabbitmq_module}
+% subsubsection rabbitmq_module (end)
+\subsubsection{Console module} % (fold)
+\label{ssub:console_module}
+% subsubsection console_module (end)
+\subsubsection{Bulk module} % (fold)
+\label{ssub:bulk_module}
+% subsubsection bulk_module (end)
+
+% subsection data_logger_modules (end)
+
+
+
+
 
 
 
