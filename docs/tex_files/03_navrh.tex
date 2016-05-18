@@ -60,6 +60,8 @@ Route is another basic structure how to define a dataflow from or to every modul
 In this section of bachelor thesis I will desciribe modules which I developed in order to complete assignment.
 \subsubsection{Blank module} % (fold)
 \label{ssub:blank_module}
+During developing modules for this bachelor thesis, I found myself using the same starting point for every module, so I created blank module which has all the neccesarry functions, or one might call it interface to make more easier creation of new modules,
+code is commented to give the reader neccesasry information what is expected from different function in case their name would not be clarifying enough. Blank module combines source and sink together but they do not need to be used both.
 % subsubsection blank_module (end)
 
 \subsubsection{Time module} % (fold)
@@ -80,12 +82,15 @@ This module will be both accepting input data and creating new information for o
 % subsubsection accident_module (end)
 \subsubsection{SMS module} % (fold)
 \label{ssub:sms_module}
+This module is a sms message sending module, but it is not designed for general use. Message relays on incoming data to be structured correctly from accident module and send 3 SMS messages with information about driver, GPS position and maximum g-force registered by the accelerometer. Modul requires modem to be pin unlocked otherwise SMS sending will fail. Sending SMS message with \verbn|AT+CGMS| command requires string to be sent be a maximal size of 150 characters and ended with \verb|^Z| special character. After message is send, module repsonds with OK and number of total SMS messages sent by the module.
 % subsubsection sms_module (end)
 \subsubsection{OBD-II module} % (fold)
+By far the most challenging module in this thesis. Module connects with help of ELM327 compatible device to the OBD-II port and selects automatic protocol. Problem with automatic protocol selection is protocols have different initializing response, the module needed to be adapted to this discovery, to be working with older and newer cars, I successfuly tested this module on 5 different cars in make and model, but I can not rule out the possibility of OBD module not working with specific model and make of car, because there are multiple protocols present and their specification is not publicly available. After successful initialization, obd module will poll suported the car for supported commands, creates a polling loop with them and periodicaly queries data. One must be vary of this one limitation, and that is older cars have older protocols which have slow rate of sending data, and therefore sample rate of this module should be considered to be calculated correctly, otherwise buffer overflow might occurr. Module implements simple buffer overflow logic, when length of PID commands queue becomes more than treshold OBD module will not add more commands to queue until the length lowers than treshold. Module emits data for every queried command separately as in some cases gathering information from every supported command would simply took too long time to collect.
 \label{ssub:obd_ii_module}
 % subsubsection obd_ii_module (end)
 \subsubsection{IFTTT module} % (fold)
 \label{ssub:ifttt_module}
+IFTTT module is a support module for communicating with web service called Maker. With this service one can create different trigger events for data which arrives to the event and connect them to various other web services as GMail, Facebook, Instagram, etc. Data format is limited as Maker channel supports JSON format with only 3 keys, namely \verb|value1,value2,vaule3|, so complicated data structures are not suited for this modul. Values of this 3 keys can be any string, with this in mind, the limitation could be circumvented for example with CSV format of data, which can be automatically parsed by form example google drive spreadsheet application. Fair to say is that this service is free of charge and provides with possibilities to connect data generated with vast number of popular web services.
 % subsubsection ifttt_module (end)
 \subsubsection{Redis module} % (fold)
 \label{ssub:redis_module}
