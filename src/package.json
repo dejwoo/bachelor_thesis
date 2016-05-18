@@ -12,14 +12,12 @@
   "dependencies": {
     "amqplib": "^0.4.1",
     "body-parser": "^1.15.0",
-    "cookie-parser": "^1.4.1",
     "duplexer2": "^0.1.4",
     "express": "^4.13.4",
     "express-session": "^1.13.0",
     "gps": "0.0.8",
     "i2c-bus": "^1.0.3",
     "lodash": "^4.11.1",
-    "logger": "0.0.1",
     "morgan": "^1.7.0",
     "node-sass-middleware": "^0.9.8",
     "object-sizeof": "^1.0.10",
@@ -27,7 +25,6 @@
     "redis": "^2.5.3",
     "request": "^2.72.0",
     "serialport": "^2.0.7-beta5",
-    "serve-favicon": "^2.3.0",
     "socket.io": "^1.4.6",
     "swig": "^1.4.2"
   }

@@ -5,8 +5,8 @@ For completing this bachelor assignment I have choosen to implement it in Javasc
 \begin{itemize}
 \item Over 70\% of the code is implemented in JavaScript, rest is HTML and CSS.
 \item Application is operating system independent
-\item For backend solution I used Node.js, which is also implemented in JavaScript.
-\item The npm packgage registry holds over 250,000 reusable packages or reusable code.
+\item For backend solution I used Node.js, which is also implemented in JavaScript. So there is no need to know another programming language by the users
+\item The npm packgage registry holds over 250,000 reusable packages of reusable code.
 \end{itemize}
 As you can see there is a lot of support surrounding Node.js enviroment which enabled me to build better and faster application.
 \subsection{npm packages} % (fold)
@@ -15,9 +15,12 @@ For clarification which packages I used during implementation, with short reason
 \begin{itemize}
 	\item \textbf{amqplib} -- library used for making amqp 0.9.1 clients for Node.js, it has been used to create client for RabbitMQ module[\ref{ssub:rabbitmq_module}]
    	\item \textbf{body-parser} -- body parsing middleware, once internal part of express, now must be installed separately, middleware is used to handle POST requests
+    \item \textbf{duplexer2} -- library for creating writable and readable streams as one, used in intrenal structures of Data Logger.
     \item \textbf{express} -- web application framework that provides a robust set of features for web and mobile applications.
+	\item \textbf{express-session} -- simple session middleware for Express, used in webserver middleware.
+	\item \textbf{gps} -- GPS.js is an extensible parser for NMEA sentences, used by GPS module to parse incoming data.[\ref{ssub:gps_module}]
     \item \textbf{i2c-bus} -- I2C serial bus access used in accelerometer module[\ref{ssub:accelerometer_module}]
-    \item \textbf{lodash} -- A modern JavaScript functional utility library delivering modularity, performance, & extras. Library is used throughout whole application for correct handling with objects and arrays.
+    \item \textbf{lodash} -- A modern JavaScript functional utility library delivering modularity, performance and extras. Library is used throughout whole application for correct handling with objects and arrays.
     \item \textbf{morgan} -- HTTP request logger middleware for node.js, used to log http requests on the express server.
     \item \textbf{node-sass-middleware} -- Connect middleware for node-sass, recompile .scss or .sass files automatically for connect and express based http servers.[citation needed]
     \item \textbf{object-sizeof} -- library for computing size of a JavaScript object in bytes, used in bulk module to evaluate message size[\ref{ssub:bulk_module}]
@@ -30,3 +33,29 @@ For clarification which packages I used during implementation, with short reason
 \end{itemize}
 % subsection npm_packages (end)
 % section overview (end)
+\section{Data Logger} % (fold)
+\label{sec:Data Logger}
+Data Logger is a standalone module. When Data Logger is required whole module is instantiated. For correct configuration it is needed to call configurate function with JavaScript Object as a argument which is passed by reading JSON configuration file from main application.
+\subsection{Modules} % (fold)
+\label{sub:modules}
+% subsection module (end)
+To process the file, modules have to be created by instantiating them with module options, which are then storted in internal key value object where keys are unique ids supplied by the user. As this framework is primarily used for fellow computer scientists and power users, Data Logger does not implement any failsafe for not overwriting modules with same ID. This happend to be a mistake to forego this failsafe, and will be reported as one of many things to be improved in continued work after this thesis.
+\subsection{Routes} % (fold)
+\label{sub:routes}
+After modules are instantiated it is time for creating data flows defined by routes. To standardize data exchange format every message must be Javascript Object. Every message traveling between modules must be composed of these 2 key mapped values, firstly its header where the mandatory key is id, whichs value is reffering to the module in which message originated. Other properties of message header are optional and can be configured with main config file. Second mandatory key maped value is body, in which is stored actual data payload created by original module.[TODO TODO TODOTODOTODOOOO TODODO TABLE]
+
+To better understand what interfaces must be implemented by the modules so they could create data or accept data I provide them in specification of interfaces below.
+\subsubsection{Interface of data creating module} % (fold)
+\label{ssub:interface_of_data_creating_module}
+For data created by the module to by properly handled by Data Logger module object must be a instance of the EventEmmiter class which exposes an eventEmitter.on() functions that allows for registering event listeners to that particular object. When object emits a specificly named event every function attached by on() function are called synchronously. So for data to be picked up be the Data Logger module must emit `data' event witch argument is created data by the module. Nothing more is mandatory to by implemented.
+% subsubsection interface_of_data_creating_module (end)
+
+\subsubsection{Interface of data accepting module} % (fold)
+\label{ssub:interface_of_data_accepting_module}
+Module which will be accepting data must be an instance of Stream Writable abstract class designed to be extended with an underlying implementation of the .\_write method. This method must be implemented to accept data passing to the underlying resource in case of this thesis -- module. Method \_write  has 3 arguments, (chunk, encoding, callback). Data intended for the module is in chunk variable.
+
+% subsubsection interface_of_data_accepting_module (end)
+
+% subsection routes (end)
+
+% section section_name (end)

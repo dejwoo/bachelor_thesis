@@ -4,9 +4,7 @@ var fs = require('fs');
 var configJSON = JSON.parse(fs.readFileSync('config.json', 'utf8'));
 var express = require('express');
 var path = require('path');
-var favicon = require('serve-favicon');
 var logger = require('morgan');
-var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
 var swig = require('swig');
@@ -30,7 +28,6 @@ app.use(session({
 }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
 app.use(require('node-sass-middleware')({
 	src: path.join(__dirname, 'public'),
 	dest: path.join(__dirname, 'public'),
