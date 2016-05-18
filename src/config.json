@@ -136,7 +136,10 @@
         "type": "rpm"
       },
       "modulePath": "./rpm.module.js",
-      "moduleOptions": {}
+      "moduleOptions": {
+        "downShiftTreshold" : 1500,
+        "upShiftTreshold" : 2500
+      }
     }
   ],
   "routes": {

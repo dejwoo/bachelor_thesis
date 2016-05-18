@@ -10,9 +10,13 @@ RpmModule = function(moduleConfig) {
     //creating module without any configuration passed
 	if (_.isUndefined(moduleConfig)) {
 		//space for defining default settings
+		this.moduleConfig.downShiftTreshold = 1500;
+		this.moduleConfig.upShiftTreshold = 2500;
 	} else {
 		//creating module with configuration
 		this.moduleConfig = moduleConfig;
+		this.moduleConfig.downShiftTreshold = this.moduleConfig.downshiftTreshold ? moduleConfig.downShiftTreshold : 1500;
+		this.moduleConfig.upShiftTreshold = this.moduleConfig.upShiftTreshold ? moduleConfig.upShiftTreshold : 2500;
 		//space for safe check of said config
 	}
 
