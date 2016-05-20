@@ -5,6 +5,7 @@
 \usepackage{amsmath}
 \usepackage{amsfonts} %amsthm ?
 \usepackage{amssymb}
+\usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage[top=2.5cm, bottom=2.5cm, right=2cm, left=3.5cm]{geometry}  %okraje
 
@@ -23,6 +24,7 @@
 \titlespacing{\subsection}{0pt}{25pt}{15pt} %left top down
 \setcounter{secnumdepth}{5}
 \setcounter{tocdepth}{5}
+\usepackage{csquotes}
 
 %toto sposobi ze slova sa nebudu na konci riadkov rozdelovat pomlckami
 \tolerance=100000000
@@ -75,9 +77,21 @@ stringstyle=\color{brown},
 morekeywords={try,class,extends,__construct,var, construct,this,parent,catch,new,protected,private,public,function,return}, 
 keywordstyle=\color{black}\bfseries
 }
+% Load the package
+\usepackage{glossaries}
+% Generate the glossary
+\makeglossaries
+
 
 %koniec nastaveni a tu uz zacina obsah
 \begin{document}
+\newglossaryentry{obd}{name=OBD-II, description={On-Board Diagnostics port}}
+\newglossaryentry{iot}{name=IoT, description={Internet of Things}}
+\newglossaryentry{sbc}{name=SBC, description={Single-board computer}}
+\newglossaryentry{gpio}{name=GPIO, description={General-purpose input/output}}
+\newglossaryentry{i2c}{name=I${}^2$C, description={Single-board computer}}
+\newglossaryentry{spi}{name=SPI, description={Serial Peripheral Interface}}
+
 
 \input firstpages.tex
 \input abstract.tex
@@ -100,12 +114,14 @@ keywordstyle=\color{black}\bfseries
 \chapter{Implementation}
 \input 04_implementation.tex
 
-\chapter{Záver}
+\chapter{Conclusion}
 \input zaver.tex
-\printbibliography
-%\addcontentsline{toc}{chapter}{Zdroje}  %pridanie nadpisu zdrojov k obsahu
 
-\chapter*{Prílohy}   %hviezdicka ze necislovana kapitola  a nie je v obsahu
+\printglossaries
+\printbibliography
+\addcontentsline{toc}{chapter}{References}  %pridanie nadpisu zdrojov k obsahu
+
+\chapter*{Attachments}   %hviezdicka ze necislovana kapitola  a nie je v obsahu
 \input prilohy.tex
 
 \label{totalpages}

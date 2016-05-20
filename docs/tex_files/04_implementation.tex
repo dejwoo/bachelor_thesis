@@ -9,29 +9,7 @@ For completing this bachelor assignment I have choosen to implement it in Javasc
 \item The npm packgage registry holds over 250,000 reusable packages of reusable code.
 \end{itemize}
 As you can see there is a lot of support surrounding Node.js enviroment which enabled me to build better and faster application.
-\subsection{npm packages} % (fold)
-\label{sub:npm_packages}
-For clarification which packages I used during implementation, with short reasoning why I used it.
-\begin{itemize}
-	\item \textbf{amqplib} -- library used for making amqp 0.9.1 clients for Node.js, it has been used to create client for RabbitMQ module[\ref{ssub:rabbitmq_module}]
-   	\item \textbf{body-parser} -- body parsing middleware, once internal part of express, now must be installed separately, middleware is used to handle POST requests
-    \item \textbf{duplexer2} -- library for creating writable and readable streams as one, used in intrenal structures of Data Logger.
-    \item \textbf{express} -- web application framework that provides a robust set of features for web and mobile applications.
-	\item \textbf{express-session} -- simple session middleware for Express, used in webserver middleware.
-	\item \textbf{gps} -- GPS.js is an extensible parser for NMEA sentences, used by GPS module to parse incoming data.[\ref{ssub:gps_module}]
-    \item \textbf{i2c-bus} -- I2C serial bus access used in accelerometer module[\ref{ssub:accelerometer_module}]
-    \item \textbf{lodash} -- A modern JavaScript functional utility library delivering modularity, performance and extras. Library is used throughout whole application for correct handling with objects and arrays.
-    \item \textbf{morgan} -- HTTP request logger middleware for node.js, used to log http requests on the express server.
-    \item \textbf{node-sass-middleware} -- Connect middleware for node-sass, recompile .scss or .sass files automatically for connect and express based http servers.[citation needed]
-    \item \textbf{object-sizeof} -- library for computing size of a JavaScript object in bytes, used in bulk module to evaluate message size[\ref{ssub:bulk_module}]
-    \item \textbf{path} -- this module contains utilities for handling and transforming file paths.[https://nodejs.org/docs/latest/api/path.html]
-    \item \textbf{redis} -- this is a complete and feature rich Redis client for node.js.[https://www.npmjs.com/package/redis] It is used in redis module[\ref{ssub:redis_module}]
-    \item \textbf{request} -- Request is designed to be the simplest way possible to make http calls. Used in IFTTT module to generate POST requests to the Maker channel[\ref{ssub:ifttt_module}]
-    \item \textbf{serialport} -- Node.js library to access serial ports, used in every module which required access to serial port.
-    \item \textbf{socket.io} -- node.js realtime framework server, used to communicate through websocekts or jsonp long polling
-    \item \textbf{swig} -- A simple, powerful, and extendable JavaScript Template Engine. Used in html templates for web application.[\ref{ssub:web_application}][http://paularmstrong.github.io/swig/docs/]
-\end{itemize}
-% subsection npm_packages (end)
+
 % section overview (end)
 \section{Data Logger} % (fold)
 \label{sec:Data Logger}
