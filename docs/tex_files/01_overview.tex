@@ -50,15 +50,211 @@ and optimize these systems.”
 % \subsection{Benefits}
 % \subsection{Why is it important?}
 % When we will have connected car, we will need to collect information, e.g. data. With Big Data approach our solution will be scalable without need for adaptation if a very big number of devices would be connected.
+\newpage
+\section{I${}^2$C} % (fold)
+\label{sec:i2c}
+\gls{i2c} protocol is a very popular serial protocol, mainly because it is cheap, simple and allows to connect multiple devices. Whole \gls{i2c} bus can be made of only 2 lines: SDA and SCL. SDA is a data line which is carrying data from one device to another and SCL is  clock line which main purpose is to synchronize all the devices connected using the \gls{i2c} bus. The SDA and the SCL lines are mandatory for all devices which support connection using \gls{i2c} bus\cite{i2cbus}. The block diagram representation of an \gls{i2c} bus is as shown in \ref{fig:ch2}
+\begin{figure}[H]
+\begin{center}
+\captionsetup{font=small}
+\includegraphics[scale=0.45]{pics/i2c-protocol.png}
+\caption{\gls{i2c} bus.}
+\label{fig:ch2}
+\end{center}
+\end{figure}
+\subsection{Bus signals} % (fold)
+ \label{sub:bus_signals}
+Both signals (SCL and SDA) are bidirectional. They are connected through resistors to a positive power supply voltage. This means both lines are high when the bus is free. Activating the line means pulling it down (wired AND). The number of the devices on a single bus is almost unlimited – the only requirement is that the bus capacitance does not exceed 400 pF. Because logical 1 level depends on the supply voltage, there is no standard bus voltage.\cite{i2c_bus_signal}
+ % subsection bus_signals (end)
+\subsection{Hierarchy} % (fold)
+\label{sub:hierarchy}
+\gls{i2c} devices are can be registered as master or slave. Masters initiate a message and
+slaves respond to a message. A master can have multiple slaves and any device can
+be master-only, slave-only, or switch between as provided in image \ref{fig:ch1}.
+\begin{figure}[H]
+\begin{center}
+\captionsetup{font=small}
+\includegraphics[scale=0.2]{pics/i2c-hierarchy.png}
+\caption{Multiple \gls{i2c} devices connected on the bus.}
+\label{fig:ch1}
+\end{center}
+\end{figure}
+
+% section section_name (end)
 \section{Single-board computer}
-Sensor monitoring systems are used in many applications such as greenhouses, ecology studies, automobiles, robots, and medical devices. These systems are essentially used to study environment data like temperature, light, humidity, or air pressure. These sensor measures are used in manual and automation control based systems\cite{6028693}. The \gls{sbc} is complete functional computer built on single circuit board. It has microprocessor, memory, input/output and other features depending on the model and manufacturer. \gls{sbc} are used for educational purposes, embedded solutions and development research/systems. \\
-\subsection{Requirements} % (fold)
-\label{sub:subsection_name}
-% subsection subsection_name (end)
-Since we will be building embedded device which will allow us to gather data and send them over to the Internet, it is necessary to choose a single-board computer which provides means for connecting to the Internet either by connectig using built-in hardware or peripheral device. For connecting various sensors \gls{sbc} must provide enough \gls{gpio} pins and support communication protocols commonly used with sensors e.g \gls{i2c} or \gls{spi}
+Sensor monitoring systems are used in many applications such as greenhouses, ecology studies, automobiles, robots, and medical devices. These systems are essentially used to study environment data like temperature, light, humidity, or air pressure. These sensor measures are used in manual and automation control based systems\cite{6028693}. The \gls{sbc} is complete functional computer built on single circuit board. It has microprocessor, memory, input/output and other features depending on the model and manufacturer. \gls{sbc} are used for educational purposes, embedded solutions and development research/systems.
+\subsection{Platforms} % (fold)
+\label{sub:platforms}
+For making a informed decision which \gls{sbc} to use for this thesis, we provide short overview of choosen manufacturers and their platforms for embedded devices.
+\subsubsection{Raspberry Pi} % (fold)
+\label{ssub:raspberry_pi}
+\begin{figure}[H]
+\begin{center}
+\captionsetup{font=small}
+\includegraphics[scale=0.2]{pics/rasp.jpg}
+\caption{Rasberry Pi Model B+ v1.2 by Lucasbosch}
+\label{fig:ch3}
+\end{center}
+\end{figure}
+Raspberry Pi is a credit-card sized mini computer as shown at Figure \ref{fig:ch3}. It is a low cost solution to many projects, and its main goal is to enable people of all ages to explore computing, and to learn how to program in languages like Scratch and Python. It is fully capable of running operating system based on ARM architecture. It has been used in a wide array of digital maker projects, from music machines and parent detectors to weather stations and tweeting birdhouses with infra-red cameras.\cite{raspberry_pi_what}. Raspberry Pi foundation develped various models with similiar hardware specifications. At the time of writing this thesis the most advanced model was Raspberry Pi 3. Hardware specifications are shown at Table \ref{tab:tab1}. Best addition to previous version was on-board wireless chip, which allowed the device to be connected to the wireless network.
+\begin{table}[H]
+ \begin{center}
+   \begin{tabular}{l l}
+   \hline
+   	\textbf{SoC}: & Broadcom BCM2837\\
+	\textbf{CPU}: & 4x ARM Cortex-A53, 1.2GHz\\
+	\textbf{GPU}: & Broadcom VideoCore IV\\
+	\textbf{RAM}: & 1GB LPDDR2 (900 MHz)\\
+	\textbf{Networking}: & 10/100 Ethernet, 2.4GHz 802.11n wireless\\
+	\textbf{Bluetooth}: & Bluetooth 4.1 Classic, Bluetooth Low Energy\\
+	\textbf{Storage}: & microSD\\
+	\textbf{GPIO}: & 40-pin header, populated\\
+	\textbf{Ports}: & HDMI, 3.5mm analogue audio-video jack, 4x USB 2.0\\
+	&Ethernet, Camera Serial Interface (CSI), Display Serial Interface (DSI) \\
+   \hline
+   \end{tabular}
+ \end{center}
+ \caption{Raspberry 3: Hardware specification}
+ \label{tab:tab1}
+\end{table}
+
+% subsection raspberry_pi (end)
+\subsubsection{The Beagles} % (fold)
+\label{ssub:the_beagles}
+\begin{figure}[H]
+\begin{center}
+\captionsetup{font=small}
+\includegraphics[scale=0.4]{pics/beagle.jpg}
+\caption{BeagleBone Black}
+\label{fig:ch4}
+\end{center}
+\end{figure}
+The BeagleBoard Foundation is a US-based non-profit corporation existing to provide education in and promotion of the design and use of open-source software and hardware in embedded computing. Providing a platform for the owners and developers of open-source software and hardware to exchange ideas, knowledge and experience.\cite{beagle_what}. The Beagles are open-hardware and open-software computers, that can be used for numerous projects, same as Raspberry Pi. In time of writing this thesis most popular model among the Beagles was BeagleBone Black shown at Figure and detailed hardware specification at Table \ref{tab:tab2}.
+\begin{table}[H]
+ \begin{center}
+   \begin{tabular}{l l}
+   \hline
+   	\textbf{SoC}: & Broadcom BCM2837\\
+	\textbf{CPU}: & AM335x 1GHz ARM® Cortex-A8\\
+	\textbf{GPU}: & SGX530 3D\\
+	\textbf{RAM}: & 512MB DDR3 RAM\\
+	\textbf{Memory}:& 4GB 8-bit eMMC on-board flash storage \\
+	\textbf{Networking}: & 10/100 Ethernet\\
+	\textbf{Storage}: & microSD\\
+	\textbf{GPIO}: & 2x 46 pin headers\\
+	\textbf{Ports}: & HDMI, Ethernet, LCD, GPMC,MMC1/2, 4 Serial Ports, CAN0 \\
+   \hline
+   \end{tabular}
+ \end{center}
+ \caption{BeagleBone Black: Hardware specification}
+ \label{tab:tab2}
+\end{table}
+As we can see in comparison to Raspberry Pi, BeagleBone is a \gls{sbc} more oriented for controlling low-level application. However BeagleBone lacks any USB ports for connecting any peripherals, so to extend BeagleBone functionality one must buy expansion boars. Which is not necessarily bad, but they might not be available in common as classic USB peripherals.
+% subsection the_beagles (end)
+\subsubsection{The Intel® Edison} % (fold)
+\label{ssub:the_intel_edison}
+\begin{figure}[H]
+\begin{center}
+\captionsetup{font=small}
+\includegraphics[scale=0.4]{pics/edison.png}
+\caption{Intel® Edison with Breakout Board}
+\label{fig:ch5}
+\end{center}
+\end{figure}
+The Intel® Edison development platform is designed to lower the barriers to entry for a range of Inventors, Entrepreneurs and consumer product designers to rapidly prototype and produce IoT and wearable computing products.\cite{intel_what}\newline
+Intel® Edison is very small \gls{sbc} which provides very interesting hardware specification, which can be found in Table \ref{tab:tab3}. However to connect anything to Intel® Edison, expansion board is needed because I/O pins of Intel® Edison are grouped in very small 70 PIN I/O Connector. One example of expansion board is Edison Breakout board which has a minimalistic set of features and is slightly larger than the Edison module as shown at Figure \ref{fig:ch5}. \newline This is concept which is different from the Raspberry and the Beagles. If a project needs different set of capabilities instead of changing whole \gls{sbc}, it is enough to change just the expansion board. One main disadvantage with starting with this platform is higher cost of obtaining Intel® Edison and exapnsion board.
+\begin{table}[H]
+ \begin{center}
+   \begin{tabular}{l l}
+   \hline
+   	\textbf{SoC}: & 22-nm Intel® SoC\\
+	\textbf{CPU}: & dual-core, dualthreaded Intel® AtomTM CPU at 500Mhz and a 32-bit \\
+   	& Intel® QuarkTM microcontroller at 100 MHz\\
+	\textbf{GPU}: & SGX530 3D\\
+	\textbf{RAM}: & 1 GB LPDDR3 POP memory\\
+	\textbf{Memory}:& 4GB eMMC\\
+	\textbf{Wireless}: & Broadcom* 43340 802.11 a/b/g/n; Dual-band (2.4 and 5 GHz)\\
+	& On board antenna or external antenna \\
+	\textbf{Bluetooth}: & Bluetooth BT 4.0\\
+	\textbf{Storage}: & microSD\\
+	\textbf{GPIO}: & 70 pin headers, populated\\
+	\textbf{Ports}: & USB OTG, 2 Serial Ports\\
+   \hline
+   \end{tabular}
+ \end{center}
+ \caption{Intel® Edison: Hardware specification}
+ \label{tab:tab3}
+\end{table}
+% subsection the_intel_iot_platform (end)
+% subsection platforms (end)
+
+\subsection{Peripherals} % (fold)
+\label{sub:peripherals}
+To provide neccessary capabilities to solve this bachelor thesis, we might need peripheral devices to extend capabilities of developed embedded device.
+\subsubsection{Bluetooth / WiFi Combination USB Dongle} % (fold)
+\label{ssub:bluetooth_wifi_combination_usb_dongle}
+\begin{figure}[H]
+\begin{center}
+\captionsetup{font=small}
+\includegraphics[scale=0.2]{pics/dongle.jpg}
+\caption{Bluetooth / WiFi Combination USB Dongle}
+\label{fig:wifi}
+\end{center}
+\end{figure}
+If \gls{sbc} choosen to complete this bachelor thesis would not have WiFi/Bluetooth capabilities, this adapter in Figure \ref{fig:wifi} will be used to provide it. Technical details can be found in Chapter \ref{sec:bluetooth_wifi_combination_usb_technical_details}. Advantage of this USB dongle is that it `saves' one USB slot by integrating WiFi and Bluetooth technology into one device.
+% subsubsection bluetooth_wifi_combination_usb_dongle (end)
+\subsubsection{Adafruit 10-DOF} % (fold)
+\label{ssub:adafruit_10_dof}
+\begin{figure}[H]
+\begin{center}
+\captionsetup{font=small}
+\includegraphics[scale=0.9]{pics/10dof.jpg}
+\caption{Bluetooth / WiFi Combination USB Dongle}
+\label{fig:10dof}
+\end{center}
+\end{figure}
+This inertial-measurement-unit(Figure \ref{fig:10dof}) combines 3 sensors  to give you 11 axes of data: 3 axes of accelerometer data, 3 axes gyroscopic, 3 axes magnetic (compass), barometric pressure/altitude and temperature. Since all of them use I2C, you can communicate with all of them using only two wires. Most will be pretty happy with just the plain I2C interfacing, but we also break out the data ready and interrupt pins, so advanced users can interface with if they choose.\cite{ada_10dof}.
+% subsubsection adafruit_10_dof (end)
+\subsubsection{Adafruit FONA 3G Cellular + GPS} % (fold)
+\label{ssub:adafruit_fona_3g_cellular_gps}
+\begin{figure}[H]
+\begin{center}
+\captionsetup{font=small}
+\includegraphics[scale=0.85]{pics/3g.jpg}
+\caption{Adafruit FONA 3G Cellular Breakout - European version}
+\label{fig:3g}
+\end{center}
+\end{figure}
+The FONA 3G has better coverage, GSM backwards-compatibility and even sports a built-in GPS module for geolocation and asset tracking. This all-in-one cellular phone module with that lets you add location-tracking, voice, text, SMS and data to your project in a single breakout as shown in Figure \ref{fig:3g}.\cite{ada_3g}
+% subsubsection adafruit_fona_3g_cellular_gps (end)
+% subsection peripherals (end)
 
 \section{OBD-II port}
-OBD II is an acronym for On-Board Diagnostics II, the second generation of on-board self-diagnostic equipment. On-board diagnostic capabilities are incorporated into the hardware and software of a vehicle's on-board computer to monitor virtually every component in the car. Each component is checked by a diagnostic routine to verify that it is functioning properly. If a problem or malfunction is detected, the OBD II system will alert the driver that something is wrong. The system will also store important information about any detected malfunction so that a repair technician can accurately find and fix the problem.
+TODO: Co je obd-ii port v skratke
+\subsection{Automotive electronic systems}
+As we will be using a subset of electronic communication protocols let overview how car electronic systems works.
+\subsubsection{Perspective} % (fold)
+\label{ssub:perspective}
+% subsubsection perspective (end)
+To gain better perspective into how complex elextronic systems in cars are, lets go back a little into history. In \citeyear{976923}, \citeauthor{976923} said in their work \citetitle{976923}:
+\blockquote[\cite{976923}]{The growth of electronic systems has had implications for vehicle engineering. For example, today's high-end vehicles may have more than 4 kilometers of wiring-compared to 45 meters in vehicles manufactured in 1955. In July 1969, Apollo 11 employed a little more than 150 Kbytes of onboard memory to go to the moon and back. Just 30 years later, a family car might use 500 Kbytes to keep the CD player from skipping tracks.}
+It is now 2016 and electronic systems evolved so much that you can find 100 milion lines of code in software of average modern high-end car\cite{lines_of_code}. Modern cars nowdays have more than 30-50 Electronic Control Units(\glspl{ecu}). At Figure \ref{fig:car_system} we can see how many electronic aspects of a car are interconnected.
+\begin{figure}[H]
+\begin{center}
+\captionsetup{font=small}
+\includegraphics[scale=0.5]{pics/car_system.png}
+\caption{Vehicles electronic network}
+\label{fig:car_system}
+\end{center}
+\end{figure} So how \gls{obd} protocol fits in?
+\subsubsection{In-vehicle networks} % (fold)
+\label{ssub:in_vehicle_networks}
+Just as \gls{lan} or Wi-Fi connects computers, control networks connects a car's electronic equipment. By interconnecting different pars of \glspl{ecu}, vehicle is able to share information amongst all distributed applications. In the history of automotive industry, wiring was just connecting element A to element B, however when electronic content in cars increased, the use of more and more cables to link elements growed enormously. To provide an example, Motorola reported in a 1998 press release, that replacing wiring cables with \gls{lan}s in the four doors of a BMW car reduced the weight by 15 kilograms. Beginning in the early 1980s, centralized and then distributed networks have replaced point-to-point wiring.\cite{815878}
+% subsubsection in_vehicle_networks (end)
+\subsubsection{Controller Area Network} % (fold)
+\label{ssub:controller_area_network}
+The Controller Area Network(\gls{can}) is a well-established networking system specifically designed with real-time requirements in mind. Developed in the 1980s by Robert Bosch, its ease of use and low cost has led to its wide adoption throughout the automotive and automation industries\cite{788104}. It is currently the most widely used vehicular network, with more than 100 million \gls{can} nodes sold in 2000.\cite{976923}
+% subsubsection controller_area_network (end)
 \subsection{Concept}
 The OBD-II standard specifies the type of the connector and its pinout, the messaging format and electrical signalling protocols available. OBD-II also provides a list of vehicle accessible parameters for monitoring tohether with how to encode the data for each. One of the pin in the connector provides power to the connected unit, so it could run from the vehicle battery, which simplify use of scantools, because you do not need auxiliary power. On the other hand, sometimes auxiliary power is needed, because of car malfunction which could shutdown the scan tool and lead to loss of diagnostic data. Finally, the OBD-II standard provides an extensible list of DTCs(Diagnostic trouble codes). As a result of this standardization, a single device can query the on-board computer(s) in any vehicle. OBD-II standardization was prompted by emissions requirements, and though only emission-related codes and data are required to be transmitted through it, most manufacturers have made the OBD-II Data Link Connector the only one in the vehicle through which all systems are diagnosed and programmed. OBD-II Diagnostic Trouble Codes are 4-digit, preceded by a letter: P for engine and transmission (powertrain), B for body, C for chassis, and U for network. \cite{obdiso}
 \subsection{Why is it important?}

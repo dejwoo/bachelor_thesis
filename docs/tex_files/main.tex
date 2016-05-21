@@ -14,7 +14,7 @@
 \usepackage{listings}
 \usepackage{color}
 \usepackage[bf,belowskip=-18pt,aboveskip=4pt]{caption}
-\usepackage[natbib=true, style=fmph]{biblatex}
+\usepackage[natbib=true]{biblatex}
 \bibliography{bibliography}
 \usepackage{booktabs}
 \usepackage{tabularx}
@@ -91,6 +91,11 @@ keywordstyle=\color{black}\bfseries
 \newglossaryentry{gpio}{name=GPIO, description={General-purpose input/output}}
 \newglossaryentry{i2c}{name=I${}^2$C, description={Single-board computer}}
 \newglossaryentry{spi}{name=SPI, description={Serial Peripheral Interface}}
+\newglossaryentry{lan}{name=LAN, description={Local Area Network}}
+\newglossaryentry{ecu}{name=ECU, description={Electronic Control Unit}, plural=ECUs }
+\newglossaryentry{can}{name=CAN, description={Controller Area Network}}
+\glsresetall[main]
+
 
 
 \input firstpages.tex
@@ -122,6 +127,7 @@ keywordstyle=\color{black}\bfseries
 \addcontentsline{toc}{chapter}{References}  %pridanie nadpisu zdrojov k obsahu
 
 \chapter*{Attachments}   %hviezdicka ze necislovana kapitola  a nie je v obsahu
+\addcontentsline{toc}{chapter}{Attachments}
 \input prilohy.tex
 
 \label{totalpages}
