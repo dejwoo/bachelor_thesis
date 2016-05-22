@@ -245,7 +245,7 @@ It is now 2016 and electronic systems evolved so much that you can find 100 mili
 \caption{Vehicles electronic network}
 \label{fig:car_system}
 \end{center}
-\end{figure} So how \gls{obd} protocol fits in?
+\end{figure}
 \subsubsection{In-vehicle networks} % (fold)
 \label{ssub:in_vehicle_networks}
 Just as \gls{lan} or Wi-Fi connects computers, control networks connects a car's electronic equipment. By interconnecting different pars of \glspl{ecu}, vehicle is able to share information amongst all distributed applications. In the history of automotive industry, wiring was just connecting element A to element B, however when electronic content in cars increased, the use of more and more cables to link elements growed enormously. To provide an example, Motorola reported in a 1998 press release, that replacing wiring cables with \gls{lan}s in the four doors of a BMW car reduced the weight by 15 kilograms. Beginning in the early 1980s, centralized and then distributed networks have replaced point-to-point wiring.\cite{815878}
@@ -254,7 +254,7 @@ Just as \gls{lan} or Wi-Fi connects computers, control networks connects a car's
 \label{sub:controller_area_network}
 The Controller Area Network(\gls{can}) is an International Standardization Organization (ISO) defined serial communications bus  specifically designed with real-time requirements in mind. Developed in the 1980s by Robert Bosch, its ease of use and low cost has led to its wide adoption throughout the automotive and automation industries\cite{788104}. It is currently the most widely used vehicular network\cite{976923}. \gls{can} is designed for signaling rates up to 1 Mbps, high protection against electrical interference, and an ability to find and repair data errors.
 
-The \gls{can} communications protocols,  ISO 11898, conforms to the Open Systems Interconnection (OSI) model that is defined in terms of layers. Protocols specify how data travel between devices on the network. Physical layer defines how to communicate between devices which are connected. Lowest two layers of the ISO/OSI model are defined as the data-link and physical layer shown in Figure \ref{fig:iso_osi_can}.
+The \gls{can} communications protocols,  ISO 11898, conforms to the Open Systems Interconnection (OSI) model that is defined in terms of layers\cite{5116731}. Protocols specify how data travel between devices on the network. Physical layer defines how to communicate between devices which are connected. Lowest two layers of the ISO/OSI model are defined as the data-link and physical layer shown in Figure \ref{fig:iso_osi_can}.
 
 \begin{figure}[H]
 \begin{center}
@@ -278,20 +278,48 @@ When data is transmitted over a \gls{can} network no individual devices are addr
 \label{sub:conclusion}
 By understanding standard messaging protocol used in cars, we are able to read and create messages. Creating and reading messages relies on correct construction of data payload and assignment of correct identifier to the message, however specification of how to create this particular parts of the message is not publicly available, moreover specification is proprietary and probably different for every car manafacturer. To discover what data in messages are and what identifier are used, data analysis of closed data dumps from different states of the car(Ignition on, windows down, engine off, etc.) can be used, however this method is dependant on concrete make and model of the car, and is not suitable for large scale applications or general use.
 % subsection conclusion (end)
-\section{OBD-II port}
-TODO: Co je obd-ii port v skratke
-\subsection{Concept}
-The OBD-II standard specifies the type of the connector and its pinout, the messaging format and electrical signalling protocols available. OBD-II also provides a list of vehicle accessible parameters for monitoring tohether with how to encode the data for each. One of the pin in the connector provides power to the connected unit, so it could run from the vehicle battery, which simplify use of scantools, because you do not need auxiliary power. On the other hand, sometimes auxiliary power is needed, because of car malfunction which could shutdown the scan tool and lead to loss of diagnostic data. Finally, the OBD-II standard provides an extensible list of DTCs(Diagnostic trouble codes). As a result of this standardization, a single device can query the on-board computer(s) in any vehicle. OBD-II standardization was prompted by emissions requirements, and though only emission-related codes and data are required to be transmitted through it, most manufacturers have made the OBD-II Data Link Connector the only one in the vehicle through which all systems are diagnosed and programmed. OBD-II Diagnostic Trouble Codes are 4-digit, preceded by a letter: P for engine and transmission (powertrain), B for body, C for chassis, and U for network. \cite{obdiso}
-\subsection{Why is it important?}
-One of the main sources of information in my thesis will be data from OBD-II diagnostic port. This data will be accessible later in the database and we can preform logical deduction on them.
+\section{OBD-II}
+When environmental pollution became a world issue in the 1970s, the U.S. created the Environmental Protection Agency (\gls{epa}). \gls{epa} established a new standard to limit the environmental pollutants emitted from vehicles. The car makers devised an electronic control system for the fuel supply and ignition devices, based on the standard. In addition, the Society of Automotive Engineers (\gls{sae}) established OBD in 1988 as a standard for the plug connector and on-board diagnosis system\cite{IJCSNS} as shown in Figure \ref{fig:obd_pinout}.
+\begin{figure}[H]
+\begin{center}
+\captionsetup{font=small}
+\includegraphics[scale=0.5]{pics/obd_pinout.jpg}
+\caption{Pinout of the plug connector}
+\label{fig:obd_pinout}
+\end{center}
+\end{figure}
+OBD standard developed over-time and in time of writing this thesis OBD-II is standard which is used in the industry.
+\subsection{Standard}
+The \gls{obd} standard specifies the type of the connector and its pinout, the messaging format and electrical signalling protocols available. Difficulties may arise because of the deficiency in the OEM specific implementation of the standard. According to The OBD Home Page: There are five basic OBD protocols in use, each with minor variations on the communication pattern between the on-board diagnostic computer and the scanner console or tool. Formula CAN is the newest protocol added to the OBD specification, and it is mandated for all 2008 and newer model years\cite{7223296}. \gls{oem} provides a list of vehicle queries which can be send to the \gls{obd} port for diagnostics and gathering real-time parameters, but the list may vary from car to car. Each of this queries has a specified response on how to decode returned data again by \gls{oem} and may vary from another manufacturer respones. Finally, the OBD-II standard provides an extensible list of DTCs(Diagnostic trouble codes). As a result of this standardization, a single device can query the on-board computer(s) in any vehicle \cite{obdiso}, however this is again based solely on \gls{oem} so for getting all posible informations from the \gls{obd} port, specifiaction from \gls{oem} is needed.
+\subsection{Communication}
+As mention above to access information from sensors attached to a vehicle via a \gls{obd} port, special codes called Parameter IDs(\gls{pids}) are used. Typically a process of retrieving data from vehicle trough \gls{obd} port is as follows.
+\begin{figure}[H]
+\begin{center}
+\begin{enumerate}
+	\item Requested PID is entered either through connected computer or scan tool.
+	\item Request is send to vehicle \gls{can} bus.
+	\item Device which is responsible for given PID recognizes it and then reports the value back to the bus
+	\item Connected computer or scan tool reads the response.
+\end{enumerate}
+\captionsetup{font=small}
+\label{fig:bul1}
+\caption{Query \gls{obd} process}
+\end{center}
+\end{figure}
+From Figure 1.13 we can see that  \gls{obd} port is in simple terms subset of \gls{can} frames. Identifier and data payload is supplemented from \gls{obd} protocol based on concrete PID query.
+\subsection{Conlusion} % (fold)
+\label{sub:conlusion}
+Main advantage of \gls{obd} port is that obtaing a single parameter from the car is relatively simple. It is enough to know correct PID to query to send, but it is not suitable for real-time telemetry, because of repetiton rate of the available data. The more different data is read out, the lower repetition time will be for each queried type, due to the fact that information is only accessible by question answer basis.
+% subsection conlusion (end)
 \section{Accelerometer}
-\subsection{General Information}
 An accelerometer measures proper acceleration which is the acceleration it experiences relative to freefall, and is the acceleration that is felt by people and objects. Put another way, at any point in spacetime the equivalence principle guarantees the existence of a local inertial frame, and an accelerometer measures the acceleration relative to that frame.\cite{einstein_rel}As a consequence an accelerometer at rest relative to the Earth's surface will indicate approximately 1 g upwards, because any point on the earth's surface is accelerating upwards relative to a local inertial frame. To obtain the acceleration due to motion with respect to the earth, this "gravity offset" should be subtracted.\\
 The reason for the appearance of a gravitational offset is Einstein's equivalence principle\cite{equivalence}, which states that the effects of gravity on an object are indistinguishable from acceleration of the reference frame. When held fixed in a gravitational field by, for example, applying a ground reaction force or an equivalent upward thrust, the reference frame for an accelerometer (its own casing) accelerates upwards with respect to a free-falling reference frame. The effect of this reference frame acceleration is indistinguishable from any other acceleration experienced by the instrument.
 An accelerometer will read zero during free fall. This includes use in a spaceship orbiting earth, but not a (non-free) fall with air resistance where drag forces reduce the acceleration until terminal velocity is reached, at which point the device would once again indicate 1 g acceleration upwards.\\
-\subsection{Why is it important?}
-For accident detection we will use accelerometer to determine if accident occured\cite{accident}. Application will proactively monitor the occurrence of accident using accelerometer sensor. When the
-accelerometer sensor values exceedes the threshold value, system can act upon it.
+For accident detection we will use accelerometer to determine if accident occured\cite{accident}. 
+\section{Node js} % (fold)
+\label{sec:node_js}
+
+% section node_js (end)
 
 
 
