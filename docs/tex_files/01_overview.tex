@@ -229,16 +229,15 @@ The FONA 3G has better coverage, GSM backwards-compatibility and even sports a b
 % subsubsection adafruit_fona_3g_cellular_gps (end)
 % subsection peripherals (end)
 
-\section{OBD-II port}
-TODO: Co je obd-ii port v skratke
-\subsection{Automotive electronic systems}
-As we will be using a subset of electronic communication protocols let overview how car electronic systems works.
-\subsubsection{Perspective} % (fold)
-\label{ssub:perspective}
+
+\section{Automotive electronic systems}
+As we will be gathering data from electronic systems of the car, lets overview how they work, what systems and protocols are present in modern cars and how to use them to our benefit.
+\subsection{Perspective} % (fold)
+\label{sub:perspective}
 % subsubsection perspective (end)
 To gain better perspective into how complex elextronic systems in cars are, lets go back a little into history. In \citeyear{976923}, \citeauthor{976923} said in their work \citetitle{976923}:
 \blockquote[\cite{976923}]{The growth of electronic systems has had implications for vehicle engineering. For example, today's high-end vehicles may have more than 4 kilometers of wiring-compared to 45 meters in vehicles manufactured in 1955. In July 1969, Apollo 11 employed a little more than 150 Kbytes of onboard memory to go to the moon and back. Just 30 years later, a family car might use 500 Kbytes to keep the CD player from skipping tracks.}
-It is now 2016 and electronic systems evolved so much that you can find 100 milion lines of code in software of average modern high-end car\cite{lines_of_code}. Modern cars nowdays have more than 30-50 Electronic Control Units(\glspl{ecu}). At Figure \ref{fig:car_system} we can see how many electronic aspects of a car are interconnected.
+It is now 2016 and electronic systems evolved so much that you can find 100 milion lines of code in software of average modern high-end car\cite{lines_of_code}. Modern cars nowdays have more than 30-50 Electronic Control Units(\glspl{ecu}). At Figure \ref{fig:car_system} we can see network of electronic components inside a car.
 \begin{figure}[H]
 \begin{center}
 \captionsetup{font=small}
@@ -251,10 +250,36 @@ It is now 2016 and electronic systems evolved so much that you can find 100 mili
 \label{ssub:in_vehicle_networks}
 Just as \gls{lan} or Wi-Fi connects computers, control networks connects a car's electronic equipment. By interconnecting different pars of \glspl{ecu}, vehicle is able to share information amongst all distributed applications. In the history of automotive industry, wiring was just connecting element A to element B, however when electronic content in cars increased, the use of more and more cables to link elements growed enormously. To provide an example, Motorola reported in a 1998 press release, that replacing wiring cables with \gls{lan}s in the four doors of a BMW car reduced the weight by 15 kilograms. Beginning in the early 1980s, centralized and then distributed networks have replaced point-to-point wiring.\cite{815878}
 % subsubsection in_vehicle_networks (end)
-\subsubsection{Controller Area Network} % (fold)
-\label{ssub:controller_area_network}
-The Controller Area Network(\gls{can}) is a well-established networking system specifically designed with real-time requirements in mind. Developed in the 1980s by Robert Bosch, its ease of use and low cost has led to its wide adoption throughout the automotive and automation industries\cite{788104}. It is currently the most widely used vehicular network, with more than 100 million \gls{can} nodes sold in 2000.\cite{976923}
+\subsection{Controller Area Network} % (fold)
+\label{sub:controller_area_network}
+The Controller Area Network(\gls{can}) is an International Standardization Organization (ISO) defined serial communications bus  specifically designed with real-time requirements in mind. Developed in the 1980s by Robert Bosch, its ease of use and low cost has led to its wide adoption throughout the automotive and automation industries\cite{788104}. It is currently the most widely used vehicular network\cite{976923}. \gls{can} is designed for signaling rates up to 1 Mbps, high protection against electrical interference, and an ability to find and repair data errors.
+
+The \gls{can} communications protocols,  ISO 11898, conforms to the Open Systems Interconnection (OSI) model that is defined in terms of layers. Protocols specify how data travel between devices on the network. Physical layer defines how to communicate between devices which are connected. Lowest two layers of the ISO/OSI model are defined as the data-link and physical layer shown in Figure \ref{fig:iso_osi_can}.
+
+\begin{figure}[H]
+\begin{center}
+\captionsetup{font=small}
+\includegraphics[scale=0.5]{pics/iso_osi_can.png}
+\caption{Layers of \gls{can} Communications protocol, ISO 11898}
+\label{fig:iso_osi_can}
+\end{center}
+\end{figure}
 % subsubsection controller_area_network (end)
+When data is transmitted over a \gls{can} network no individual devices are addressed. Instead, all messages have an unique identifier, a unique tag of its data content. Not only it identifies the message contents, but also the message priority as how much important data contents are. Lower the message priority, the more important message and it is delivered in prior to messages with higher priority. When a device connected to the network wants to transmit message, it passes the data and the identifier to the \gls{can} controller with a relevant request to transmit information. \gls{can} controller formats the message conents and transmits the data in form of a \gls{can} frame as shown in Figure \ref{fig:can_bus_frame}.
+\begin{figure}[H]
+\begin{center}
+\captionsetup{font=small}
+\includegraphics[scale=0.55]{pics/can_bus_frame.png}
+\caption{\gls{can} bus frame, by Erniotti (output of slef programmed software) [GFDL (http://www.gnu.org/copyleft/fdl.html) or CC BY-SA 3.0 (http://creativecommons.org/licenses/by-sa/3.0)], via Wikimedia Commons}
+\label{fig:can_bus_frame}
+\end{center}
+\end{figure}
+\subsection{Conclusion} % (fold)
+\label{sub:conclusion}
+By understanding standard messaging protocol used in cars, we are able to read and create messages. Creating and reading messages relies on correct construction of data payload and assignment of correct identifier to the message, however specification of how to create this particular parts of the message is not publicly available, moreover specification is proprietary and probably different for every car manafacturer. To discover what data in messages are and what identifier are used, data analysis of closed data dumps from different states of the car(Ignition on, windows down, engine off, etc.) can be used, however this method is dependant on concrete make and model of the car, and is not suitable for large scale applications or general use.
+% subsection conclusion (end)
+\section{OBD-II port}
+TODO: Co je obd-ii port v skratke
 \subsection{Concept}
 The OBD-II standard specifies the type of the connector and its pinout, the messaging format and electrical signalling protocols available. OBD-II also provides a list of vehicle accessible parameters for monitoring tohether with how to encode the data for each. One of the pin in the connector provides power to the connected unit, so it could run from the vehicle battery, which simplify use of scantools, because you do not need auxiliary power. On the other hand, sometimes auxiliary power is needed, because of car malfunction which could shutdown the scan tool and lead to loss of diagnostic data. Finally, the OBD-II standard provides an extensible list of DTCs(Diagnostic trouble codes). As a result of this standardization, a single device can query the on-board computer(s) in any vehicle. OBD-II standardization was prompted by emissions requirements, and though only emission-related codes and data are required to be transmitted through it, most manufacturers have made the OBD-II Data Link Connector the only one in the vehicle through which all systems are diagnosed and programmed. OBD-II Diagnostic Trouble Codes are 4-digit, preceded by a letter: P for engine and transmission (powertrain), B for body, C for chassis, and U for network. \cite{obdiso}
 \subsection{Why is it important?}
