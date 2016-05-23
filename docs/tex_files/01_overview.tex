@@ -311,14 +311,43 @@ From Figure 1.13 we can see that  \gls{obd} port is in simple terms subset of \g
 \label{sub:conlusion}
 Main advantage of \gls{obd} port is that obtaing a single parameter from the car is relatively simple. It is enough to know correct PID to query to send, but it is not suitable for real-time telemetry, because of repetiton rate of the available data. The more different data is read out, the lower repetition time will be for each queried type, due to the fact that information is only accessible by question answer basis.
 % subsection conlusion (end)
-\section{Accelerometer}
-An accelerometer measures proper acceleration which is the acceleration it experiences relative to freefall, and is the acceleration that is felt by people and objects. Put another way, at any point in spacetime the equivalence principle guarantees the existence of a local inertial frame, and an accelerometer measures the acceleration relative to that frame.\cite{einstein_rel}As a consequence an accelerometer at rest relative to the Earth's surface will indicate approximately 1 g upwards, because any point on the earth's surface is accelerating upwards relative to a local inertial frame. To obtain the acceleration due to motion with respect to the earth, this "gravity offset" should be subtracted.\\
-The reason for the appearance of a gravitational offset is Einstein's equivalence principle\cite{equivalence}, which states that the effects of gravity on an object are indistinguishable from acceleration of the reference frame. When held fixed in a gravitational field by, for example, applying a ground reaction force or an equivalent upward thrust, the reference frame for an accelerometer (its own casing) accelerates upwards with respect to a free-falling reference frame. The effect of this reference frame acceleration is indistinguishable from any other acceleration experienced by the instrument.
-An accelerometer will read zero during free fall. This includes use in a spaceship orbiting earth, but not a (non-free) fall with air resistance where drag forces reduce the acceleration until terminal velocity is reached, at which point the device would once again indicate 1 g acceleration upwards.\\
-For accident detection we will use accelerometer to determine if accident occured\cite{accident}. 
-\section{Node js} % (fold)
+% \section{Accelerometer}
+% An accelerometer measures proper acceleration which is the acceleration it experiences relative to freefall, and is the acceleration that is felt by people and objects. Put another way, at any point in spacetime the equivalence principle guarantees the existence of a local inertial frame, and an accelerometer measures the acceleration relative to that frame.\cite{einstein_rel}As a consequence an accelerometer at rest relative to the Earth's surface will indicate approximately 1 g upwards, because any point on the earth's surface is accelerating upwards relative to a local inertial frame. To obtain the acceleration due to motion with respect to the earth, this "gravity offset" should be subtracted.\\
+% The reason for the appearance of a gravitational offset is Einstein's equivalence principle\cite{equivalence}, which states that the effects of gravity on an object are indistinguishable from acceleration of the reference frame. When held fixed in a gravitational field by, for example, applying a ground reaction force or an equivalent upward thrust, the reference frame for an accelerometer (its own casing) accelerates upwards with respect to a free-falling reference frame. The effect of this reference frame acceleration is indistinguishable from any other acceleration experienced by the instrument.
+% An accelerometer will read zero during free fall. This includes use in a spaceship orbiting earth, but not a (non-free) fall with air resistance where drag forces reduce the acceleration until terminal velocity is reached, at which point the device would once again indicate 1 g acceleration upwards.\\
+% For accident detection we will use accelerometer to determine if accident occured\cite{accident}. 
+\section{Node.js} % (fold)
 \label{sec:node_js}
-
+Node.js is a event-based network application which allows developers to use asynchonous programming interfaces for I/O operations. Language which is primarily used with Node.js platform is JavaScript. Despite it is one of the newer platforms available, Node.js has significant communicty of developers and we can see more and more applications build in the industry on top of the Node.js. Node.js is built on a V8 JavaScript Engine.
+\subsection{V8 JavaScript Engine} % (fold)
+\label{sub:v8_javascript_engine}
+\glsdesc{v8} is an open source enginge developed by Google for the Chrome web browser. \gls{v8} is open source high-performance JavaScript engine, written in C++. V8 implements ECMAScript as specified in ECMA-262, 5th edition, and runs on Windows (XP or newer), Mac OS X (10.5 or newer), and Linux systems that use IA-32, x64, or ARM processors. In several benchmark tests, V8 is many times faster than JScript (in Internet Explorer), SpiderMonkey (in Firefox), and JavaScriptCore (in Safari).\cite{google_v8}
+% subsection v8_javascript_engine (end)
+\subsection{Event Loop Mechanism} % (fold)
+\label{sub:event_loop_mechanism}
+Every Node.js application runs a single-threaded continuous event loop, which sources out time-consuming tasks to worker threads, which callback the main event loop when tasks is finised, as shown in Figure \ref{fig:node_js_model}.
+\begin{figure}[H]
+\begin{center}
+\captionsetup{font=small}
+\includegraphics[scale=0.8]{pics/node_js_model.png}
+\caption{Node.js Process Model}
+\label{fig:node_js_model}
+\end{center}
+\end{figure}
+Event-driven programming offers more scalable alternative than multithreaded programming, that provide developers with much more controll over application behavior and activities. In this model, the application firstly registers interest of certain events, such as disconnection of the client, data ready to be read, end of stream, etc. Then application waits to be notified of occurence in these registered events, and can act upon triggering. \cite{7073454} When an event happens a record of the event is added to the Node.js event queue, after main thread  looks at the event queue and takes the first event from the front and starts running the corresponding event handler. After event handler finishes the thread controll goes back to the main thread which again looks at the event queue if there are any events left to process.\cite{5617064}
+\subsection{Asynchronous Model} % (fold)
+\label{sub:asynchronous_code}
+\subsubsection{Problem} % (fold)
+\label{ssub:problem}
+% subsubsection problem (end)
+Now we know that single threaded event system works by placing events in a queue and process them one after another by calling appropriate event handler. The event handler then runs until all applications registered for that event are completed and returns control to the dispatcher, which looks again at the event queue for another event. This is an asynchronous system because order of execution of application code is not guaranteed. The order is based on event triggering which can not be pre-determined. To put it another way, order of the application written by event-driven model might be any of the combination of events which that concrete application react to. However, problem might be of the single threading, as Node.js is.\\
+The reason is simple, what if event handler takes too much time to finish, or the worst case scenario never returns thread control to the dispatcher  -- application seems to freeze. Event handler never ends, so no other event handler from event queue ever gets to run.
+\subsubsection{Solution} % (fold)
+\label{ssub:solution}
+Solution is simply use event handler to set up new thread and get it to do all the work. Ater that event handler returns at one and the new thread can process time consuming work. Problems of synchronization arise when creating a new thread in single-threaded application. In Node.js time-consuming functions are dispatched to non-blocking workers as shown in Figure \ref{fig:node_js_model}. Synchonization problem is we do not know when worker finishes with particular function, and usually we would like to process return value of that function somewhere else in the code. This problem might be solved in many ways, but all of them are nearly variations on the idea of passing an explicit someting to do when function has finished - i.e callbacks. Callback is function which will be executed at the end of function dispatchet to the worker, which successfuly solves problem of how and when to process return value of unknown time running function.\cite{asynch}
+% subsubsection solution (end)
+% subsection asynchronous_i_o (end)
+% subsection event_loop_mechanism (end)
 % section node_js (end)
 
 
