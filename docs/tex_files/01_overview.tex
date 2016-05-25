@@ -58,7 +58,7 @@ and optimize these systems.”
 \begin{center}
 \captionsetup{font=small}
 \includegraphics[scale=0.45]{pics/i2c-protocol.png}
-\caption{\gls{i2c} bus.}
+\caption{\gls{i2c} bus.\cite{i2c_bus_pic1}}
 \label{fig:ch2}
 \end{center}
 \end{figure}
@@ -74,8 +74,8 @@ be master-only, slave-only, or switch between as provided in image \ref{fig:ch1}
 \begin{figure}[H]
 \begin{center}
 \captionsetup{font=small}
-\includegraphics[scale=0.2]{pics/i2c-hierarchy.png}
-\caption{Multiple \gls{i2c} devices connected on the bus.}
+\includegraphics[scale=0.33]{pics/i2c_hierarchy.jpg}
+\caption{Multiple \gls{i2c} devices connected on the bus.\cite{i2c_bus_pic}}
 \label{fig:ch1}
 \end{center}
 \end{figure}
@@ -92,7 +92,7 @@ For making a informed decision which \gls{sbc} to use for this thesis, we provid
 \begin{center}
 \captionsetup{font=small}
 \includegraphics[scale=0.2]{pics/rasp.jpg}
-\caption{Rasberry Pi Model B+ v1.2 by Lucasbosch}
+\caption{Rasberry Pi Model B+ v1.2 \cite{pi_pic}}
 \label{fig:ch3}
 \end{center}
 \end{figure}
@@ -125,7 +125,7 @@ Raspberry Pi is a credit-card sized mini computer as shown at Figure \ref{fig:ch
 \begin{center}
 \captionsetup{font=small}
 \includegraphics[scale=0.4]{pics/beagle.jpg}
-\caption{BeagleBone Black}
+\caption{BeagleBone Black\cite{beagle_pic}}
 \label{fig:ch4}
 \end{center}
 \end{figure}
@@ -156,13 +156,13 @@ As we can see in comparison to Raspberry Pi, BeagleBone is a \gls{sbc} more orie
 \begin{figure}[H]
 \begin{center}
 \captionsetup{font=small}
-\includegraphics[scale=0.4]{pics/edison.png}
-\caption{Intel® Edison with Breakout Board}
+\includegraphics[scale=0.3]{pics/edison.jpg}
+\caption{Intel® Edison with Breakout Board\cite{edison_pic}}
 \label{fig:ch5}
 \end{center}
 \end{figure}
 The Intel® Edison development platform is designed to lower the barriers to entry for a range of Inventors, Entrepreneurs and consumer product designers to rapidly prototype and produce IoT and wearable computing products.\cite{intel_what}\newline
-Intel® Edison is very small \gls{sbc} which provides very interesting hardware specification, which can be found in Table \ref{tab:tab3}. However to connect anything to Intel® Edison, expansion board is needed because I/O pins of Intel® Edison are grouped in very small 70 PIN I/O Connector. One example of expansion board is Edison Breakout board which has a minimalistic set of features and is slightly larger than the Edison module as shown at Figure \ref{fig:ch5}. \newline This is concept which is different from the Raspberry and the Beagles. If a project needs different set of capabilities instead of changing whole \gls{sbc}, it is enough to change just the expansion board. One main disadvantage with starting with this platform is higher cost of obtaining Intel® Edison and exapnsion board.
+Intel® Edison is very small \gls{sbc} which provides very interesting hardware specification, which can be found in Table \ref{tab:tab3}. However to connect anything to Intel® Edison, expansion board is needed because I/O pins of Intel® Edison are grouped in very small 70 PIN I/O Connector. One example of expansion board is Edison Breakout board which has a minimalistic set of features and is slightly larger than the Edison module as shown at Figure \ref{fig:ch5}. This is concept which is different from the Raspberry and the Beagles. If a project needs different set of capabilities instead of changing whole \gls{sbc}, it is enough to change just the expansion board. One main disadvantage with starting with this platform is higher cost of obtaining Intel® Edison and exapnsion board.
 \begin{table}[H]
  \begin{center}
    \begin{tabular}{l l}
@@ -197,7 +197,7 @@ To provide neccessary capabilities to solve this bachelor thesis, we might need 
 \begin{center}
 \captionsetup{font=small}
 \includegraphics[scale=0.2]{pics/dongle.jpg}
-\caption{Bluetooth / WiFi Combination USB Dongle}
+\caption{Bluetooth / WiFi Combination USB Dongle\cite{wifi_pic}}
 \label{fig:wifi}
 \end{center}
 \end{figure}
@@ -209,7 +209,7 @@ If \gls{sbc} choosen to complete this bachelor thesis would not have WiFi/Blueto
 \begin{center}
 \captionsetup{font=small}
 \includegraphics[scale=0.9]{pics/10dof.jpg}
-\caption{Bluetooth / WiFi Combination USB Dongle}
+\caption{Adafruit 10-DOF IMU Breakout\cite{ada_10dof}}
 \label{fig:10dof}
 \end{center}
 \end{figure}
@@ -221,7 +221,7 @@ This inertial-measurement-unit(Figure \ref{fig:10dof}) combines 3 sensors  to gi
 \begin{center}
 \captionsetup{font=small}
 \includegraphics[scale=0.85]{pics/3g.jpg}
-\caption{Adafruit FONA 3G Cellular Breakout - European version}
+\caption{Adafruit FONA 3G Cellular Breakout - European version\cite{ada_3g}}
 \label{fig:3g}
 \end{center}
 \end{figure}
@@ -242,13 +242,13 @@ It is now 2016 and electronic systems evolved so much that you can find 100 mili
 \begin{center}
 \captionsetup{font=small}
 \includegraphics[scale=0.5]{pics/car_system.png}
-\caption{Vehicles electronic network}
+\caption{Vehicles electronic network \cite{976923}.}
 \label{fig:car_system}
 \end{center}
 \end{figure}
 \subsubsection{In-vehicle networks} % (fold)
 \label{ssub:in_vehicle_networks}
-Just as \gls{lan} or Wi-Fi connects computers, control networks connects a car's electronic equipment. By interconnecting different pars of \glspl{ecu}, vehicle is able to share information amongst all distributed applications. In the history of automotive industry, wiring was just connecting element A to element B, however when electronic content in cars increased, the use of more and more cables to link elements growed enormously. To provide an example, Motorola reported in a 1998 press release, that replacing wiring cables with \gls{lan}s in the four doors of a BMW car reduced the weight by 15 kilograms. Beginning in the early 1980s, centralized and then distributed networks have replaced point-to-point wiring.\cite{815878}
+Just as \gls{lan} or Wi-Fi connects computers, control networks connects a car's electronic equipment. By interconnecting different pars of \glspl{ecu}, vehicle is able to share information amongst all distributed applications. In the history of automotive industry, wiring was just connecting element A to element B, however when electronic content in cars increased, the use of more and more cables to link elements growed enormously. To provide an example, Motorola reported in a 1998 press release, that replacing wiring cables with \gls{lan}s in the four doors of a BMW car reduced the weight by 15 kilograms.\cite{976923} Point-to-point wiring was replaced first by centralized then distributed newtorks in the early 1980s.\cite{815878}
 % subsubsection in_vehicle_networks (end)
 \subsection{Controller Area Network} % (fold)
 \label{sub:controller_area_network}
@@ -270,7 +270,7 @@ When data is transmitted over a \gls{can} network no individual devices are addr
 \begin{center}
 \captionsetup{font=small}
 \includegraphics[scale=0.55]{pics/can_bus_frame.png}
-\caption{\gls{can} bus frame, by Erniotti (output of slef programmed software) [GFDL (http://www.gnu.org/copyleft/fdl.html) or CC BY-SA 3.0 (http://creativecommons.org/licenses/by-sa/3.0)], via Wikimedia Commons}
+\caption{\gls{can} bus frame \cite{can_frame_pic}}
 \label{fig:can_bus_frame}
 \end{center}
 \end{figure}
@@ -330,7 +330,7 @@ Every Node.js application runs a single-threaded continuous event loop, which so
 \begin{center}
 \captionsetup{font=small}
 \includegraphics[scale=0.8]{pics/node_js_model.png}
-\caption{Node.js Process Model}
+\caption{Node.js Process Model\cite{node_js_pic}}
 \label{fig:node_js_model}
 \end{center}
 \end{figure}
