@@ -12,7 +12,7 @@ After peripheral devices are connected, operating system needs to be configured 
 \subsection{Application}
 Application have to be developed for collecting information from different sources. To application be easily configurable, develop modular system which objectifies every data gathering application in form of interchangeable modules. These modules have to be able  accept and send data information. Interface or template should be provided for easy creation of new modules.  Modules must be selectable by type, to provide manner of choosing same type of modules by unique type name. Routing logic should be developed to manage flow of information to and from modules. Defining routes must be provided by key value pattern where key can be either unique name or type of the module/s. Key in routes is to provide source module from which data are being sent. Values are structured by array and are also being denoted by unique name or type of the module. Values of the routes are defined as modules which can accept data. Interface needs to be developed for sending and accepting data to provide unified access to the objectified modules of your application. Lower-level application modules should be produced for
 \begin{itemize}
- 	\item Gathering sensoric data 
+ 	\item Gathering sensoric data
  	\item Gathering all OBD-II parameters supported by car
  	\item Sending SMS messages
  	\item Sending data over to the server on the Internet by AMQP protocol
@@ -21,7 +21,7 @@ Application have to be developed for collecting information from different sourc
  	\item Gathering NMEA data from GPS sensor
  	\item Gathering time from Operating System
  	\item Sending data to the standard output of the Node.js application
- \end{itemize} 
+ \end{itemize}
  By utilizing this lower-level application, higher-level application modules must be developed for:
 \begin{itemize}
 	\item Reporting accidents over SMS messages, by providing info about driver, location of the accident and maximal g-force reading recored by the accelerometer
