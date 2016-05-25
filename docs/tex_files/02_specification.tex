@@ -1,13 +1,36 @@
 \section{Requirements}
-
+In this chapter ot the thesis we provide clear requirements for this thesis solution. By stating clear specifiaction result of this thesis can be evaluated by comapring results and requirements.
 \subsection{Hardware}
-We will d an embedded device which will be running operating system of your preference. Design how to connect all peripheral devices.Setup the device with applications to operate properly such as Internet, Wi-Fi, GPS and additional sensors. Figure out how to connect your device to the vehicle's OBD-II service port. Assamble and provide this device as a hardware part of this bachelor thesis.
-\subsection{System}
-Configure the system to every sensoric input so you can communicate with them. Use any protocol for communication which will suit your solution. Develop a application for collecting information from various sources, design the system to be easily configurable, without needing to change large portions of the system. System will have modular capabilities of connecting various sources of information. Develop a routing which will enable to configure which way data flows from input sources to output sinks. Design the application for modular adding of different outputs. Define a format in which are information passed from your server. Create an interface where user can configure this input functions to increase adaptivity of your system. Figure out how to send data to the server connected to the Internet. For accessing through WiFi, create RESTful web application which will user to access your web app. In web application add a configuration webpage where user can easily configure your system. Parameters of modules connected to your application will have to be configurable by the user, define them and provide a configuration method.
+For completing hardware requirements an embedded device must be developed. Operating system of this embedded device should be the mos.
+Peripheral devices needed to be connected to this device are:
+\begin{itemize}
+	\item Adafruit 10-DOF to enable device to gather accelerometer data through \gls{i2c} bus
+	\item Adafruit FONA 3G Cellular Breakout for connecting to the Internet through cellular network and ability to send SMS messages
+	\item Wi-Fi extension if device does not have wireless connection built-in, to provide means of connecting to the device without need of serial port
+\end{itemize}
+After peripheral devices are connected, operating system needs to be configured that Wireless access point is created automaticaly after device start-up. Connection between \gls{obd} port and the device have to be established. Solution must be provided how to configure and gather data from \gls{obd} port. Every peripheral device needs to be configured properly to enable operating system communication with each of them.
 \subsection{Application}
-Provide examples which will utilize your modular application, gathering information collected from connected vehilce. The examples needs to preform logic deduction from accessed data and act upon it.
+Application have to be developed for collecting information from different sources. To application be easily configurable, develop modular system which objectifies every data gathering application in form of interchangeable modules. These modules have to be able  accept and send data information. Interface or template should be provided for easy creation of new modules.  Modules must be selectable by type, to provide manner of choosing same type of modules by unique type name. Routing logic should be developed to manage flow of information to and from modules. Defining routes must be provided by key value pattern where key can be either unique name or type of the module/s. Key in routes is to provide source module from which data are being sent. Values are structured by array and are also being denoted by unique name or type of the module. Values of the routes are defined as modules which can accept data. Interface needs to be developed for sending and accepting data to provide unified access to the objectified modules of your application. Lower-level application modules should be produced for
+\begin{itemize}
+ 	\item Gathering sensoric data 
+ 	\item Gathering all OBD-II parameters supported by car
+ 	\item Sending SMS messages
+ 	\item Sending data over to the server on the Internet by AMQP protocol
+ 	\item Sending trigger events to the IFTTT webservice
+ 	\item Storing data to the Redis database
+ 	\item Gathering NMEA data from GPS sensor
+ 	\item Gathering time from Operating System
+ 	\item Sending data to the standard output of the Node.js application
+ \end{itemize} 
+ By utilizing this lower-level application, higher-level application modules must be developed for:
+\begin{itemize}
+	\item Reporting accidents over SMS messages, by providing info about driver, location of the accident and maximal g-force reading recored by the accelerometer
+	\item Advising to shift gears by reading RPM information from \gls{obd} port by sending trigger event to the IFTTT webservice.
+	\item Bulk data sending over the cellular network by gathering all created data and sending them one in a time, not as a constant stream of information.
+\end{itemize}
+Routes shall be provided correctly for application to work by interconnecting lower-level modules to enable higher-level modules to work. Configuration of the modules should be provided by creating web application developed for changing configuration of any module or route. Web application needs to be able to display last created data from each module, also web application should be accessible by connecting to the device's wireless access point.
 \subsection{Output}
-Output of your bachelor thesis should be application which upon correct instalation on embedded device is capable of monitoring various inputs of sensoric data, based upon configuration distribute and make them accessible for different services.
+Output of this bachelor thesis should be application which upon correct instalation on embedded device is capable of monitoring various inputs of sensoric data, based upon configuration distribute and make them accessible for different services.
 
 
 
