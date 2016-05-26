@@ -115,13 +115,37 @@ Data Logger framework is a stand alone application module which can be incorpora
 \label{fig:entity_pc}
 \end{center}
 \end{figure}
- Modules are stand alone application modules which are written to obtain,modify, or send data to various devices or services. Pipes and filters design is applied when connecting modules together. How are modules connected is defined by routes. which are an interface for configuring which module will be streaming data to which. Data-Logger is configurable through internal function and by file which serves for storing configurations of each model and route. This is the first version of the framework and will undergo some more development in the future.
+ Modules are stand alone application modules which are written to obtain,modify, or send data to various devices or services. Pipes and filters design is applied when connecting modules together. How are modules connected is defined by routes. which are an interface for configuring which module will be streaming data to which. Data-Logger is configurable through internal function and by file which serves for storing configurations of each model and route. To help understand dataflow of the Data-Logger we provide diagram in Figure~\ref{fig:dataflow}.
+ \begin{figure}[H]
+\begin{center}
+\captionsetup{font=small}
+\includegraphics[scale=0.6]{pics/data_flow_bc.png}
+\caption{Dataflow of Data-Logger framework}
+\label{fig:dataflow}
+\end{center}
+\end{figure}
 \subsubsection{Module}
 \label{ssub:module}
-Module is basic structure for every element. It is an encapsulating class for every information creating or sending application/module. By this it is possible for framework to objectify every application, no matter how much they would be different, and extract data from generating one or send data to to accepting one. With this feature we will be albe to get data from OBD port of the car system the same way as from accelometer present at Adafruit 10 DOF sensoric board. This is achieved by writing specific modules to parse/get data from the source, which are then run under Data Logger. Every module can be generating data, or accepting data and acting upon it. For modul to be generating or accepting one, module must be implemented by the same interface so it can be easily handled by Data Logger, otherwise this would not be much of a framework if for every module there would need to be specific functions to run to obtain or accept data. Configurating modules are easy as from framework we can pass settings for every module separatly, either from application or much easier from a file. This configuration file has a specific block of configruation settings for every module present in current implementation of Data Logger.[Picture needed]
+Application Module is basic structure for every element in Data-Logger. It is an encapsulating class for every information creating or sending application. By this it is possible for framework to objectify every application, no matter how much they would be different, and extract data from generating one or send data to to accepting one. With this feature we will be albe to get data from OBD port of the car system the same way as from accelometer present at Adafruit 10 DOF sensoric board. This is achieved by writing specific applications to parse/get data from the source, which are then run under Data Logger. Every module can be generating data, or accepting data and acting upon it. For module to be generating or accepting one, module must be implemented by the same interface so it can be easily handled by Data Logger, otherwise for every application connected to Data-Logger there would had to be specific functions to run to obtain or accept data. Configurating modules are easy as from framework we can pass settings for every module separatly, either from application or much easier from a main configuration file. This configuration file has a specific block of configruation settings for every module present in current implementation of Data Logger. For provide better description of what data-logger module consists we provide activity diagram in Figure~\ref{fig:activity}
+\begin{figure}[H]
+\begin{center}
+\captionsetup{font=small}
+\includegraphics[scale=0.6]{pics/logic_bc.png}
+\caption{Activity of Data-Logger module}
+\label{fig:activity}
+\end{center}
+\end{figure}
 \subsubsection{Route} % (fold)
 \label{ssub:route}
-Route is another basic structure how to define a dataflow from or to every module. Routes are defined with simple principle in mind, you define source and then every possible sink to which data have to be sent. By this configuration Data Logger will begin to accessing modules based on which side of the equation they are. If the module is generating data, framework will use specific general interface to gather data provided by the module and then distribute it to every sink defined by the route again by using general interface to sending data to module. With this principle one can define a very detailed data flow and by which assamble a data handling application in no time. If we would scale this framework to enourmous proportions, say we would have 10 sensors producing same data but they would need different modules to be handled, it would become soon tedious to write routes based only on id matching of modules. So for every module there is a specific setting to be set, a type, by which we can more easily define routes, e.g. \verb|accelerometer -> database| and from now on, every data produced by module which has type set to acceloremeter will be routed to every module which has type of database, even if there is alot of them.[Picture needed]
+Route is another basic structure how to define a dataflow from or to every module. Routes are defined with simple principle in mind, you define source and then every possible sink to which data have to be sent. By this configuration Data Logger will start sending or recieving data from modules depending on which side of the equation they are. If the module is generating data, framework will use specific general interface to gather data provided by the module and then distribute it to every sink defined by the route again by using general interface to sending data to module. With this principle one can define a very detailed dataflow. If we would scale this framework, say we would have 10 sensors producing same data but they would need different modules to be handled, it would become soon tedious to write routes based only on unique identification matching of modules. So for every module there is a specific setting to be set, a type, by which we can more easily define routes, e.g. defined route as \verb|accelerometer -> database| and from now on, every data produced by module which has type set to acceloremeter will be routed to every module which has database set as type. Activity diagram of Data-Logger routes is shown in Figure~\ref{fig:act}. 
+\begin{figure}[H]
+\begin{center}
+\captionsetup{font=small}
+\includegraphics[scale=0.6]{pics/route_bc.png}
+\caption{Activity of Data-Logger routes}
+\label{fig:act}
+\end{center}
+\end{figure}
 % subsubsection route (end)
 \label{sub:data_logger_framework}
 % subsection data_logger_framework (end)
@@ -130,11 +154,11 @@ Route is another basic structure how to define a dataflow from or to every modul
 In this section of bachelor thesis we will desciribe modules which were developed in order to help complete the assignment. Low modules are modules which does not implement any logic or process data in any way. They are developed for data gathering or sending, as they recieve them they are send.
 \subsubsection{Blank module} % (fold)
 \label{ssub:blank_module}
-During developing modules for this bachelor thesis, blank module was created which has all the neccesarry functions, or one might call it interface to make more easier creation of new modules, code is commented to provide neccesasry information what is expected from different functions in case their name would not be clarifying enough. Blank module combines source and sink functionality together but they do not need to be used both.
+During developing modules for this bachelor thesis, blank module was created which has all the neccesarry functions, interface to make more easier creation of new modules, code is commented to provide neccesasry information what is expected from different functions in case their name would not be clarifying enough. Blank module combines source and sink functionality together but they do not need to be used both.
 % subsubsection blank_module (end)
 \subsubsection{Time module} % (fold)
 \label{ssub:time_module}
-This is rather simple module which will be used to beta test others modules. Advantage of having this module is not being dependent on any hardware. By periodic intervalas defined by sample rate, current time as data is provided.
+This is rather simple module which will be used to beta test others modules. Advantage of having this module is not being dependent on any hardware. In periodic intervalas defined by sample rate, current time as data is provided.
 % subsubsection time_module (end)
 \subsubsection{Accelerometer module} % (fold)
 This module is dependent on Adafruit 10 DOF sensor board and will utilize onboard LSM303 accelerometer sensor, communicating over I2C protocol. Module will emit proper acceleration in 3 axis, maximum acceleration +- 16g in each direction, sample rate will be configurable. LSM303 accelerometer sensor supports various settings as which axis acceleration is registered, how fast are these values checked, this constants for these settings are implemented, but any benefit was not found of selecting only one axis or sampling at lower rate, so defaults are every axis is registered, and sampled as fast as it can be for accident checking module.
@@ -150,7 +174,7 @@ GPS module as name suggests will parse nmea sentences from FONA 3g modem which h
 This module is a sms message sending module, but it is not designed for general use. Message relays on incoming data to be structured correctly from accident module and send 3 SMS messages with information about driver, GPS position and maximum g-force registered by the accelerometer. Modul requires modem to be pin unlocked otherwise SMS sending will fail. Sending SMS message with \verb|AT+CGMS| command requires string to be sent be a maximal size of 150 characters and ended with \verb|^Z| special character. After message is send, module repsonds with OK and number of total SMS messages sent by the module.
 % subsubsection sms_module (end)
 \subsubsection{OBD-II module} % (fold)
-By far the most challenging module in this thesis. Module connects with help of ELM327 compatible device to the OBD-II port and selects automatic protocol. Problem with automatic protocol selection is protocols have different initializing response, the module needed to be adapted to this discovery, to be working with older and newer cars, I successfuly tested this module on 5 different cars in make and model, but I can not rule out the possibility of OBD module not working with specific model and make of car, because there are multiple protocols present and their specification is not publicly available. After successful initialization, obd module will poll suported the car for supported commands, creates a polling loop with them and periodicaly queries data. One must be vary of this one limitation, and that is older cars have older protocols which have slow rate of sending data, and therefore sample rate of this module should be considered to be calculated correctly, otherwise buffer overflow might occurr. Module implements simple buffer overflow logic, when length of PID commands queue becomes more than treshold OBD module will not add more commands to queue until the length lowers than treshold. Module emits data for every queried command separately as in some cases gathering information from every supported command would simply took too long time to collect.
+By far the most challenging module in this thesis. Module connects with help of ELM327 compatible device to the OBD-II port and selects automatic protocol. Problem with automatic protocol selection is protocols have different initializing response, the module needed to be adapted to this discovery, to be working with older and newer cars, we successfuly tested this module on 5 different cars in make and model, but we can not rule out the possibility of OBD module not working with specific model and make of car, because there are multiple protocols present and their specification is not publicly available for free. After successful initialization, obd module will poll suported the car for supported commands, creates a polling loop with them and periodicaly queries data. One must be vary of this one limitation, and that is older cars have older protocols which have slow rate of sending data, and therefore sample rate of this module should be considered to be calculated correctly, otherwise buffer overflow might occurr. Module implements simple buffer overflow logic, when length of PID commands queue becomes more than treshold OBD module will not add more commands to queue until the length lowers than treshold. Module emits data for every queried command separately as in some cases gathering information from every supported command would simply took too long time to collect.
 \label{ssub:obd_ii_module}
 
 % subsubsection obd_ii_module (end)
@@ -160,11 +184,11 @@ RabbitMQ module is primary module for getting data from Rapsberry to server or c
 % subsubsection rabbitmq_module (end)
 \subsubsection{Redis module} % (fold)
 \label{ssub:redis_module}
-Redis module is database module for storing data in Redis database. As I mention above in Redis overview[TODO], redis stores data in mapping keys to values. For correct work module implements counters for every data source which wants to store data in database.  Module stores whole given messages in hash keys. Key is composed from message header id and counter which is incremented by every message stored. As not to store counters in modules, counter current value is stored by message header id key. By configuring database snapshoting, redis database is able to recreate data structure from previous sessions, and continue where application left, with correct counters so data would not be accidentaly overriden. Database is password protected which is set by configuration file.
+Redis module is database module for storing data in Redis database. Redis stores data in mapping keys to values. For correct work module implements counters for every data source which wants to store data in database. Module stores whole given messages in hash keys. Key is composed from message header id and counter which is incremented by every message stored. As not to store counters in modules, counter current value is stored by message header id key. By configuring database snapshoting, redis database is able to recreate data structure from previous sessions, and continue where application left, with correct counters so data would not be accidentaly overriden. Database is password protected which is set by configuration file.
 % subsubsection redis_module (end)
 \subsubsection{IFTTT module} % (fold)
 \label{ssub:ifttt_module}
-IFTTT module is a support module for communicating with web service called Maker. With this service one can create different trigger events for data which arrives to the event and connect them to various other web services as GMail, Facebook, Instagram, etc. Data format is limited as Maker channel supports JSON format with only 3 keys, namely \verb|value1,value2,vaule3|, so complicated data structures are not suited for this modul. Values of this 3 keys can be any string, with this in mind, the limitation could be circumvented for example with CSV format of data, which can be automatically parsed by form example google drive spreadsheet application. Fair to say is that this service is free of charge and provides with possibilities to connect data generated with vast number of popular web services.
+IFTTT module is a support module for communicating with web service called Maker. With this service one can create different trigger events for data which arrives to the event and connect them to various other web services as GMail, Facebook, Instagram, etc. Data format is limited as Maker channel supports JSON format with only 3 keys, namely \verb|value1,value2,vaule3|, so complicated data structures are not suited for this module. Values of this 3 keys can be any string, with this in mind, the limitation could be circumvented for example with CSV format of data, which can be automatically parsed by for example google drive spreadsheet application. Fair to say is that this service is free of charge and provides with possibilities to connect data generated with vast number of popular web services.
 % subsubsection ifttt_module (end)
 \subsubsection{Console module} % (fold)
 \label{ssub:console_module}
@@ -172,9 +196,26 @@ Very simple module which provides structured module for console logging data to 
 \subsection{Data Logger high modules}
 
 High modules are modules which does implement logic or process data. They are developed for data manipulation, grouping or analyzing.
-\subsubsection{RPM module} % (fold)
+\subsubsection{RPM advisor module} % (fold)
 \label{ssub:rpm_module}
-RPM module is a module which listens for data from OBD-II module and evaluates only RPM(Revolutions per minute) data from car. Purpose of this module is to simulate modern cars which often provides gearshift indicator together with information when to shift. In configuration file can be find two values, downShiftTreshold is a treshold under which RPMs drops, module will generate data to indicate to shift gears, similiar action happens with upShiftTreshold, but instead dropping RPMs, it watchs when revolutions are higher then treshold. This module have also configured IFTTT event. This event triggers a notification on mobile device which has IFTTT application installed. In the screenshots below we can see what is looks like[TODO]
+RPM module is a module which listens for data from OBD-II module and evaluates only RPM(Revolutions per minute) data from car. Purpose of this module is to simulate modern cars which often provides gearshift indicator together with information when to shift. In configuration file can be find two values, downShiftTreshold is a treshold under which RPMs drops, module will generate data to indicate to shift gears, similiar action happens with upShiftTreshold, but instead dropping RPMs, it watchs when revolutions are higher then treshold as can be seen in Figure~\ref{fig:rmp_pic} 
+\begin{figure}[H]
+\begin{center}
+\captionsetup{font=small}
+\includegraphics[scale=0.6]{pics/RPM_bc.png}
+\caption{Activity diagram of RMP advisor module}
+\label{fig:rmp_pic}
+\end{center}
+\end{figure}
+This module have also configured IFTTT event. This event triggers a notification on mobile device which has IFTTT application installed. In the screenshots below shown as Figure~\ref{fig:mobile_screen} we can see what it looks like.
+\begin{figure}[H]
+\begin{center}
+\captionsetup{font=small}
+\includegraphics[scale=0.2]{pics/mobil_screen.png}
+\caption{Screenshot of RPM advisor notifications}
+\label{fig:mobile_screen}
+\end{center}
+\end{figure}
 % subsubsection rpm_module (end)
 % subsubsection console_module (end)
 \subsubsection{Bulk module} % (fold)
@@ -183,22 +224,47 @@ Bulk module is module primarily used for grouping outputs from multiple modules 
 % subsubsection bulk_module (end)
 \subsubsection{Accident module} % (fold)
 \label{ssub:accident_module}
-This module will be both accepting input data and creating new information for other modules. New cars electronic crash sensors are accelometers. They are used to determine exactly when the airbag should be deployed to prevent injury to a driver or passenger.   When an impact occurs, it results in vehicle deceleration, which is sensed by the accelerometer. This change is monitored by electronic control unit, which sends a signal to trigger the airbag. Not to rely on car accelerometer sensors the application will be polling LSM303 accelerometer sensor attached to the device. Problem with car accelerometer sensors is missing common interface to communicate with airbag/ECU system. If it is even possible then every car manafacturer has proprietary system in place, which would result in buying different specifications for every make, maybe even model. As for giving the gathered information value, I am not suitable for the task for simple reason, I am application comuter science undergrad and I can create, gather, store, act upon, etc based on information but to assign which value from accelerometer is right to register accident I have no knowledge, it is probably better task for someone from physics field. To create this module smart, in settings can be found treshold value which says that if accelerometer module registers acceleration over treshold accident module will be trigered and will compose a sos message to be sent to emergency dispatch centre. This message will be composed of latest GPS positon, maximal g-forces registred and medical information about driver. Medical information about driver, or in other words custom message is also configurable through settings.
+This module will be both accepting input data and creating new information for other modules. Electronic crash sensors found in new cars are accelometers. They are used to determine exactly when the airbag should be deployed to prevent injury to a driver or passenger. When an impact occurs, it results in vehicle deceleration, which is sensed by the accelerometer. This change is monitored by electronic control unit, which sends a signal to trigger the airbag. Not to rely on car accelerometer sensors the application will be polling LSM303 accelerometer sensor attached to the device. Problem with car accelerometer sensors is missing common interface to communicate with airbag/ECU system. If it is even possible then every car manafacturer has proprietary system in place, which would result in buying different specifications for every make, maybe even model. As we are not physicists we could not successfully determine at which value from accelerometer is right to register accident. But we created this module that in settings can be found treshold value which says that if accelerometer module registers acceleration over treshold, accident module will be trigered and will compose a SOS message to be sent to emergency dispatch centre as shown in Figure~\ref{fig:acc_bc} This message will be composed of latest GPS positon, maximal g-forces registred and medical information about driver. Medical information about driver, or in other words custom message is also configurable through settings.
+\begin{figure}[H]
+\begin{center}
+\captionsetup{font=small}
+\includegraphics[scale=0.6]{pics/accident_bc.png}
+\caption{Activity diagram of Accident module}
+\label{fig:acc_bc}
+\end{center}
+\end{figure}
 % subsection data_logger_modules (end)
 \subsection{Data Logger routes} % (fold)
 \label{sub:data_logger_routes}
-Data Logger routes are designed for interconnecting data streams from modules. These routes are designed so they would fullifil given assignment. Exact definiton how routes are set can be found in a configuration file. Main benefit of having these routes in one place and so easy configurable is that you can change complete outcome of the application by changing routes and redefinig them to suit your needs.
+Data Logger routes are designed for interconnecting data streams from modules. These routes are designed so they would fullifil given assignment. Exact definiton how routes are set can be found in a configuration file. Main benefit of having these routes in one place and so easy configurable is that you can change complete outcome of the application by changing routes and redefinig them to suit your needs. All defined routes for our Data-Logger solution are provided in Table~\ref{tab:tab6}
+\begin{table}[H]
+ \begin{center}
+   \begin{tabular}{l l}
+   Source Module ID or type & Destination module IDs or types\\
+   \hline
+   	obd & rpm, bulk, redisModule\\
+    rpm & ifttt\\
+    acc & bulk,accident, redisModule\\
+    gps & bulk, accident, redisModule\\
+    accident & sms\\
+    bulk & rabbitmqModule\\
+   \hline
+   \end{tabular}
+ \end{center}
+ \caption{Routes defined for Data-Logger of this thesis}
+ \label{tab:tab6}
+\end{table}
 % subsection data_logger_routes (end)
 \subsection{Main application} % (fold)
 \label{sub:main_application}
-Main application is the main part of code which is directily run by Node.js. Architecture of the main application can be described as loosely coupled system, where main application has and make use of little to no knowledge of the Data Logger framework. This allows for extensibility in design, a new module for framework implementing blank module interface can be writtenr to replace a current modules without requiring a change of the main application. The new and old modules can be interchanged freely.[UML diagram depicting adding new module to the application]
+Main application is the main part of code which is directily run by Node.js. Architecture of the main application can be described as loosely coupled system, where main application has and make use of little to no knowledge of the Data Logger framework. This allows for extensibility in design, a new module for framework implementing blank module interface can be written to replace a current modules without requiring a change of the main application. The new and old modules can be interchanged freely. Whole main application can be devided by features. In this section of this work every feature is described separately to provide more detail.
 \subsubsection{Web Server} % (fold)
 \label{ssub:web_server}
-To provide web application for the user to be albe to configure Data Logger framework, server had to be created. This server works at port 8000 at localhost as to not confuse him with regular website. To connect to server, you have to be connected to the raspberry, either via LAN cable or to the wireless AP created automaticaly by the raspberry device. Password for this access point can be found in configuration file of hostapd at GitHub. Server supports websocets to communicate real-time data over them, also  for configurating module settings.
+To provide web application for the user to be able to configure Data Logger framework, server had to be created. This server works at port 8000 at localhost as to not confuse him with regular website. To connect to server, you have to be connected to the raspberry, either via LAN cable or to the wireless AP created automaticaly by the raspberry device. Password for this access point can be found in configuration file of hostapd in resources under name \verb|hostapd.conf|. Server supports websockets to communicate real-time with Web Application, also for configuring module settings.
 % subsubsection web_server (end)
 \subsubsection{Web Socket} % (fold)
 \label{ssub:web_socket}
-For web application to display real time data produced by Data Logger modules websockets are used. For every module which produces data, main application will emit the information over websocket to every connected client. After connection client automatically starts listening for emitted info and display it accordingly. Through websockets it is possible to send new configuration to the server. Validating new configuration is burden for the web application as websockets assumes that configuration is wirtten correctly.
+For web application to display real time data produced by Data-Logger modules websockets are used. For every module which produces data, main application will emit the information over websocket to every connected client. After connection client automatically starts listening for emitted info and display it accordingly. Through websockets it is possible to send new configuration to the server. Validating new configuration is burden for the web application as websockets assumes that configuration is wirtten correctly.
 % subsubsection web_socket (end)
 \subsubsection{Web Application} % (fold)
 \label{ssub:web_application}
