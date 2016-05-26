@@ -149,9 +149,9 @@ Route is another basic structure how to define a dataflow from or to every modul
 % subsubsection route (end)
 \label{sub:data_logger_framework}
 % subsection data_logger_framework (end)
-\subsection{Data Logger low modules}
+\subsection{Data Logger low-level modules}
 
-In this section of bachelor thesis we will desciribe modules which were developed in order to help complete the assignment. Low modules are modules which does not implement any logic or process data in any way. They are developed for data gathering or sending, as they recieve them they are send.
+In this section of bachelor thesis we will desciribe modules which were developed in order to help complete the assignment. Low-level modules are modules which does not implement any logic or process data in any way. They are developed for data gathering or sending, as they recieve them they are send.
 \subsubsection{Blank module} % (fold)
 \label{ssub:blank_module}
 During developing modules for this bachelor thesis, blank module was created which has all the neccesarry functions, interface to make more easier creation of new modules, code is commented to provide neccesasry information what is expected from different functions in case their name would not be clarifying enough. Blank module combines source and sink functionality together but they do not need to be used both.
@@ -193,9 +193,9 @@ IFTTT module is a support module for communicating with web service called Maker
 \subsubsection{Console module} % (fold)
 \label{ssub:console_module}
 Very simple module which provides structured module for console logging data to show what information is passed into module. This module was primarily used for developing purposes same as time module. This module will probably not be used in production enviroment but is very handy for debuggind purposes, when modules do not cooperate in expected way. Console header can be set only to show configuration capabilities in early stages of development.
-\subsection{Data Logger high modules}
+\subsection{Data Logger high-level modules}
 
-High modules are modules which does implement logic or process data. They are developed for data manipulation, grouping or analyzing.
+High modules are modules which does implement logic or process data. They are developed for data manipulation, grouping or analyzing, mainly by connecting low-level modules to them and analyzing data from different sources.
 \subsubsection{RPM advisor module} % (fold)
 \label{ssub:rpm_module}
 RPM module is a module which listens for data from OBD-II module and evaluates only RPM(Revolutions per minute) data from car. Purpose of this module is to simulate modern cars which often provides gearshift indicator together with information when to shift. In configuration file can be find two values, downShiftTreshold is a treshold under which RPMs drops, module will generate data to indicate to shift gears, similiar action happens with upShiftTreshold, but instead dropping RPMs, it watchs when revolutions are higher then treshold as can be seen in Figure~\ref{fig:rmp_pic} 

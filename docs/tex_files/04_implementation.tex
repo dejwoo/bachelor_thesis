@@ -1,39 +1,110 @@
-In this chapter of bachelor thesis I will provide a technical implementation details regarding my solution.
+In this chapter of bachelor thesis a technical implementation details regarding our solution are provided.
 \section{Overview} % (fold)
 \label{sec:overview}
-For completing this bachelor assignment I have choosen to implement it in Javascript programming language, which provides various benefits for its implementation.
+For completing this bachelor assignment we have choosen to implement it mainly in JavaScript programming language, which provides various benefits.
 \begin{itemize}
-\item Over 70\% of the code is implemented in JavaScript, rest is HTML and CSS.
 \item Application is operating system independent
-\item For backend solution I used Node.js, which is also implemented in JavaScript. So there is no need to know another programming language by the users
+\item For backend solution we used Node.js, which is also implemented in JavaScript. So there is no need to know another programming language by the users
 \item The npm packgage registry holds over 250,000 reusable packages of reusable code.
+\item Accessing Web application is possible from every web-friendly device.
 \end{itemize}
-As you can see there is a lot of support surrounding Node.js enviroment which enabled me to build better and faster application.
-
+As you can see there is a lot of support surrounding Node.js enviroment which provides a lot of reusable code. To provide language overview of our application it has over 70\% implemented in JavaScript, rest is HTML and CSS.
 % section overview (end)
 \section{Data Logger} % (fold)
-\label{sec:Data Logger}
+\label{sec:data_logger}
 Data Logger is a standalone module. When Data Logger is required whole module is instantiated. For correct configuration it is needed to call configurate function with JavaScript Object as a argument which is passed by reading JSON configuration file from main application.
 \subsection{Modules} % (fold)
 \label{sub:modules}
 % subsection module (end)
-To process the file, modules have to be created by instantiating them with module options, which are then storted in internal key value object where keys are unique ids supplied by the user. As this framework is primarily used for fellow computer scientists and power users, Data Logger does not implement any failsafe for not overwriting modules with same ID. This happend to be a mistake to forego this failsafe, and will be reported as one of many things to be improved in continued work after this thesis.
+To process the file, modules have to be created by instantiating them with module options, which are then stored in internal key value object where keys are unique ids supplied by the configuration file. As this framework is primarily used for fellow computer scientists and power users, Data Logger does not implement any failsafe for not overwriting modules with same ID. This happend to be a mistake to forego this failsafe, and will be reported as one of many things to be improved in continued work after this thesis.
 \subsection{Routes} % (fold)
 \label{sub:routes}
-After modules are instantiated it is time for creating data flows defined by routes. To standardize data exchange format every message must be Javascript Object. Every message traveling between modules must be composed of these 2 key mapped values, firstly its header where the mandatory key is id, whichs value is reffering to the module in which message originated. Other properties of message header are optional and can be configured with main config file. Second mandatory key maped value is body, in which is stored actual data payload created by original module.[TODO TODO TODOTODOTODOOOO TODODO TABLE]
-
-To better understand what interfaces must be implemented by the modules so they could create data or accept data I provide them in specification of interfaces below.
-\subsubsection{Interface of data creating module} % (fold)
+After modules are instantiated it is time for creating data flows defined by routes. To standardize data exchange format every message must be Javascript Object. Every message traveling between modules must be composed of these 2 key mapped values, firstly its header where the mandatory key is id, whichs value is reffering to the module in which message originated. Other properties of message header are optional and can be configured with main config file. Second mandatory key maped value is body, in which is stored actual data payload created by original module. Overview of message format is provide in Table~\ref{tab:tab7}.
+\begin{table}[H]
+ \begin{center}
+   \begin{tabular}{l l l l}
+   \toprule
+   \multicolumn{4}{c}{Data-Logger Message}\\
+   \multicolumn{2}{c}{Header} & \multicolumn{2}{c}{Body} \\
+   \midrule
+   Module ID & [Optional values] & \multicolumn{2}{c}{Data payload}\\   
+   \end{tabular}
+ \end{center}
+ \caption{Format of Data-Logger message}
+ \label{tab:tab7}
+\end{table}
+To better understand what interfaces must be implemented by the modules so they could create data or accept data we provide them in specification of interfaces below.
+% subsection routes (end)
+\subsection{Interface of data creating module} % (fold)
 \label{ssub:interface_of_data_creating_module}
-For data created by the module to by properly handled by Data Logger module object must be a instance of the EventEmmiter class which exposes an eventEmitter.on() functions that allows for registering event listeners to that particular object. When object emits a specificly named event every function attached by on() function are called synchronously. So for data to be picked up be the Data Logger module must emit `data' event witch argument is created data by the module. Nothing more is mandatory to by implemented.
+For data created by the module to by properly handled by Data Logger module object must be a instance of the EventEmmiter class which exposes an eventEmitter.on() functions that allows for registering event listeners to that particular object. When object emits a specificly named event every function attached by on() function are called synchronously. So for data to be picked up the Data-Logger module must emit `data' event which argument is created data. Nothing more is mandatory to be implemented.
 % subsubsection interface_of_data_creating_module (end)
 
-\subsubsection{Interface of data accepting module} % (fold)
+\subsection{Interface of data accepting module} % (fold)
 \label{ssub:interface_of_data_accepting_module}
 Module which will be accepting data must be an instance of Stream Writable abstract class designed to be extended with an underlying implementation of the .\_write method. This method must be implemented to accept data passing to the underlying resource in case of this thesis -- module. Method \_write  has 3 arguments, (chunk, encoding, callback). Data intended for the module is in chunk variable.
-
 % subsubsection interface_of_data_accepting_module (end)
+\subsection{Lower-level modules} % (fold)
+\label{sub:lower_level_modules}
+In this section we describe spesific implementations of lower-level modules. Every of this modules which needs unknown amount of time to make connection to outside service implements simple queue to buffer incoming data till it is not ready to send data to the service. After successful connection is made, firstly data from queue are emptied and then normal messages are followed.
+\subsubsection{Blank module} % (fold)
+\label{ssub:blank_module}
+Blank module is designed to be used as default module for developing new modules. It combines data accepting and sending interface firstyl by assigning this value from EventEmitter class which allows as to define and listen for events. Data accepting part is implemented by prototypal inheritance of Writable stream class, which will enable to address whole module as a stream object in which can be written to.
+% subsubsection blank_module (end)
+\subsubsection{Accelerometer module} % (fold)
+\label{ssub:accelerometer_module}
+Accelerometer is module developed for communication with Adafruit 10DOF Breakout board over \gls{i2c} board. It is dependant on stand alone module application which was implemented for communicating with LSM303 accelerometer chips. This application provides read function which will query the device for current state of accelerometer readings and then report it back in a JavaScript object where values are bind to the axis from which they were read e.g.
+\begin{verbatim}{"x": x_axis_value, "y": y_axis_value, "z":z_axis_value}\end{verbatim}
+Module provides a way how to set up accelerometer differently than default values(readings of 3 axis, 400Hz update rate), but to successfully configure these options, documentation to LSM303 should be read and our code studied, it is not a trivial task.
+% subsubsection accelerometer_module (end)
+\subsubsection{GPS module} % (fold)
+\label{ssub:gps_module}
+GPS module implements serial port access to the nmea port of Adafruit FONA 3G. For parsing read NMEA sentences module from NPM.js library is used called GPS.js. This library parses NMEA sentences into one JavaScript object which then can be queried about current postion, fix state, how many satellites is connected, etc.
+% subsubsection gps_module (end)
+\subsubsection{OBD-II module} % (fold)
+\label{ssub:obd_ii_module}
+OBD module implements serial port access for ELM-USB device to connect and query \gls{obd} port. As every query for parameters must be executed and awaited reply, module implements queue for commands which are yet to be send to the ELM-USB. After command is pushed into the queue, event \verb|sendCmd| is dispatched, which if cmdInProgress is false writes next query to the ELM-USB and awaits reply. When reply arrives it is parsed and all possible outcomes are processed. One specific outcome is worth to mention is when \verb|UNABLE TO CONNECT| it signifies that ELM-USB was not able to connect to the \gls{obd} port for unknown reason(older car, wrong state of OBD-II port, etc.) After this outcome is detected, module will attemt repeatedly to send last command until it gets other answer than \verb|UNALBE TO CONNECT|. In testing this module, we observed mainly on older cars sometime \gls{obd} port was not responsive for first time to query the data but after repeated tries, it began to answer normally with data. Thus we developed repeating of last command until we get answer. Time which should be waited before next try is configurable by `failedDelay' setting. After initializing module a sequence of commands are send to ELM-USB to select automatic protocol selection, set ELM-USB to correct formating of responses to enable faster querying and last command to be send is to query device which \gls{obd} \gls{pids} commands are supported. This is achieved by first sending \verb|0100| command which gets bit encoded respone of supported first 32 PID commands in \verb|01| (reak-time) mode. If last of this bit is set to 1, it means that support for next set of 32 commands can be queried. By this method whole bitmap of every supported command in real-time mode is queried and interval loop is established to query every supported command. By searching the Internet we were able to find how to parse some of this queries outputs and are provided in \verb|obd.pids.js| file with sort description.
+% subsubsection obd_ii_module (end)
+\subsubsection{Redis module} % (fold)
+\label{ssub:redis_module}
+Redis is module which serves as one of many possible endpoints of dataflow. Redis is module which handles database connection to Redis. For every accepted data, based on message header counter is created in the database, to enable us save each new data to be saved by unique indentification key. To query last data from concrete module, it is needed to know module ID. By querying module ID from redis we will get last number used to create unique key, if we than concatenate module ID with this last number we get unique key for last data saved by redis module. By correctly configuring snapshoting intervals, we are able to continue in generating unique counters in case of powerloss or reboot of the device, because last snapshot is automatically loaded by redis when database is started on boot up.
+% subsubsection redis_module (end)
+\subsubsection{RabbitMQ module} % (fold)
+\label{ssub:rabbitmq_module}
+RabbitMQ is module which handles AMQP protocol connection to the RabbitMQ service hosted on virtual private server on the Internet. Upon successful connection to this service, for every message with unique id queue is created. This provide separated queues to process on server side of the RabbitMQ service which enable server indenpendent processing of data. Connection to the RabbitMQ service is passowrd and user protected and can be used over SSL/TLS connetion providing needed security of transfering data, however this feature is not yet implemented due lack of time and bigger scope of this thesis.
+% subsubsection rabbitmq_module (end)
+\subsubsection{SMS module} % (fold)
+\label{ssub:sms_module}
+SMS module is developed to enable our application to send distress SMS messages to emergency dispatch centre. This module is not developed to be used as data sending to SMS messages universal module, it is rather tayloerd directly for reporting accidents from data generated by accident module. SOS reporting is devided in three messages, first describes medical condition which can be set by configuration file, then last known gps location and g-force which was recorded during treshold overstep. Every message is sent trough AT command in serial port, after which special character `\\x1A' is used to indicate end of mesage. Module uses slightly different queue design as \gls{obd} module.
+% subsubsection sms_module (end)
+\subsubsection{IFTTT module} % (fold)
+\label{ssub:ifttt_module}
+This module is design to trigger Maker dependent recipes at webservice IFTTT. Events are triggerd by making POST request to special URI address with token which is obtained from IFTTT Maker channel. In this POST message body consists of JSON object which can have 3 elements, keys are \verb|value1,value2,value3|. This naming is not optional and is enforced by IFTTT implementation, however one can put any data into values maped to these keys. Event name which to trigger is incorporated together with token intu URI to which POST request is made. Module obtains event name by 2 methods, eiter in message header iftttEvent value is declared or module identification name is used.
+% subsubsection ifttt_module (end)
+\subsubsection{Console module} % (fold)
+\label{ssub:console_module}
+This module is debug module which displays every message routed to this module on standart console output of Node.js application. Only thing that can be configured is ``messageHeader'' which is automaticaly prepended to console output message together with module identification obtained from message header.
+% subsubsection console_module (end)
+\subsubsection{Time module} % (fold)
+\label{ssub:time_module}
+Time module is simple module which emits Date object through interval. Time is configurable by setting sampleRate in configuration file.
+% subsubsection time_module (end)
+% subsection lower_level_modules (end)
+\subsection{Higher-level modules} % (fold)
+\label{sub:higher_level_modules}
+In this section we provide implementation details for higher-level modules of this application. This modules implements some degree of data analysis logic.
+\subsubsection{Accident module} % (fold)
+\label{ssub:accident_module}
+Accident module gathers data from two low-level modules, accelerometer module and gps module. These modules provides information necessary for accident reporting. Module establishes last known address from gps data, and last known accelerometer data. Before overwriting last accelerometer data, treshold check occures to identify if accident happened. Treshold is configurable by configuration file. After accident is detected message is composed by providing information about the driver, which can be also configured, last known postition and maximal g-forces which were registered till the accident detection.
+% subsubsection accident_module (end)
+\subsubsection{RPM advisor module} % (fold)
+\label{ssub:rpm_advisor_module}
+RPM advisor module is module to provide proof of data filtering from one low-level module. OBD-II module is reporting every supported parameter in connected vehicle which is not needed for RPM advisor. Module implements data filtering based on PID code which is attached to the message payload from OBD-II module. After RPM(Revolutions per minute) are obtained tresholds are checked for minimal and maximal RPMs. If threshold is below minimum or above maximum message is emitted with advice to switch gears correctly. Module has defined ifttt Event name in message header which allows IFTTT module to correctly trigger event.
 
-% subsection routes (end)
-
-% section section_name (end)
+% subsubsection rpm_advisor_module (end)
+\subsubsection{Bulk module} % (fold)
+\label{ssub:bulk_module}
+Bulk module is developed for burst mode of sending information over the Internet to the Servers. Bulk module accumulates data sent to the module and when one of the triggerers happend it send whole data as JSON array. Triggereres can be twofold. First, amount of time during which data is collected and second size of collected data, these triggers are checked upon every arrival of new data. To properrly calculate size of collected data aditional library \verb|sizeof| is used.
+% subsubsection bulk_module (end)
+% subsection higher_level_modules (end)
+% section data_logger (end)
