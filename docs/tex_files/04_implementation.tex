@@ -10,7 +10,7 @@ For completing this bachelor assignment we have choosen to implement it mainly i
 \end{itemize}
 As you can see there is a lot of support surrounding Node.js enviroment which provides a lot of reusable code. To provide language overview of our application it has over 70\% implemented in JavaScript, rest is HTML and CSS.
 % section overview (end)
-\section{Data Logger} % (fold)
+\section{Data-Logger} % (fold)
 \label{sec:data_logger}
 Data Logger is a standalone module. When Data Logger is required whole module is instantiated. For correct configuration it is needed to call configurate function with JavaScript Object as a argument which is passed by reading JSON configuration file from main application.
 \subsection{Modules} % (fold)
@@ -107,4 +107,25 @@ RPM advisor module is module to provide proof of data filtering from one low-lev
 Bulk module is developed for burst mode of sending information over the Internet to the Servers. Bulk module accumulates data sent to the module and when one of the triggerers happend it send whole data as JSON array. Triggereres can be twofold. First, amount of time during which data is collected and second size of collected data, these triggers are checked upon every arrival of new data. To properrly calculate size of collected data aditional library \verb|sizeof| is used.
 % subsubsection bulk_module (end)
 % subsection higher_level_modules (end)
+\subsection{Data-Logger routes} % (fold)
+\label{sub:data_logger_routes}
+For every data producing module, which is found on key side of key-value pairs in routes is encapsulated in InputStream class. This class provides interface listener for event `data' which signals InputStream that data is ready to be sent. After event is processed, information is pushed into readable stream. Creating this readable stream allowes Data-Logger to implement piping logic of streams, where every route defines is handled by piping together readable stream(data source) to writable stream(data sink). After this piping is done, data can flow freely without being slowed through Data-Logger handling. This piping occurs for every source and sink defined in configuration. If routing by type occurs, Data-Logger internaly knows every type of module which was loaded. All needed combinations are iterated and routing is executed by piping all sources to all sinks respectively by types.
+% subsection data_logger_routes (end)
 % section data_logger (end)
+\section{Main application} % (fold)
+\label{sec:main_application}
+Main application is where internal logic happens, http server is created, configuration file is loaded through asynchronous file reading into JSON string and then parsed into JavaScript object. Data-Logger is instantianted with configuration object as argument. In this section we provide information about implementation details of main application and subcategories. 
+\subsection{Web server} % (fold)
+\label{sub:web_server}
+Application creates http server which listens on port \verb|8000| and instantiates websocket server using Socket.io library. Application extends AJAX calls trough \verb|/api| extension on server address.
+This enables web application to load configuration file asynchronously. For web styling SASS extension is used together with Bootstrap front-end framework. HTML Template engine is used for easier HTML page creation, it is called Swig and it is very similiar to Django html template engine. Server supports angular framework for enhancing DOM capabilities and to build single-page web application. Main application is implemented to listen for terminal commands send to Node.js, after registering command to quit Node.js Data-Logger is proprely shutdown, by calling internal function, so every module would have a chance to finish writing and sending messages.% subsection web_server (end)
+\subsection{Web Socket} % (fold)
+\label{sub:web_socket}
+Sockets listen for \verb|configureModule| event which awaits JavaScript configuration object which is then passed to the Data-Logger framework. Same is happening with \verb|configureRoute|, but rather module configuration, whole routes configuration is passed. For every module which has implemented data sending interface, in another words which has EventEmmiter registering function on(), real-time data listener is hooked up. Upon firing data event, data is not only processed by Data-Logger but is also send to Web application front-end.
+\subsection{Web Application} % (fold)
+\label{sub:web_application}
+Web application is implemented as Single Page Application(SPA). It is built with Angular javascript framework and Angular routing. Once a web request for web application is handled by the server, client load all resources for web application to work, so no other requests are needed. Web application implements routing for every module by adding \verb|/module/:ID| to the link of the web application. By accessing this page we are able to configure every module separately. Configuring is handled by changing displayed configuration to form, in which single text-area has old configuration. After editing this configuration and confirming to apply changes, new configuration is evaluated for syntax mistakes as configuration needs to be in valid JSON format. If it is not configuration is not changed if it is okay, configuration changes and through web sockets new configuration is send into Data-Logger.
+Overview page is created to show real-time data flow of every module. If module's table is red, it means no data was displayed yes, if it is green, message was registered from that particular module.
+% subsection web_application (end)
+% subsection web_socket (end)
+% section main_application (end)

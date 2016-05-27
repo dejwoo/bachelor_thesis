@@ -8,7 +8,7 @@
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage[top=2.5cm, bottom=2.5cm, right=2cm, left=3.5cm]{geometry}  %okraje
-
+\usepackage{appendix}
 \usepackage{graphicx}
 \usepackage{times}
 \usepackage{listings}
@@ -132,9 +132,8 @@ keywordstyle=\color{black}\bfseries
 \printbibliography
 \addcontentsline{toc}{chapter}{References}  %pridanie nadpisu zdrojov k obsahu
 
-\chapter*{Attachments}   %hviezdicka ze necislovana kapitola  a nie je v obsahu
-\addcontentsline{toc}{chapter}{Attachments}
+\begin{appendices}
 \input prilohy.tex
-
+\end{appendices}
 \label{totalpages}
 \end{document}
