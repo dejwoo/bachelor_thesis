@@ -1,0 +1,23 @@
+[Unit]
+Description=Creates wifi AP for wlan0
+Before=network.target
+Wants=network.target
+BindsTo=sys-subsystem-net-devices-wlan0.device
+After=sys-subsystem-net-devices-wlan0.device
+
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/sbin/iw dev wlan0 set type __ap 
+ExecStart=/usr/sbin/ip addr add 10.1.1.100/24 broadcast 10.1.1.255 dev wlan0
+ExecStart=/usr/sbin/ip link set dev wlan0 up
+ExecStart=/usr/bin/hostapd -B /etc/hostapd/hostapd.conf
+ExecStart=/usr/sbin/dhcpd -4 -q wlan0
+
+
+ExecStop=/sbin/ip addr flush dev wlan0
+ExecStop=/sbin/ip link set dev wlan0 down
+
+[Install]
+WantedBy=multi-user.target
