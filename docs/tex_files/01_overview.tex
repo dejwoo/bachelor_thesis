@@ -1,17 +1,18 @@
+In this chapter overview of technology and already available solutions is provided. We will look into how car electric systems works, what embedded devices can be bought on the market or what IoT means.
 %Content: IoT
 \section{Solutions available}
 In this section we will provide an overview of existing solutions which are similiar with the goal of this bachelor thesis.
 \subsection{Automatic}
 ``The Automatic car adapter plugs into just about any car’s standard diagnostics (OBD-II) port. It unlocks the data in your car’s on-board computer and connects it to your phone via Bluetooth wireless.''\cite{automatic_how}\\
-Automatic turns almost any car into a connected car. By pairing Automatic’s adapter and apps for iPhone, Android, and web, drivers are able to enhance their driving experience with a host of connected services on the Automatic platform. Automatic helps to  diagnose engine trouble, also provides acelerometer which measures car orientation to detect serious collision. By using audio signals Automatic is able to provide feedback to the driver. As Automatic connection is wireless, all data is encryptet by using 128-bit AES encryption.\cite{automatic_press} More detailed hardware specification can be found in the attachment chapter[\ref{sec:automatic_hardware_specification}]. This particular solution is proprietary and can be bought in the U.S.
+Automatic turns almost any car into a connected car. By pairing Automatic’s adapter and apps for iPhone, Android, and web, drivers are able to enhance their driving experience with a host of connected services on the Automatic platform. Automatic helps to diagnose engine trouble, also provides acelerometer which measures car orientation to detect serious collision. By using audio signals Automatic is able to provide feedback to the driver. As Automatic connection is wireless, all data is encryptet by using 128-bit AES encryption.\cite{automatic_press} More detailed hardware specification can be found in the Appendix \ref{sec:automatic_hardware_specification}. This particular solution is proprietary and can be bought in the U.S.
 
 
 \subsection{VI Monitor}
-The VI Monitor  works by reading the data stream straight form vehicle electronic control unit via \gls{obd}. The VI Monitor has also  a 3.5" touch screen display and G-sensor. It has an advanced diagnostics tool with the ability to view and reset engine fault codes and comes with sophisticated comparision software. Main difference comparing Automatic and VI Monitor is in set of tools, VI Monitor allows for precision braking and acceleraion tests by using accelerometer and car data.\cite{vi_features} For more detailed overview of capabilities of VI Monitor consult [\ref{sec:vi_monitor_abilities}]
+The VI Monitor works by reading the data stream straight form vehicle electronic control unit via \gls{obd}. The VI Monitor has also a 3.5" touch screen display and G-sensor. It has an advanced diagnostics tool with the ability to view and reset engine fault codes and comes with sophisticated comparision software. Main difference comparing Automatic and VI Monitor is in set of tools, VI Monitor allows for precision braking and acceleraion tests by using accelerometer and car data.\cite{vi_features} For more detailed overview of capabilities of VI Monitor consult Appendix \ref{sec:vi_monitor_abilities}.
 
 
 \section{Internet of Things} 
-The \gls{iot} is a global infrastructure concept to further informatization of society, enabling advanced services by interconnecting things based on available technologies.\\The \gls{iot} technology aims to build a set of networks in which each object is connected. In the \gls{iot}, all objects has the storage and computing power.\cite{7263548} Through identification, data capture, communication and processing capabilities, the IoT makes full use of things to offer services to all kinds of applications. \\Whilst IoT is a hot topic in the industry it is not a new concept. It was initially put forward by Mark Weiser in the early 1990s. This concept is opening up huge opportunities for both the society and individuals. However, it also involves risks and undoubtedly represents an immense technical and social challenge.\cite{iot}
+The \gls{iot} is a global infrastructure concept to further informatization of society, enabling advanced services by interconnecting things based on available technologies.\\The \gls{iot} technology aims to build a set of networks in which each object is connected. In the \gls{iot}, all objects have storage and computing power\cite{7263548}. Through identification, data capture, communication and processing capabilities, the IoT makes full use of things to offer services to all kinds of applications. \\Whilst IoT is a hot topic in the industry it is not a new concept. It was initially put forward by Mark Weiser in the early 1990s. This concept is opening up huge opportunities for both the society and individuals. However, it also involves risks and undoubtedly represents an immense technical and social challenge.\cite{iot}
 \subsection{Concept} % (fold)
 \label{sub:concept}
 % subsection concept (end)
@@ -53,7 +54,7 @@ and optimize these systems.”
 \newpage
 \section{I${}^2$C} % (fold)
 \label{sec:i2c}
-\gls{i2c} protocol is a very popular serial protocol, mainly because it is cheap, simple and allows to connect multiple devices. Whole \gls{i2c} bus can be made of only 2 lines: SDA and SCL. SDA is a data line which is carrying data from one device to another and SCL is  clock line which main purpose is to synchronize all the devices connected using the \gls{i2c} bus. The SDA and the SCL lines are mandatory for all devices which support connection using \gls{i2c} bus\cite{i2cbus}. The block diagram representation of an \gls{i2c} bus is as shown in \ref{fig:ch2}
+\gls{i2c} protocol is a very popular serial protocol, mainly because it is cheap, simple and allows to connect multiple devices. Whole \gls{i2c} bus can be made of only 2 lines: SDA and SCL. SDA is a data line which is carrying data from one device to another and SCL is clock line which main purpose is to synchronize all the devices connected using the \gls{i2c} bus. The SDA and the SCL lines are mandatory for all devices which support connection using \gls{i2c} bus\cite{i2cbus}. The block diagram representation of an \gls{i2c} bus is as shown in \ref{fig:ch2}
 \begin{figure}[H]
 \begin{center}
 \captionsetup{font=small}
@@ -82,7 +83,8 @@ be master-only, slave-only, or switch between as provided in image \ref{fig:ch1}
 
 % section section_name (end)
 \section{Single-board computer}
-Sensor monitoring systems are used in many applications such as greenhouses, ecology studies, automobiles, robots, and medical devices. These systems are essentially used to study environment data like temperature, light, humidity, or air pressure. These sensor measures are used in manual and automation control based systems\cite{6028693}. The \gls{sbc} is complete functional computer built on single circuit board. It has microprocessor, memory, input/output and other features depending on the model and manufacturer. \gls{sbc} are used for educational purposes, embedded solutions and development research/systems.
+\glsreset{sbc}
+The \gls{sbc} is complete functional computer built on single circuit board. It has microprocessor, memory, input/output and other features depending on the model and manufacturer. \gls{sbc} are used for educational purposes, embedded solutions, development research/systems and sensor monitoring systems which are used in many applications such as greenhouses, ecology studies, automobiles, robots, and medical devices. These systems are essentially used to study environment data like temperature, light, humidity, or air pressure. These sensor measurements are used in manual and automation control based systems\cite{6028693}.  
 \subsection{Platforms} % (fold)
 \label{sub:platforms}
 For making a informed decision which \gls{sbc} to use for this thesis, we provide short overview of choosen manufacturers and their platforms for embedded devices.
@@ -129,7 +131,7 @@ Raspberry Pi is a credit-card sized mini computer as shown at Figure \ref{fig:ch
 \label{fig:ch4}
 \end{center}
 \end{figure}
-The BeagleBoard Foundation is a US-based non-profit corporation existing to provide education in and promotion of the design and use of open-source software and hardware in embedded computing. Providing a platform for the owners and developers of open-source software and hardware to exchange ideas, knowledge and experience.\cite{beagle_what}. The Beagles are open-hardware and open-software computers, that can be used for numerous projects, same as Raspberry Pi. In time of writing this thesis most popular model among the Beagles was BeagleBone Black shown at Figure and detailed hardware specification at Table \ref{tab:tab2}.
+The BeagleBoard Foundation is a US-based non-profit corporation existing to provide education in and promotion of the design and use of open-source software and hardware in embedded computing. Providing a platform for the owners and developers of open-source software and hardware to exchange ideas, knowledge and experience.\cite{beagle_what}. The Beagles are open-hardware and open-software computers, that can be used for numerous projects, same as Raspberry Pi. In time of writing this thesis most popular model among the Beagles was BeagleBone Black shown at Figure~\ref{fig:ch4} and detailed hardware specification at Table \ref{tab:tab18}.
 \begin{table}[H]
  \begin{center}
    \begin{tabular}{l l}
@@ -147,9 +149,9 @@ The BeagleBoard Foundation is a US-based non-profit corporation existing to prov
    \end{tabular}
  \end{center}
  \caption{BeagleBone Black: Hardware specification}
- \label{tab:tab2}
+ \label{tab:tab18}
 \end{table}
-As we can see in comparison to Raspberry Pi, BeagleBone is a \gls{sbc} more oriented for controlling low-level application. However BeagleBone lacks any USB ports for connecting any peripherals, so to extend BeagleBone functionality one must buy expansion boars. Which is not necessarily bad, but they might not be available in common as classic USB peripherals.
+As we can see in comparison to Raspberry Pi, BeagleBone is a \gls{sbc} more oriented for controlling low-level application. However BeagleBone lacks any USB ports for connecting any peripherals, so to extend BeagleBone functionality one must buy expansion boards. Which is not necessarily bad, but they might not be available in common as classic USB peripherals.
 % subsection the_beagles (end)
 \subsubsection{The Intel® Edison} % (fold)
 \label{ssub:the_intel_edison}
@@ -162,7 +164,7 @@ As we can see in comparison to Raspberry Pi, BeagleBone is a \gls{sbc} more orie
 \end{center}
 \end{figure}
 The Intel® Edison development platform is designed to lower the barriers to entry for a range of Inventors, Entrepreneurs and consumer product designers to rapidly prototype and produce IoT and wearable computing products.\cite{intel_what}\newline
-Intel® Edison is very small \gls{sbc} which provides very interesting hardware specification, which can be found in Table \ref{tab:tab3}. However to connect anything to Intel® Edison, expansion board is needed because I/O pins of Intel® Edison are grouped in very small 70 PIN I/O Connector. One example of expansion board is Edison Breakout board which has a minimalistic set of features and is slightly larger than the Edison module as shown at Figure \ref{fig:ch5}. This is concept which is different from the Raspberry and the Beagles. If a project needs different set of capabilities instead of changing whole \gls{sbc}, it is enough to change just the expansion board. One main disadvantage with starting with this platform is higher cost of obtaining Intel® Edison and exapnsion board.
+Intel® Edison is very small \gls{sbc} which provides very interesting hardware specification, which can be found in Table \ref{tab:tab13}. However to connect anything to Intel® Edison, expansion board is needed because I/O pins of Intel® Edison are grouped in very small 70 PIN I/O Connector. One example of expansion board is Edison Breakout board which has a minimalistic set of features and is slightly larger than the Edison module as shown at Figure \ref{fig:ch5}. This is concept which is different from the Raspberry and the Beagles. If a project needs different set of capabilities instead of changing whole \gls{sbc}, it is enough to change just the expansion board. One main disadvantage with starting with this platform is higher cost of obtaining Intel® Edison and exapnsion board.
 \begin{table}[H]
  \begin{center}
    \begin{tabular}{l l}
@@ -183,7 +185,7 @@ Intel® Edison is very small \gls{sbc} which provides very interesting hardware 
    \end{tabular}
  \end{center}
  \caption{Intel® Edison: Hardware specification}
- \label{tab:tab3}
+ \label{tab:tab13}
 \end{table}
 % subsection the_intel_iot_platform (end)
 % subsection platforms (end)
@@ -201,7 +203,7 @@ To provide neccessary capabilities to solve this bachelor thesis, we might need 
 \label{fig:wifi}
 \end{center}
 \end{figure}
-If \gls{sbc} choosen to complete this bachelor thesis would not have WiFi/Bluetooth capabilities, this adapter in Figure \ref{fig:wifi} will be used to provide it. Technical details can be found in Chapter \ref{sec:bluetooth_wifi_combination_usb_technical_details}. Advantage of this USB dongle is that it `saves' one USB slot by integrating WiFi and Bluetooth technology into one device.
+If \gls{sbc} choosen to complete this bachelor thesis would not have WiFi/Bluetooth capabilities, this adapter in Figure \ref{fig:wifi} will be used to provide it. Technical details can be found in Appendix~\ref{sec:bluetooth_wifi_combination_usb_technical_details}. Advantage of this USB dongle is that it `saves' one USB slot by integrating WiFi and Bluetooth technology into one device.
 % subsubsection bluetooth_wifi_combination_usb_dongle (end)
 \subsubsection{Adafruit 10-DOF} % (fold)
 \label{ssub:adafruit_10_dof}
@@ -213,7 +215,7 @@ If \gls{sbc} choosen to complete this bachelor thesis would not have WiFi/Blueto
 \label{fig:10dof}
 \end{center}
 \end{figure}
-This inertial-measurement-unit(Figure \ref{fig:10dof}) combines 3 sensors  to give you 11 axes of data: 3 axes of accelerometer data, 3 axes gyroscopic, 3 axes magnetic (compass), barometric pressure/altitude and temperature. Since all of them use I2C, you can communicate with all of them using only two wires. Most will be pretty happy with just the plain I2C interfacing, but we also break out the data ready and interrupt pins, so advanced users can interface with if they choose.\cite{ada_10dof}.
+This inertial-measurement-unit(Figure \ref{fig:10dof}) combines 3 sensors to provide 11 axes of data: 3 axes of accelerometer data, 3 axes gyroscopic, 3 axes magnetic (compass), barometric pressure/altitude and temperature. Since all of them use I2C, you can communicate with all of them using only two wires. On the breakout board are the data ready and interrupt pins available for advanced users.\cite{ada_10dof}.
 % subsubsection adafruit_10_dof (end)
 \subsubsection{Adafruit FONA 3G Cellular + GPS} % (fold)
 \label{ssub:adafruit_fona_3g_cellular_gps}
@@ -225,7 +227,7 @@ This inertial-measurement-unit(Figure \ref{fig:10dof}) combines 3 sensors  to gi
 \label{fig:3g}
 \end{center}
 \end{figure}
-The FONA 3G has better coverage, GSM backwards-compatibility and even sports a built-in GPS module for geolocation and asset tracking. This all-in-one cellular phone module with that lets you add location-tracking, voice, text, SMS and data to your project in a single breakout as shown in Figure \ref{fig:3g}.\cite{ada_3g}
+The FONA 3G has good coverage, GSM backwards-compatibility and even has a built-in GPS module for geolocation and asset tracking. This all-in-one cellular phone module that lets you add location-tracking, voice, text, SMS and data to your project in a single breakout as shown in Figure \ref{fig:3g}.\cite{ada_3g}
 % subsubsection adafruit_fona_3g_cellular_gps (end)
 % subsection peripherals (end)
 
@@ -235,7 +237,7 @@ As we will be gathering data from electronic systems of the car, lets overview h
 \subsection{Perspective} % (fold)
 \label{sub:perspective}
 % subsubsection perspective (end)
-To gain better perspective into how complex elextronic systems in cars are, lets go back a little into history. In \citeyear{976923}, \citeauthor{976923} said in their work \citetitle{976923}:
+To gain better perspective into how complex elextronic systems are in cars, lets go back a little into history. In \citeyear{976923}, \citeauthor{976923} said in their work \citetitle{976923}:
 \blockquote[\cite{976923}]{The growth of electronic systems has had implications for vehicle engineering. For example, today's high-end vehicles may have more than 4 kilometers of wiring-compared to 45 meters in vehicles manufactured in 1955. In July 1969, Apollo 11 employed a little more than 150 Kbytes of onboard memory to go to the moon and back. Just 30 years later, a family car might use 500 Kbytes to keep the CD player from skipping tracks.}
 It is now 2016 and electronic systems evolved so much that you can find 100 milion lines of code in software of average modern high-end car\cite{lines_of_code}. Modern cars nowdays have more than 30-50 Electronic Control Units(\glspl{ecu}). At Figure \ref{fig:car_system} we can see network of electronic components inside a car.
 \begin{figure}[H]
@@ -252,20 +254,20 @@ Just as \gls{lan} or Wi-Fi connects computers, control networks connects a car's
 % subsubsection in_vehicle_networks (end)
 \subsection{Controller Area Network} % (fold)
 \label{sub:controller_area_network}
-The Controller Area Network(\gls{can}) is an International Standardization Organization (ISO) defined serial communications bus  specifically designed with real-time requirements in mind. Developed in the 1980s by Robert Bosch, its ease of use and low cost has led to its wide adoption throughout the automotive and automation industries\cite{788104}. It is currently the most widely used vehicular network\cite{976923}. \gls{can} is designed for signaling rates up to 1 Mbps, high protection against electrical interference, and an ability to find and repair data errors.
+The \gls{can} is an ISO defined serial communications bus specifically designed with real-time requirements in mind. Developed in the 1980s by Robert Bosch, its ease of use and low cost has led to its wide adoption throughout the automotive and automation industries\cite{788104}. It is currently the most widely used vehicular network\cite{976923}. \gls{can} is designed for signaling rates up to 1 Mbps, high protection against electrical interference, and an ability to find and repair data errors.
 
-The \gls{can} communications protocols,  ISO 11898, conforms to the Open Systems Interconnection (OSI) model that is defined in terms of layers\cite{5116731}. Protocols specify how data travel between devices on the network. Physical layer defines how to communicate between devices which are connected. Lowest two layers of the ISO/OSI model are defined as the data-link and physical layer shown in Figure \ref{fig:iso_osi_can}.
+The \gls{can} communications protocols, ISO 11898, conform to the Open Systems Interconnection (OSI) model that is defined in terms of layers\cite{5116731}. Protocols specify how data travel between devices on the network. Physical layer defines how to communicate between devices which are connected. Lowest two layers of the ISO/OSI model are defined as the data-link and physical layer shown in Figure \ref{fig:iso_osi_can}.
 
 \begin{figure}[H]
 \begin{center}
 \captionsetup{font=small}
 \includegraphics[scale=0.5]{pics/iso_osi_can.png}
-\caption{Layers of \gls{can} Communications protocol, ISO 11898}
+\caption{Layers of \gls{can} Communications protocol, ISO 11898\cite{5116731}.}
 \label{fig:iso_osi_can}
 \end{center}
 \end{figure}
 % subsubsection controller_area_network (end)
-When data is transmitted over a \gls{can} network no individual devices are addressed. Instead, all messages have an unique identifier, a unique tag of its data content. Not only it identifies the message contents, but also the message priority as how much important data contents are. Lower the message priority, the more important message and it is delivered in prior to messages with higher priority. When a device connected to the network wants to transmit message, it passes the data and the identifier to the \gls{can} controller with a relevant request to transmit information. \gls{can} controller formats the message conents and transmits the data in form of a \gls{can} frame as shown in Figure \ref{fig:can_bus_frame}.
+When data is transmitted over a \gls{can} network no individual devices are addressed. Instead, all messages have an unique identifier, a unique tag of its data content. Not only it identifies the message contents, but also the message priority as how much important data contents are. Lower the message priority, the more important is the message and it is delivered in prior to messages with higher priority. When a device connected to the network wants to transmit message, it passes the data and the identifier to the \gls{can} controller with a relevant request to transmit information. \gls{can} controller formats the message conents and transmits the data in form of a \gls{can} frame as shown in Figure \ref{fig:can_bus_frame}.
 \begin{figure}[H]
 \begin{center}
 \captionsetup{font=small}
@@ -292,7 +294,7 @@ OBD standard developed over-time and in time of writing this thesis OBD-II is st
 \subsection{Standard}
 The \gls{obd} standard specifies the type of the connector and its pinout, the messaging format and electrical signalling protocols available. Difficulties may arise because of the deficiency in the OEM specific implementation of the standard. According to The OBD Home Page: There are five basic OBD protocols in use, each with minor variations on the communication pattern between the on-board diagnostic computer and the scanner console or tool. Formula CAN is the newest protocol added to the OBD specification, and it is mandated for all 2008 and newer model years\cite{7223296}. \gls{oem} provides a list of vehicle queries which can be send to the \gls{obd} port for diagnostics and gathering real-time parameters, but the list may vary from car to car. Each of this queries has a specified response on how to decode returned data again by \gls{oem} and may vary from another manufacturer respones. Finally, the OBD-II standard provides an extensible list of DTCs(Diagnostic trouble codes). As a result of this standardization, a single device can query the on-board computer(s) in any vehicle \cite{obdiso}, however this is again based solely on \gls{oem} so for getting all posible informations from the \gls{obd} port, specifiaction from \gls{oem} is needed.
 \subsection{Communication}
-As mention above to access information from sensors attached to a vehicle via a \gls{obd} port, special codes called Parameter IDs(\gls{pids}) are used. Typically a process of retrieving data from vehicle trough \gls{obd} port is as follows.
+As mentioned above to access information from sensors attached to a vehicle via a \gls{obd} port, special codes called Parameter IDs(\gls{pids}) are used. Typically a process of retrieving data from vehicle trough \gls{obd} port is as follows.
 \begin{figure}[H]
 \begin{center}
 \begin{enumerate}
@@ -306,7 +308,27 @@ As mention above to access information from sensors attached to a vehicle via a 
 \caption{Query \gls{obd} process}
 \end{center}
 \end{figure}
-From Figure 1.13 we can see that  \gls{obd} port is in simple terms subset of \gls{can} frames. Identifier and data payload is supplemented from \gls{obd} protocol based on concrete PID query.
+From Figure 1.13 we can see that \gls{obd} port is in simple terms subset of \gls{can} frames. Identifier and data payload is supplemented from \gls{obd} protocol based on concrete PID query.
+\subsection{ELM-USB} % (fold)
+\label{sub:elm_usb}
+ELM-USB is OBD-II to USB interface compatible with ELM-32x series (ELM323, ELM327, ELM CAN).\cite{elm_site} It supports any of the five communication protocols used in OBD-II compliant vehicles shown in Figure~\ref{fig:obd_protocol}.
+\begin{figure}[htbp]
+	\centering
+	\begin{itemize}
+		\item SAE J1850 PWM
+		\item SAE J1850 VPW
+		\item ISO9141-2
+		\item ISO14230-4 (KWP2000)
+		\item SO 15765-4/SAE J2480
+	\end{itemize}
+	\caption{OBD-II compliant vehicles protocols}
+	\label{fig:obd_protocol}
+\end{figure}
+\subsubsection{Connection} % (fold)
+\label{ssub:connection}
+As ELM-USB is very easily connected, the OBD-II connector needs to be connected into \gls{obd} port of the vehicle and USB connector to USB port of the embedded device. After connecting, operating system recognizes new device and instantiate a serial port for sending commands to the ELM-USB device. Commands are in form of AT commands which are similiar to the AT commands of the Adafruit 3G FONA used as a modem for cellular network.
+% subsubsection connection (end)
+% subsubsection elm_usb (end)
 \subsection{Conlusion} % (fold)
 \label{sub:conlusion}
 Main advantage of \gls{obd} port is that obtaing a single parameter from the car is relatively simple. It is enough to know correct PID to query to send, but it is not suitable for real-time telemetry, because of repetiton rate of the available data. The more different data is read out, the lower repetition time will be for each queried type, due to the fact that information is only accessible by question answer basis.
@@ -334,14 +356,14 @@ Every Node.js application runs a single-threaded continuous event loop, which so
 \label{fig:node_js_model}
 \end{center}
 \end{figure}
-Event-driven programming offers more scalable alternative than multithreaded programming, that provide developers with much more controll over application behavior and activities. In this model, the application firstly registers interest of certain events, such as disconnection of the client, data ready to be read, end of stream, etc. Then application waits to be notified of occurence in these registered events, and can act upon triggering. \cite{7073454} When an event happens a record of the event is added to the Node.js event queue, after main thread  looks at the event queue and takes the first event from the front and starts running the corresponding event handler. After event handler finishes the thread controll goes back to the main thread which again looks at the event queue if there are any events left to process.\cite{5617064}
+Event-driven programming offers more scalable alternative than multithreaded programming, that provide developers with much more control over application behavior and activities. In this model, the application firstly registers interest of certain events, such as disconnection of the client, data ready to be read, end of stream, etc. Then application waits to be notified of occurence in these registered events, and can act upon triggering. \cite{7073454} When an event happens a record of the event is added to the Node.js event queue, after main thread looks at the event queue and takes the first event from the front and starts running the corresponding event handler. After event handler finishes the thread controll goes back to the main thread which again looks at the event queue if there are any events left to process.\cite{5617064}
 \subsection{Asynchronous Model} % (fold)
 \label{sub:asynchronous_code}
+Now we know that single threaded event system works by placing events in a queue and process them one after another by calling appropriate event handler. The event handler then runs until all applications registered for that event are completed and returns control to the dispatcher, which looks again at the event queue for another event. This is an asynchronous system because order of execution of application code is not guaranteed. The order is based on event triggering which can not be pre-determined. To put it another way, order of the application written by event-driven model might be any of the combination of events which that concrete application react to. However, problem might be of the single threading, as Node.js is.
 \subsubsection{Problem} % (fold)
 \label{ssub:problem}
 % subsubsection problem (end)
-Now we know that single threaded event system works by placing events in a queue and process them one after another by calling appropriate event handler. The event handler then runs until all applications registered for that event are completed and returns control to the dispatcher, which looks again at the event queue for another event. This is an asynchronous system because order of execution of application code is not guaranteed. The order is based on event triggering which can not be pre-determined. To put it another way, order of the application written by event-driven model might be any of the combination of events which that concrete application react to. However, problem might be of the single threading, as Node.js is.\\
-The reason is simple, what if event handler takes too much time to finish, or the worst case scenario never returns thread control to the dispatcher  -- application seems to freeze. Event handler never ends, so no other event handler from event queue ever gets to run.
+The reason is simple, what if event handler takes too much time to finish, or the worst case scenario never returns thread control to the dispatcher -- application seems to freeze. Event handler never ends, so no other event handler from event queue ever gets to run.
 \subsubsection{Solution} % (fold)
 \label{ssub:solution}
 Solution is simply use event handler to set up new thread and get it to do all the work. Ater that event handler returns at one and the new thread can process time consuming work. Problems of synchronization arise when creating a new thread in single-threaded application. In Node.js time-consuming functions are dispatched to non-blocking workers as shown in Figure \ref{fig:node_js_model}. Synchonization problem is we do not know when worker finishes with particular function, and usually we would like to process return value of that function somewhere else in the code. This problem might be solved in many ways, but all of them are nearly variations on the idea of passing an explicit someting to do when function has finished - i.e callbacks. Callback is function which will be executed at the end of function dispatchet to the worker, which successfuly solves problem of how and when to process return value of unknown time running function.\cite{asynch}

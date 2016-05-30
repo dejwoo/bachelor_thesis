@@ -1,7 +1,7 @@
 \section{Requirements}
-In this chapter ot the thesis we provide clear requirements for this thesis solution. By stating clear specifiaction result of this thesis can be evaluated by comapring results and requirements.
+In this chapter  we provide clear requirements for this thesis solution. By stating clear specifiaction the result of this thesis can be evaluated by comapring results and requirements.
 \subsection{Hardware}
-For completing hardware requirements an embedded device must be developed. Operating system of this embedded device should be the mos.
+To complete hardware requirements an embedded device must be developed. Operating system of this embedded device should be the most suitable for the device.
 Peripheral devices needed to be connected to this device are:
 \begin{itemize}
 	\item Adafruit 10-DOF to enable device to gather accelerometer data through \gls{i2c} bus
@@ -10,7 +10,7 @@ Peripheral devices needed to be connected to this device are:
 \end{itemize}
 After peripheral devices are connected, operating system needs to be configured that Wireless access point is created automaticaly after device start-up. Connection between \gls{obd} port and the device have to be established. Solution must be provided how to configure and gather data from \gls{obd} port. Every peripheral device needs to be configured properly to enable operating system communication with each of them.
 \subsection{Application}
-Application have to be developed for collecting information from different sources. To application be easily configurable, develop modular system which objectifies every data gathering application in form of interchangeable modules. These modules have to be able  accept and send data information. Interface or template should be provided for easy creation of new modules.  Modules must be selectable by type, to provide manner of choosing same type of modules by unique type name. Routing logic should be developed to manage flow of information to and from modules. Defining routes must be provided by key value pattern where key can be either unique name or type of the module/s. Key in routes is to provide source module from which data are being sent. Values are structured by array and are also being denoted by unique name or type of the module. Values of the routes are defined as modules which can accept data. Interface needs to be developed for sending and accepting data to provide unified access to the objectified modules of your application. Lower-level application modules should be produced for
+Application have to be developed for collecting information from different sources. Application to be more easily configurable, develop modular system which objectifies every data gathering application in form of interchangeable modules. These modules have to be able  accept and send data information. Interface or template should be provided for easy creation of new modules. Modules must be selectable by type, to provide manner of choosing same type of modules by unique type name. Routing logic should be developed to manage flow of information to and from modules. Defining routes must be provided by key value pattern where key can be either unique name or type of the module/s. Key in routes is to provide source module from which data are being sent. Values are structured by array and are also being denoted by unique name or type of the module. Values of the routes are defined as modules which can accept data. Interface needs to be developed for sending and accepting data to provide unified access to the objectified modules of your application. Lower-level application modules should be produced for:
 \begin{itemize}
  	\item Gathering sensoric data
  	\item Gathering all OBD-II parameters supported by car
@@ -30,7 +30,7 @@ Application have to be developed for collecting information from different sourc
 \end{itemize}
 Routes shall be provided correctly for application to work by interconnecting lower-level modules to enable higher-level modules to work. Configuration of the modules should be provided by creating web application developed for changing configuration of any module or route. Web application needs to be able to display last created data from each module, also web application should be accessible by connecting to the device's wireless access point.
 \subsection{Output}
-Output of this bachelor thesis should be application which upon correct instalation on embedded device is capable of monitoring various inputs of sensoric data, based upon configuration distribute and make them accessible for different services.
+Output of this bachelor thesis should be an application which upon correct instalation on embedded device is capable of monitoring various inputs of sensoric data, based upon configuration distribute and make them accessible for different services.
 
 
 

@@ -8,7 +8,7 @@
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage[top=2.5cm, bottom=2.5cm, right=2cm, left=3.5cm]{geometry}  %okraje
-\usepackage{appendix}
+\usepackage[toc]{appendix}
 \usepackage{graphicx}
 \usepackage{times}
 \usepackage{listings}
@@ -85,23 +85,23 @@ keywordstyle=\color{black}\bfseries
 
 %koniec nastaveni a tu uz zacina obsah
 \begin{document}
-\newglossaryentry{obd}{name=OBD-II, description={On-Board Diagnostics port}}
-\newglossaryentry{iot}{name=IoT, description={Internet of Things}}
-\newglossaryentry{sbc}{name=SBC, description={Single-board computer}}
-\newglossaryentry{gpio}{name=GPIO, description={General-purpose input/output}}
-\newglossaryentry{i2c}{name=I${}^2$C, description={Single-board computer}}
-\newglossaryentry{spi}{name=SPI, description={Serial Peripheral Interface}}
-\newglossaryentry{lan}{name=LAN, description={Local Area Network}}
-\newglossaryentry{ecu}{name=ECU, description={Electronic Control Unit}, plural=ECUs }
-\newglossaryentry{can}{name=CAN, description={Controller Area Network}}
-\newglossaryentry{epa}{name=EPA, description={Environmental Protection Agency}}
-\newglossaryentry{sae}{name=SAE, description={Society of Automotive Engineers}}
-\newglossaryentry{oem}{name=OEM, description={Original equipment manufacturer}}
-\newglossaryentry{pids}{name=PIDs, description={Parameter IDs}}
-\newglossaryentry{v8}{name=V8, description={V8 JavaScript Engine}}
-
-\glsresetall[main]
-
+\newacronym{obd}{OBD-II}{On-Board Diagnostics port}
+\newacronym{iot}{IoT}{Internet of Things}
+\newacronym{sbc}{SBC}{Single-board computer}
+\newacronym{gpio}{GPIO}{General-purpose input/output}
+\newacronym{i2c}{I${}^2$C}{Inter-Integrated Circuit}
+\newacronym{spi}{SPI}{Serial Peripheral Interface}
+\newacronym{lan}{LAN}{Local Area Network}
+\newacronym{ecu}{ECU}{Electronic Control Unit}
+\newacronym{can}{CAN}{Controller Area Network}
+\newacronym{epa}{EPA}{Environmental Protection Agency}
+\newacronym{sae}{SAE}{Society of Automotive Engineers}
+\newacronym{oem}{OEM}{Original equipment manufacturer}
+\newacronym{pids}{PIDs}{Parameter IDs}
+\newacronym{v8}{V8}{V8 JavaScript Engine}
+\glsunsetall
+\glsresetall
+\glsunset{lan}
 
 
 \input firstpages.tex
@@ -133,6 +133,7 @@ keywordstyle=\color{black}\bfseries
 \addcontentsline{toc}{chapter}{References}  %pridanie nadpisu zdrojov k obsahu
 
 \begin{appendices}
+
 \input prilohy.tex
 \end{appendices}
 \label{totalpages}

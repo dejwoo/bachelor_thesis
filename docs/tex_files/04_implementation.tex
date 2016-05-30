@@ -1,22 +1,22 @@
-In this chapter of bachelor thesis a technical implementation details regarding our solution are provided.
+In this chapter of bachelor thesis technical implementation details regarding our solution are provided.
 \section{Overview} % (fold)
 \label{sec:overview}
-For completing this bachelor assignment we have choosen to implement it mainly in JavaScript programming language, which provides various benefits.
+To fullfil assignment we have choosen to implement it mainly in JavaScript programming language, which provides various benefits.
 \begin{itemize}
 \item Application is operating system independent
 \item For backend solution we used Node.js, which is also implemented in JavaScript. So there is no need to know another programming language by the users
 \item The npm packgage registry holds over 250,000 reusable packages of reusable code.
 \item Accessing Web application is possible from every web-friendly device.
 \end{itemize}
-As you can see there is a lot of support surrounding Node.js enviroment which provides a lot of reusable code. To provide language overview of our application it has over 70\% implemented in JavaScript, rest is HTML and CSS.
+As you can see there is a lot of support surrounding Node.js enviroment which provides a lot of reusable code. To provide language overview of our application it has over 70\% of the code written in JavaScript, rest is HTML and CSS.
 % section overview (end)
 \section{Data-Logger} % (fold)
 \label{sec:data_logger}
-Data Logger is a standalone module. When Data Logger is required whole module is instantiated. For correct configuration it is needed to call configurate function with JavaScript Object as a argument which is passed by reading JSON configuration file from main application.
+Data-Logger is a standalone module. When Data-Logger is required whole module is instantiated. For correct configuration it is needed to call configurate function with JavaScript Object as a argument which is passed by reading JSON configuration file from main application.
 \subsection{Modules} % (fold)
 \label{sub:modules}
 % subsection module (end)
-To process the file, modules have to be created by instantiating them with module options, which are then stored in internal key value object where keys are unique ids supplied by the configuration file. As this framework is primarily used for fellow computer scientists and power users, Data Logger does not implement any failsafe for not overwriting modules with same ID. This happend to be a mistake to forego this failsafe, and will be reported as one of many things to be improved in continued work after this thesis.
+To process the file, modules have to be created by instantiating them with module options, which are then stored in internal key value object where keys are unique ids supplied by the configuration file. As this framework is primarily intended for fellow computer scientists and power users, Data-Logger does not implement any failsafe for not overwriting modules with same ID. This happend to be a mistake to forego this failsafe, and will be reported as one of many things to be improved in continued work after this thesis.
 \subsection{Routes} % (fold)
 \label{sub:routes}
 After modules are instantiated it is time for creating data flows defined by routes. To standardize data exchange format every message must be Javascript Object. Every message traveling between modules must be composed of these 2 key mapped values, firstly its header where the mandatory key is id, whichs value is reffering to the module in which message originated. Other properties of message header are optional and can be configured with main config file. Second mandatory key maped value is body, in which is stored actual data payload created by original module. Overview of message format is provide in Table~\ref{tab:tab7}.
@@ -37,7 +37,7 @@ To better understand what interfaces must be implemented by the modules so they 
 % subsection routes (end)
 \subsection{Interface of data creating module} % (fold)
 \label{ssub:interface_of_data_creating_module}
-For data created by the module to be properly handled by Data Logger module object must be a instance of the EventEmmiter class which exposes an eventEmitter.on() functions that allows for registering event listeners to that particular object. When object emits a specificly named event every function attached by on() function are called synchronously. So for data to be picked up the Data-Logger module must emit `data' event which argument is created data. Nothing more is mandatory to be implemented.
+For data created by the module to be properly handled by Data-Logger module object must be a instance of the EventEmmiter class which exposes an eventEmitter.on() functions that allows for registering event listeners to that particular object. When object emits a specificly named event every function attached by on() function are called synchronously. So for data to be picked up the Data-Logger module must emit `data' event which argument is created data. Nothing more is mandatory to be implemented.
 % subsubsection interface_of_data_creating_module (end)
 
 \subsection{Interface of data accepting module} % (fold)
@@ -46,7 +46,7 @@ Module which will be accepting data must be an instance of Stream Writable abstr
 % subsubsection interface_of_data_accepting_module (end)
 \subsection{Lower-level modules} % (fold)
 \label{sub:lower_level_modules}
-In this section we describe spesific implementations of lower-level modules. Every of this modules which needs unknown amount of time to make connection to outside service implements simple queue to buffer incoming data till it is not ready to send data to the service. After successful connection is made, firstly data from queue are emptied and then normal messages are followed.
+In this section we describe spesific implementations of lower-level modules. Every of these modules which needs unknown amount of time to make connection to outside service implements simple queue to buffer incoming data till it is not ready to send data to the service. After successful connection is made, firstly data from queue are emptied and then normal messages are followed.
 \subsubsection{Blank module} % (fold)
 \label{ssub:blank_module}
 Blank module is designed to be used as default module for developing new modules. It combines data accepting and sending interface firstly by assigning this value from EventEmitter class which allows us to define and listen for events. Data accepting part is implemented by prototypal inheritance of Writable stream class, which will enable to address whole module as a stream object in which can be written to.
@@ -114,7 +114,7 @@ For every data producing module, which is found on key side of key-value pairs i
 % section data_logger (end)
 \section{Main application} % (fold)
 \label{sec:main_application}
-Main application is where internal logic happens, http server is created, configuration file is loaded through asynchronous file reading into JSON string and then parsed into JavaScript object. Data-Logger is instantianted with configuration object as argument. In this section we provide information about implementation details of main application and subcategories. 
+Main application is where internal logic happens, http server is created, configuration file is loaded through asynchronous file reading into JSON string and then parsed into JavaScript object. Data-Logger is instantianted with configuration object as argument. In this section we provide information about implementation details of main application and subcategories.
 \subsection{Web server} % (fold)
 \label{sub:web_server}
 Application creates http server which listens on port \verb|8000| and instantiates websocket server using Socket.io library. Application extends AJAX calls trough \verb|/api| extension on server address.
