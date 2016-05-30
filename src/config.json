@@ -144,13 +144,22 @@
   ],
   "routes": {
     "obd": [
-      "rpm"
+      "rpm","buld","db"
     ],
     "rpm": [
-      "console", "ifttt"
+      "ifttt"
     ],
-    "ifttt":[
-    "console"
+    "acc": [
+      "bulk","accident","db"
+    ],
+    "gps": [
+      "bulk","accident","db"
+    ],
+    "accident": [
+      "sms"
+    ],
+    "bulk": [
+      "rabbitmqModule"
     ]
   }
 }

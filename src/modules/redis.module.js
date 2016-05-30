@@ -55,7 +55,6 @@ RedisOutput.prototype.init = function () {
 			console.error(err);
 		}
 	});
-	t
 	this.client.on('connect', function() {
 		self.ready = true;
 		console.log("redis.module.js: Connection to redisDB successfull.");
