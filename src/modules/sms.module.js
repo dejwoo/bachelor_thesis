@@ -23,7 +23,7 @@ SmsModule = function(moduleConfig) {
 			console.error("sms.module: Undefined serial device, setting default /dev/ttyUSB2");
 			this.moduleConfig.device = "/dev/ttyUSB2";
 		}
-		this.moduleConfig.device = _.isUndefined(this.moduleConfig.device) ? 100 : this.moduleConfig.device;
+		this.moduleConfig.device = _.isUndefined(this.moduleConfig.device) ? "/dev/ttyUSB2" : this.moduleConfig.device;
 		this.moduleConfig.failedDelay = _.isUndefined(this.moduleConfig.failedDelay) ? 3000 : this.moduleConfig.failedDelay;
 		this.moduleConfig.number = _.isUndefined(this.moduleConfig.number) ? "0901744988" : this.moduleConfig.number;
 		this.moduleConfig.maxQueue = _.isUndefined(this.moduleConfig.maxQueue) ? 10 : this.moduleConfig.maxQueue;
@@ -52,6 +52,7 @@ SmsModule.prototype.configure = function() {
 }
 SmsModule.prototype.init = function() {
 	var self = this;
+	console.log(this.moduleConfig);
 	this.serial = new SerialPort(this.moduleConfig.device, {
 		baudrate:9600,
 		parser: serialport.parsers.readline('\r\n')
