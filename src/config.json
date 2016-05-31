@@ -43,7 +43,7 @@
       "type": "acc",
       "modulePath": "./accelerometer.module.js",
       "moduleOptions": {
-        "sampleRate": 500
+        "sampleRate": 1000
       }
     },
     {
@@ -91,7 +91,7 @@
       "type": "bulk",
       "modulePath": "./bulk.module.js",
       "moduleOptions": {
-        "timePassed": 5005,
+        "timePassed": 1005,
         "payloadSize": 300
       }
     },
@@ -120,7 +120,7 @@
       "type": "sms",
       "modulePath": "./sms.module.js",
       "moduleOptions": {
-        "device": 100,
+        "device": "/dev/ttyUSB2",
         "failedDelay": 3000,
         "number": "0901744988",
         "maxQueue": 10
@@ -137,26 +137,32 @@
       },
       "modulePath": "./rpm.module.js",
       "moduleOptions": {
-        "downShiftTreshold" : 1500,
-        "upShiftTreshold" : 2500
+        "downShiftTreshold": 1500,
+        "upShiftTreshold": 2500
       }
     }
   ],
   "routes": {
     "obd": [
-      "rpm","buld","db"
+      "rpm",
+      "buld",
+      "db"
     ],
     "rpm": [
       "ifttt"
     ],
     "acc": [
-      "bulk","accident","db"
-    ],
-    "gps": [
-      "bulk","accident","db"
+      "bulk",
+      "accident",
+      "db"
     ],
     "accident": [
       "sms"
+    ],
+    "gps": [
+      "bulk",
+      "accident",
+      "db"
     ],
     "bulk": [
       "rabbitmqModule"
