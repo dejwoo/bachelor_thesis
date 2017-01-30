@@ -1,0 +1,420 @@
+\ifglsentryexists{obd}{}%
+{%
+\gls@defglossaryentry{obd}%
+{%
+name={OBD-II},%
+sort={OBD-II},%
+type={main},%
+first={On-Board Diagnostics port\glsspace (OBD-II)},%
+firstplural={On-Board Diagnostics ports\glsspace (OBD-IIs)},%
+text={OBD-II},%
+plural={OBD-IIs},%
+description={On-Board Diagnostics port},%
+descriptionplural={On-Board Diagnostics port\acrpluralsuffix },%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={On-Board Diagnostics port},%
+longplural={On-Board Diagnostics ports},%
+short={OBD-II},%
+shortplural={OBD-IIs},%
+counter={page},%
+parent={},%
+%
+}%
+}%
+\ifglsentryexists{iot}{}%
+{%
+\gls@defglossaryentry{iot}%
+{%
+name={IoT},%
+sort={IoT},%
+type={main},%
+first={Internet of Things\glsspace (IoT)},%
+firstplural={Internet of Thingss\glsspace (IoTs)},%
+text={IoT},%
+plural={IoTs},%
+description={Internet of Things},%
+descriptionplural={Internet of Things\acrpluralsuffix },%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={Internet of Things},%
+longplural={Internet of Thingss},%
+short={IoT},%
+shortplural={IoTs},%
+counter={page},%
+parent={},%
+%
+}%
+}%
+\ifglsentryexists{sbc}{}%
+{%
+\gls@defglossaryentry{sbc}%
+{%
+name={SBC},%
+sort={SBC},%
+type={main},%
+first={Single-board computer\glsspace (SBC)},%
+firstplural={Single-board computers\glsspace (SBCs)},%
+text={SBC},%
+plural={SBCs},%
+description={Single-board computer},%
+descriptionplural={Single-board computer\acrpluralsuffix },%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={Single-board computer},%
+longplural={Single-board computers},%
+short={SBC},%
+shortplural={SBCs},%
+counter={page},%
+parent={},%
+%
+}%
+}%
+\ifglsentryexists{gpio}{}%
+{%
+\gls@defglossaryentry{gpio}%
+{%
+name={GPIO},%
+sort={GPIO},%
+type={main},%
+first={General-purpose input/output\glsspace (GPIO)},%
+firstplural={General-purpose input/outputs\glsspace (GPIOs)},%
+text={GPIO},%
+plural={GPIOs},%
+description={General-purpose input/output},%
+descriptionplural={General-purpose input/output\acrpluralsuffix },%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={General-purpose input/output},%
+longplural={General-purpose input/outputs},%
+short={GPIO},%
+shortplural={GPIOs},%
+counter={page},%
+parent={},%
+%
+}%
+}%
+\ifglsentryexists{i2c}{}%
+{%
+\gls@defglossaryentry{i2c}%
+{%
+name={I${}^2$C},%
+sort={I${}^2$C},%
+type={main},%
+first={Inter-Integrated Circuit\glsspace (I${}^2$C)},%
+firstplural={Inter-Integrated Circuits\glsspace (I${}^2$Cs)},%
+text={I${}^2$C},%
+plural={I${}^2$Cs},%
+description={Inter-Integrated Circuit},%
+descriptionplural={Inter-Integrated Circuit\acrpluralsuffix },%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={Inter-Integrated Circuit},%
+longplural={Inter-Integrated Circuits},%
+short={I${}^2$C},%
+shortplural={I${}^2$Cs},%
+counter={page},%
+parent={},%
+%
+}%
+}%
+\ifglsentryexists{spi}{}%
+{%
+\gls@defglossaryentry{spi}%
+{%
+name={SPI},%
+sort={SPI},%
+type={main},%
+first={Serial Peripheral Interface\glsspace (SPI)},%
+firstplural={Serial Peripheral Interfaces\glsspace (SPIs)},%
+text={SPI},%
+plural={SPIs},%
+description={Serial Peripheral Interface},%
+descriptionplural={Serial Peripheral Interface\acrpluralsuffix },%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={Serial Peripheral Interface},%
+longplural={Serial Peripheral Interfaces},%
+short={SPI},%
+shortplural={SPIs},%
+counter={page},%
+parent={},%
+%
+}%
+}%
+\ifglsentryexists{lan}{}%
+{%
+\gls@defglossaryentry{lan}%
+{%
+name={LAN},%
+sort={LAN},%
+type={main},%
+first={Local Area Network\glsspace (LAN)},%
+firstplural={Local Area Networks\glsspace (LANs)},%
+text={LAN},%
+plural={LANs},%
+description={Local Area Network},%
+descriptionplural={Local Area Network\acrpluralsuffix },%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={Local Area Network},%
+longplural={Local Area Networks},%
+short={LAN},%
+shortplural={LANs},%
+counter={page},%
+parent={},%
+%
+}%
+}%
+\ifglsentryexists{ecu}{}%
+{%
+\gls@defglossaryentry{ecu}%
+{%
+name={ECU},%
+sort={ECU},%
+type={main},%
+first={Electronic Control Unit\glsspace (ECU)},%
+firstplural={Electronic Control Units\glsspace (ECUs)},%
+text={ECU},%
+plural={ECUs},%
+description={Electronic Control Unit},%
+descriptionplural={Electronic Control Unit\acrpluralsuffix },%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={Electronic Control Unit},%
+longplural={Electronic Control Units},%
+short={ECU},%
+shortplural={ECUs},%
+counter={page},%
+parent={},%
+%
+}%
+}%
+\ifglsentryexists{can}{}%
+{%
+\gls@defglossaryentry{can}%
+{%
+name={CAN},%
+sort={CAN},%
+type={main},%
+first={Controller Area Network\glsspace (CAN)},%
+firstplural={Controller Area Networks\glsspace (CANs)},%
+text={CAN},%
+plural={CANs},%
+description={Controller Area Network},%
+descriptionplural={Controller Area Network\acrpluralsuffix },%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={Controller Area Network},%
+longplural={Controller Area Networks},%
+short={CAN},%
+shortplural={CANs},%
+counter={page},%
+parent={},%
+%
+}%
+}%
+\ifglsentryexists{epa}{}%
+{%
+\gls@defglossaryentry{epa}%
+{%
+name={EPA},%
+sort={EPA},%
+type={main},%
+first={Environmental Protection Agency\glsspace (EPA)},%
+firstplural={Environmental Protection Agencys\glsspace (EPAs)},%
+text={EPA},%
+plural={EPAs},%
+description={Environmental Protection Agency},%
+descriptionplural={Environmental Protection Agency\acrpluralsuffix },%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={Environmental Protection Agency},%
+longplural={Environmental Protection Agencys},%
+short={EPA},%
+shortplural={EPAs},%
+counter={page},%
+parent={},%
+%
+}%
+}%
+\ifglsentryexists{sae}{}%
+{%
+\gls@defglossaryentry{sae}%
+{%
+name={SAE},%
+sort={SAE},%
+type={main},%
+first={Society of Automotive Engineers\glsspace (SAE)},%
+firstplural={Society of Automotive Engineerss\glsspace (SAEs)},%
+text={SAE},%
+plural={SAEs},%
+description={Society of Automotive Engineers},%
+descriptionplural={Society of Automotive Engineers\acrpluralsuffix },%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={Society of Automotive Engineers},%
+longplural={Society of Automotive Engineerss},%
+short={SAE},%
+shortplural={SAEs},%
+counter={page},%
+parent={},%
+%
+}%
+}%
+\ifglsentryexists{oem}{}%
+{%
+\gls@defglossaryentry{oem}%
+{%
+name={OEM},%
+sort={OEM},%
+type={main},%
+first={Original equipment manufacturer\glsspace (OEM)},%
+firstplural={Original equipment manufacturers\glsspace (OEMs)},%
+text={OEM},%
+plural={OEMs},%
+description={Original equipment manufacturer},%
+descriptionplural={Original equipment manufacturer\acrpluralsuffix },%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={Original equipment manufacturer},%
+longplural={Original equipment manufacturers},%
+short={OEM},%
+shortplural={OEMs},%
+counter={page},%
+parent={},%
+%
+}%
+}%
+\ifglsentryexists{pids}{}%
+{%
+\gls@defglossaryentry{pids}%
+{%
+name={PIDs},%
+sort={PIDs},%
+type={main},%
+first={Parameter IDs\glsspace (PIDs)},%
+firstplural={Parameter IDss\glsspace (PIDss)},%
+text={PIDs},%
+plural={PIDss},%
+description={Parameter IDs},%
+descriptionplural={Parameter IDs\acrpluralsuffix },%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={Parameter IDs},%
+longplural={Parameter IDss},%
+short={PIDs},%
+shortplural={PIDss},%
+counter={page},%
+parent={},%
+%
+}%
+}%
+\ifglsentryexists{v8}{}%
+{%
+\gls@defglossaryentry{v8}%
+{%
+name={V8},%
+sort={V8},%
+type={main},%
+first={V8 JavaScript Engine\glsspace (V8)},%
+firstplural={V8 JavaScript Engines\glsspace (V8s)},%
+text={V8},%
+plural={V8s},%
+description={V8 JavaScript Engine},%
+descriptionplural={V8 JavaScript Engine\acrpluralsuffix },%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={V8 JavaScript Engine},%
+longplural={V8 JavaScript Engines},%
+short={V8},%
+shortplural={V8s},%
+counter={page},%
+parent={},%
+%
+}%
+}%
